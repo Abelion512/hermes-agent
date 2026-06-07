@@ -938,7 +938,9 @@ def _run_cua_driver_installer(label: str = "Installing", verbose: bool = True) -
         _print_warning(
             f"    cua-driver {label.lower()} did not complete. Re-run manually:"
         )
-        _print_info(f"      {install_cmd}")
+        import shlex
+
+        _print_info(f"      {shlex.join(install_cmd)}")
         return False
     except subprocess.TimeoutExpired:
         _print_warning(f"    cua-driver {label.lower()} timed out. Re-run manually.")
