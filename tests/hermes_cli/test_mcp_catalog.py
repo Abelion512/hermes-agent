@@ -791,3 +791,30 @@ class TestShippedCatalog:
             assert entry.name
             assert entry.description
             assert entry.transport.type in ("stdio", "http")
+
+class TestRunBootstrap:
+    def test_run_bootstrap_shlex_split(self, monkeypatch, tmp_path):
+        """_run_bootstrap should split the command using shlex and not use shell=True."""
+        from hermes_cli import mcp_catalog
+        from hermes_cli.mcp_catalog import _run_bootstrap
+
+        calls = []
+        shell_kwargs = []
+
+        class _FakeProc:
+            def __init__(self, returncode):
+                self.returncode = returncode
+
+        def fake_run(args, *pargs, **kwargs):
+            calls.append(args)
+            shell_kwargs.append(kwargs.get("shell", False))
+            return _FakeProc(returncode=0)
+
+        monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
+
+        _run_bootstrap(tmp_path, ["echo hello world", "ls -l /tmp"])
+
+        assert len(calls) == 2
+        assert calls[0] == ["echo", "hello", "world"]
+        assert calls[1] == ["ls", "-l", "/tmp"]
+        assert shell_kwargs == [False, False]
