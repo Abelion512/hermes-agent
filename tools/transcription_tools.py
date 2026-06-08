@@ -170,7 +170,7 @@ def _get_local_command_template() -> Optional[str]:
         quoted_binary = shlex.quote(whisper_binary)
         return (
             f"{quoted_binary} {{input_path}} --model {{model}} --output_format txt "
-            "--output_dir {output_dir} --language {language}"
+            "--output_dir {{output_dir}} --language {{language}}"
         )
     return None
 
@@ -1223,19 +1223,32 @@ def _transcribe_local_command(file_path: str, model_name: str) -> Dict[str, Any]
             if prep_error:
                 return {"success": False, "transcript": "", "error": prep_error}
 
-            command = command_template.format(
-                input_path=shlex.quote(prepared_input),
-                output_dir=shlex.quote(output_dir),
-                language=shlex.quote(language),
-                model=shlex.quote(normalized_model),
-            )
-            # User-provided templates (env var) may contain shell syntax; auto-detected commands are safe for list mode.
-            use_shell = bool(os.getenv(LOCAL_STT_COMMAND_ENV, "").strip())
-            if use_shell:
-                subprocess.run(command, shell=True, check=True, capture_output=True, text=True, timeout=300)
-            else:
-                subprocess.run(shlex.split(command), check=True, capture_output=True, text=True, timeout=300)
-            
+            try:
+                command_list = shlex.split(command_template)
+            except ValueError as e:
+                return {
+                    "success": False,
+                    "transcript": "",
+                    "error": f"Invalid command template (unmatched quotes?): {e}",
+                }
+
+            try:
+                formatted_command = [
+                    part.format(
+                        input_path=prepared_input,
+                        output_dir=output_dir,
+                        language=language,
+                        model=normalized_model,
+                    )
+                    for part in command_list
+                ]
+            except KeyError as e:
+                return {
+                    "success": False,
+                    "transcript": "",
+                    "error": f"Invalid LOCAL_STT_COMMAND_ENV template, unexpected placeholder: {e}",
+                }
+            subprocess.run(formatted_command, check=True, capture_output=True, text=True, timeout=300)
 
             txt_files = sorted(Path(output_dir).glob("*.txt"))
             if not txt_files:
