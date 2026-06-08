@@ -365,11 +365,25 @@ def _run_bootstrap(cwd: Path, commands: List[str]) -> None:
     """
     for cmd in commands:
         print(color(f"  $ {cmd}", Colors.DIM))
-        sub_cmds = [c.strip() for c in cmd.split("&&")]
+        try:
+            tokens = shlex.split(cmd)
+        except ValueError as e:
+            raise CatalogError(f"Failed to parse bootstrap command: {cmd}") from e
+
+        sub_cmds = []
+        current = []
+        for token in tokens:
+            if token == "&&":
+                if current:
+                    sub_cmds.append(current)
+                    current = []
+            else:
+                current.append(token)
+        if current:
+            sub_cmds.append(current)
+
         for sub_cmd in sub_cmds:
-            if not sub_cmd:
-                continue
-            proc = subprocess.run(shlex.split(sub_cmd), cwd=str(cwd), shell=False)
+            proc = subprocess.run(sub_cmd, cwd=str(cwd), shell=False)
             if proc.returncode != 0:
                 raise CatalogError(
                     f"bootstrap step failed (exit {proc.returncode}): {cmd}"
