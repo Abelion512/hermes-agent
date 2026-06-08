@@ -4,7 +4,7 @@ import { Fragment, memo, type ReactNode, useMemo } from 'react'
 import { ensureEmojiPresentation } from '../lib/emoji.js'
 import { normalizeExternalUrl, urlSlugTitleLabel, useLinkTitle } from '../lib/externalLink.js'
 import { formatToAnsi } from '../lib/formatToAnsi.js'
-import { BOX_CLOSE, BOX_OPEN, texToUnicode } from '../lib/mathUnicode.js'
+import { applyMathBoxFormat, texToUnicode } from '../lib/mathUnicode.js'
 import { highlightLine, isHighlightable } from '../lib/syntax.js'
 import type { Theme } from '../theme.js'
 
@@ -16,46 +16,17 @@ import type { Theme } from '../theme.js'
 // highlight gives a one-cell visual margin so the highlight reads as a
 // block, not a hug.
 const renderMath = (text: string): ReactNode => {
-  if (!text.includes(BOX_OPEN)) {
-    return text
-  }
+  let key = 0;
 
-  const out: ReactNode[] = []
-  let i = 0
-  let key = 0
+  const parts = applyMathBoxFormat<ReactNode>(
+    text,
+    t => t,
+    box => <Text bold inverse key={key++}> {' '} {box} {' '} </Text>
+  );
 
-  while (i < text.length) {
-    const start = text.indexOf(BOX_OPEN, i)
+  if (parts.length === 1 && typeof parts[0] === 'string') {return parts[0];}
 
-    if (start < 0) {
-      out.push(text.slice(i))
-
-      break
-    }
-
-    if (start > i) {
-      out.push(text.slice(i, start))
-    }
-
-    const end = text.indexOf(BOX_CLOSE, start + 1)
-
-    if (end < 0) {
-      out.push(text.slice(start))
-
-      break
-    }
-
-    out.push(
-      <Text bold inverse key={key++}>
-        {' '}
-        {text.slice(start + 1, end)}{' '}
-      </Text>
-    )
-
-    i = end + 1
-  }
-
-  return out
+  return parts;
 }
 
 const FENCE_RE = /^\s*(`{3,}|~{3,})(.*)$/

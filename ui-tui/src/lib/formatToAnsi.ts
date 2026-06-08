@@ -3,7 +3,7 @@ import { Chalk } from 'chalk'
 import { INLINE_RE } from '../components/markdown.js'
 import type { Theme } from '../theme.js'
 
-import { BOX_CLOSE, BOX_OPEN, texToUnicode } from './mathUnicode.js'
+import { applyMathBoxFormat, texToUnicode } from './mathUnicode.js'
 
 // Provide a pre-configured Chalk instance with truecolor forced ON so it doesn't
 // drop colors when run inside Ink context (which sometimes overrides FORCE_COLOR).
@@ -76,34 +76,11 @@ export function formatToAnsi(text: string, t: Theme): string {
       const mathCode = m[17] ?? m[18]!
       let mathText = texToUnicode(mathCode)
 
-      if (mathText.includes(BOX_OPEN)) {
-        const parts: string[] = []
-        let boxI = 0
-
-        while (boxI < mathText.length) {
-          const start = mathText.indexOf(BOX_OPEN, boxI)
-
-          if (start < 0) {
-            parts.push(mathText.slice(boxI))
-
-            break
-          }
-
-          if (start > boxI) {parts.push(mathText.slice(boxI, start))}
-          const end = mathText.indexOf(BOX_CLOSE, start + 1)
-
-          if (end < 0) {
-            parts.push(mathText.slice(start))
-
-            break
-          }
-
-          parts.push(ctx.bold.inverse(` ${mathText.slice(start + 1, end)} `))
-          boxI = end + 1
-        }
-
-        mathText = parts.join('')
-      }
+      mathText = applyMathBoxFormat(
+        mathText,
+        t => t,
+        box => ctx.bold.inverse(` ${box} `)
+      ).join('')
 
       result += applyColor(mathText, t.color.accent)
     }
