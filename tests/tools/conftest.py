@@ -65,5 +65,6 @@ def disable_lazy_stt_install():
     Opt in at module scope with
     ``pytestmark = pytest.mark.usefixtures("disable_lazy_stt_install")``.
     """
+    import tools.transcription_tools
     with patch("tools.transcription_tools._try_lazy_install_stt", return_value=False):
         yield
