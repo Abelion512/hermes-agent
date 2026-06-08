@@ -515,6 +515,7 @@ const readBraced = (s: string, start: number): { content: string; end: number } 
     // should not change the brace counter.
     if (c === '\\' && i + 1 < s.length) {
       i += 2
+
       continue
     }
 
@@ -560,6 +561,7 @@ const replaceBracedCommand = (input: string, command: string, render: (content: 
     if (after && /[A-Za-z]/.test(after)) {
       out += input.slice(i, idx + cmdLen)
       i = idx + cmdLen
+
       continue
     }
 
@@ -567,13 +569,14 @@ const replaceBracedCommand = (input: string, command: string, render: (content: 
 
     let p = idx + cmdLen
 
-    while (input[p] === ' ' || input[p] === '\t') p++
+    while (input[p] === ' ' || input[p] === '\t') {p++}
 
     const arg = readBraced(input, p)
 
     if (!arg) {
       out += input.slice(idx, p + 1)
       i = p + 1
+
       continue
     }
 
@@ -607,6 +610,7 @@ const replaceFracs = (input: string): string => {
     if (after && /[A-Za-z]/.test(after)) {
       out += input.slice(i, idx + 5)
       i = idx + 5
+
       continue
     }
 
@@ -614,25 +618,27 @@ const replaceFracs = (input: string): string => {
 
     let p = idx + 5
 
-    while (input[p] === ' ' || input[p] === '\t') p++
+    while (input[p] === ' ' || input[p] === '\t') {p++}
 
     const num = readBraced(input, p)
 
     if (!num) {
       out += input.slice(idx, p + 1)
       i = p + 1
+
       continue
     }
 
     p = num.end
 
-    while (input[p] === ' ' || input[p] === '\t') p++
+    while (input[p] === ' ' || input[p] === '\t') {p++}
 
     const den = readBraced(input, p)
 
     if (!den) {
       out += input.slice(idx, p + 1)
       i = p + 1
+
       continue
     }
 
@@ -767,4 +773,45 @@ export function texToUnicode(input: string): string {
   s = s.replace(/_([A-Za-z0-9+\-=])/g, (raw, ch: string) => SUBSCRIPT[ch] ?? raw)
 
   return s
+}
+
+export function applyMathBoxFormat<T>(
+  text: string,
+  onText: (text: string) => T,
+  onBox: (text: string) => T
+): T[] {
+  if (!text.includes(BOX_OPEN)) {
+    return [onText(text)]
+  }
+
+  const out: T[] = []
+  let i = 0
+
+  while (i < text.length) {
+    const start = text.indexOf(BOX_OPEN, i)
+
+    if (start < 0) {
+      out.push(onText(text.slice(i)))
+
+      break
+    }
+
+    if (start > i) {
+      out.push(onText(text.slice(i, start)))
+    }
+
+    const end = text.indexOf(BOX_CLOSE, start + 1)
+
+    if (end < 0) {
+      out.push(onText(text.slice(start)))
+
+      break
+    }
+
+    out.push(onBox(text.slice(start + 1, end)))
+
+    i = end + 1
+  }
+
+  return out
 }

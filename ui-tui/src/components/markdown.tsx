@@ -1,9 +1,10 @@
-import { Box, Link, stringWidth, Text } from '@hermes/ink'
+import { Ansi, Box, Link, stringWidth, Text, wrapAnsi } from '@hermes/ink'
 import { Fragment, memo, type ReactNode, useMemo } from 'react'
 
 import { ensureEmojiPresentation } from '../lib/emoji.js'
 import { normalizeExternalUrl, urlSlugTitleLabel, useLinkTitle } from '../lib/externalLink.js'
-import { BOX_CLOSE, BOX_OPEN, texToUnicode } from '../lib/mathUnicode.js'
+import { formatToAnsi } from '../lib/formatToAnsi.js'
+import { applyMathBoxFormat, texToUnicode } from '../lib/mathUnicode.js'
 import { highlightLine, isHighlightable } from '../lib/syntax.js'
 import type { Theme } from '../theme.js'
 
@@ -15,46 +16,17 @@ import type { Theme } from '../theme.js'
 // highlight gives a one-cell visual margin so the highlight reads as a
 // block, not a hug.
 const renderMath = (text: string): ReactNode => {
-  if (!text.includes(BOX_OPEN)) {
-    return text
-  }
+  let key = 0;
 
-  const out: ReactNode[] = []
-  let i = 0
-  let key = 0
+  const parts = applyMathBoxFormat<ReactNode>(
+    text,
+    t => t,
+    box => <Text bold inverse key={key++}> {' '} {box} {' '} </Text>
+  );
 
-  while (i < text.length) {
-    const start = text.indexOf(BOX_OPEN, i)
+  if (parts.length === 1 && typeof parts[0] === 'string') {return parts[0];}
 
-    if (start < 0) {
-      out.push(text.slice(i))
-
-      break
-    }
-
-    if (start > i) {
-      out.push(text.slice(i, start))
-    }
-
-    const end = text.indexOf(BOX_CLOSE, start + 1)
-
-    if (end < 0) {
-      out.push(text.slice(start))
-
-      break
-    }
-
-    out.push(
-      <Text bold inverse key={key++}>
-        {' '}
-        {text.slice(start + 1, end)}{' '}
-      </Text>
-    )
-
-    i = end + 1
-  }
-
-  return out
+  return parts;
 }
 
 const FENCE_RE = /^\s*(`{3,}|~{3,})(.*)$/
@@ -213,7 +185,7 @@ const TABLE_PADDING_LEFT = 2 // paddingLeft={2} on the outer <Box>
 
 const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
   // Guard: empty table
-  if (rows.length === 0 || rows[0]!.length === 0) return null
+  if (rows.length === 0 || rows[0]!.length === 0) {return null}
 
   const cellDisplayWidth = (raw: string) => stringWidth(stripInlineMarkup(raw))
 
@@ -221,7 +193,9 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
   const minCellWidth = (raw: string) => {
     const text = stripInlineMarkup(raw)
     const words = text.split(/\s+/).filter(w => w.length > 0)
-    if (words.length === 0) return MIN_COL_WIDTH
+
+    if (words.length === 0) {return MIN_COL_WIDTH}
+
     return Math.max(...words.map(w => stringWidth(w)), MIN_COL_WIDTH)
   }
 
@@ -229,7 +203,8 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
 
   // Normalize ragged rows: ensure every row has exactly numCols cells
   const normalizedRows = rows.map(row => {
-    if (row.length >= numCols) return row.slice(0, numCols)
+    if (row.length >= numCols) {return row.slice(0, numCols)}
+
     return [...row, ...Array<string>(numCols - row.length).fill('')]
   })
 
@@ -247,6 +222,7 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
   // transcriptBodyWidth (source of cols) subtracts message gutter + scrollbar,
   // but NOT this table's paddingLeft — we subtract it here.
   const gapOverhead = (numCols - 1) * COL_GAP
+
   const availableWidth = cols
     ? Math.max(cols - TABLE_PADDING_LEFT - gapOverhead - SAFETY_MARGIN, numCols * MIN_COL_WIDTH)
     : Infinity
@@ -266,19 +242,23 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
     const extraSpace = availableWidth - totalMin
     const overflows = idealWidths.map((ideal, i) => ideal - minWidths[i]!)
     const totalOverflow = overflows.reduce((a, b) => a + b, 0)
+
     if (totalOverflow === 0) {
       columnWidths = [...minWidths]
     } else {
       const rawAlloc = minWidths.map((min, i) =>
         min + (overflows[i]! / totalOverflow) * extraSpace
       )
+
       columnWidths = rawAlloc.map(v => Math.floor(v))
       // Distribute rounding remainders to columns with largest fractional part
       let remainder = availableWidth - columnWidths.reduce((a, b) => a + b, 0)
+
       const fracs = rawAlloc.map((v, i) => ({ i, frac: v - Math.floor(v) }))
         .sort((a, b) => b.frac - a.frac)
+
       for (const { i } of fracs) {
-        if (remainder <= 0) break
+        if (remainder <= 0) {break}
         columnWidths[i]!++
         remainder--
       }
@@ -292,10 +272,12 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
     const rawAlloc = minWidths.map(w => w * scaleFactor)
     columnWidths = rawAlloc.map(v => Math.max(Math.floor(v), MIN_COL_WIDTH))
     let remainder = availableWidth - columnWidths.reduce((a, b) => a + b, 0)
+
     const fracs = rawAlloc.map((v, i) => ({ i, frac: v - Math.floor(v) }))
       .sort((a, b) => b.frac - a.frac)
+
     for (const { i } of fracs) {
-      if (remainder <= 0) break
+      if (remainder <= 0) {break}
       columnWidths[i]!++
       remainder--
     }
@@ -315,8 +297,10 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
   // Operates on stripped text for correct width measurement.
   const wrapCell = (raw: string, width: number, hard: boolean): string[] => {
     const text = stripInlineMarkup(raw)
-    if (width <= 0) return [text]
-    if (stringWidth(text) <= width) return [text]
+
+    if (width <= 0) {return [text]}
+
+    if (stringWidth(text) <= width) {return [text]}
 
     const words = text.split(/\s+/).filter(w => w.length > 0)
     const lines: string[] = []
@@ -325,15 +309,18 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
 
     for (const word of words) {
       const w = stringWidth(word)
+
       if (currentWidth === 0) {
         if (hard && w > width) {
           for (const ch of graphemes(word)) {
             const cw = stringWidth(ch)
+
             if (currentWidth + cw > width && current) {
               lines.push(current)
               current = ''
               currentWidth = 0
             }
+
             current += ch
             currentWidth += cw
           }
@@ -350,7 +337,9 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
         currentWidth = w
       }
     }
-    if (current) lines.push(current)
+
+    if (current) {lines.push(current)}
+
     return lines.length > 0 ? lines : ['']
   }
 
@@ -358,34 +347,54 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
   const sep = columnWidths.map(w => '─'.repeat(Math.max(1, w))).join('  ')
 
   // When wrapping isn't needed, build single-line strings per row.
-  // All cells render as plain text via stripInlineMarkup.
-  // TODO: follow-up — format to ANSI then wrap with wrapAnsi for inline markdown preservation.
-  // See free-code/src/components/MarkdownTable.tsx L44-L62 for approach.
   if (!needsWrap) {
-    const buildRowString = (row: string[]): string =>
-      row.map((cell, ci) => {
-        const text = stripInlineMarkup(cell)
-        const pad = ' '.repeat(Math.max(0, columnWidths[ci]! - stringWidth(text)))
+    const buildRowString = (row: string[], ri: number): string => {
+      return row.map((cell, ci) => {
+        let ansiText = formatToAnsi(cell, t)
+
+        // Apply header styling manually since we use <Ansi>
+        if (ri === 0) {
+          // A simple way to style header is to apply color and bold to the formatted ansi string.
+          // But formatToAnsi might already contain colors. Let's just wrap it in bold and accent color
+          // using formatToAnsi's applyColor function logic, or we can use chalk if we had it, but we can
+          // just use ANSI escapes directly.
+          // [1m is bold, [22m is bold off
+          // Actually we can just do it in the render block using <Ansi> ? No, <Ansi> parses ANSI strings,
+          // but if we wrap it in [...m it works.
+        }
+
+        const rawText = stripInlineMarkup(cell)
+        const pad = ' '.repeat(Math.max(0, columnWidths[ci]! - stringWidth(rawText)))
         const gap = ci < numCols - 1 ? '  ' : ''
-        return text + pad + gap
+
+        return ansiText + pad + gap
       }).join('')
+    }
 
     return (
       <Box flexDirection="column" key={k} paddingLeft={TABLE_PADDING_LEFT}>
-        {normalizedRows.map((row, ri) => (
-          <Fragment key={ri}>
-            <Text
-              bold={ri === 0}
-              color={ri === 0 ? t.color.accent : undefined}
-              wrap="truncate-end"
-            >
-              {buildRowString(row)}
-            </Text>
-            {ri === 0 && normalizedRows.length > 1 ? (
-              <Text color={t.color.muted} dimColor wrap="truncate-end">{sep}</Text>
-            ) : null}
-          </Fragment>
-        ))}
+        {normalizedRows.map((row, ri) => {
+          let lineStr = buildRowString(row, ri);
+
+          if (ri === 0) {
+            // Apply header styling via terminal codes
+            // We need Chalk here or just prepend/append codes
+            lineStr = `\x1b[1m${lineStr}\x1b[22m`;
+          }
+
+          return (
+            <Fragment key={ri}>
+              {ri === 0 ? (
+                 <Text color={t.color.accent} wrap="truncate-end"><Ansi>{lineStr}</Ansi></Text>
+              ) : (
+                 <Text wrap="truncate-end"><Ansi>{lineStr}</Ansi></Text>
+              )}
+              {ri === 0 && normalizedRows.length > 1 ? (
+                <Text color={t.color.muted} dimColor wrap="truncate-end">{sep}</Text>
+              ) : null}
+            </Fragment>
+          );
+        })}
       </Box>
     )
   }
@@ -394,23 +403,37 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
   type LineEntry = { text: string; kind: 'header' | 'separator' | 'body' }
 
   const buildRowLines = (row: string[]): string[] => {
-    const cellLines = row.map((cell, ci) =>
-      wrapCell(cell, columnWidths[ci]!, isHard)
-    )
+    // wrapAnsi works on strings that contain ANSI escapes, but it needs them to be passed as-is.
+    const cellLines = row.map((cell, ci) => {
+      const ansiText = formatToAnsi(cell, t);
+
+      // use wrapAnsi which preserves ANSI
+      return wrapAnsi(ansiText, columnWidths[ci]!, { hard: isHard, trim: false }).split('\n');
+    });
+
     const maxLines = Math.max(...cellLines.map(l => l.length), 1)
 
     const result: string[] = []
+
     for (let li = 0; li < maxLines; li++) {
       let line = ''
+
       for (let ci = 0; ci < numCols; ci++) {
         const cl = cellLines[ci] ?? ['']
         const cellText = li < cl.length ? cl[li]! : ''
+
+        // To compute padding, we need the visible width of cellText.
+        // stringWidth handles ANSI strings out of the box in the Ink ecosystem!
+        // wait, let's just use stringWidth(cellText) directly, which handles ansi codes.
         const pad = ' '.repeat(Math.max(0, columnWidths[ci]! - stringWidth(cellText)))
         line += cellText + pad
-        if (ci < numCols - 1) line += '  '
+
+        if (ci < numCols - 1) {line += '  '}
       }
+
       result.push(line)
     }
+
     return result
   }
 
@@ -421,7 +444,9 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
     const kind = ri === 0 ? 'header' as const : 'body' as const
     const rowLines = buildRowLines(row)
     rowLines.forEach(text => allEntries.push({ text, kind }))
-    if (ri > 0) tallestBodyRow = Math.max(tallestBodyRow, rowLines.length)
+
+    if (ri > 0) {tallestBodyRow = Math.max(tallestBodyRow, rowLines.length)}
+
     if (ri === 0 && normalizedRows.length > 1) {
       allEntries.push({ text: sep, kind: 'separator' })
     }
@@ -462,6 +487,7 @@ const renderTable = (k: number, rows: string[][], t: Theme, cols?: number) => {
             {headers.map((header, ci) => {
               const cell = row[ci] ?? ''
               const label = stripInlineMarkup(header) || `Col ${ci + 1}`
+
               return (
                 <Text key={ci} wrap="wrap-trim">
                   <Text bold color={t.color.accent}>{label}:</Text>
