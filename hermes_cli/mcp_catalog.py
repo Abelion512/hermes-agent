@@ -361,14 +361,33 @@ def _run_bootstrap(cwd: Path, commands: List[str]) -> None:
     """Execute bootstrap commands in *cwd*. Raise CatalogError on first failure.
 
     The output is streamed to the user's terminal for visibility.
+    Multiple commands can be chained with `&&` for convenience.
     """
     for cmd in commands:
         print(color(f"  $ {cmd}", Colors.DIM))
-        proc = subprocess.run(shlex.split(cmd), cwd=str(cwd))
-        if proc.returncode != 0:
-            raise CatalogError(
-                f"bootstrap step failed (exit {proc.returncode}): {cmd}"
-            )
+        try:
+            tokens = shlex.split(cmd)
+        except ValueError as e:
+            raise CatalogError(f"Failed to parse bootstrap command: {cmd}") from e
+
+        sub_cmds = []
+        current = []
+        for token in tokens:
+            if token == "&&":
+                if current:
+                    sub_cmds.append(current)
+                    current = []
+            else:
+                current.append(token)
+        if current:
+            sub_cmds.append(current)
+
+        for sub_cmd in sub_cmds:
+            proc = subprocess.run(sub_cmd, cwd=str(cwd), shell=False)
+            if proc.returncode != 0:
+                raise CatalogError(
+                    f"bootstrap step failed (exit {proc.returncode}): {cmd}"
+                )
 
 
 def _do_git_install(entry: CatalogEntry) -> Path:
