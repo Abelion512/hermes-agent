@@ -170,7 +170,7 @@ def _get_local_command_template() -> Optional[str]:
         quoted_binary = shlex.quote(whisper_binary)
         return (
             f"{quoted_binary} {{input_path}} --model {{model}} --output_format txt "
-            "--output_dir {{output_dir}} --language {{language}}"
+            f"--output_dir {{output_dir}} --language {{language}}"
         )
     return None
 
