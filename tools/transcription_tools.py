@@ -170,7 +170,7 @@ def _get_local_command_template() -> Optional[str]:
         quoted_binary = shlex.quote(whisper_binary)
         return (
             f"{quoted_binary} {{input_path}} --model {{model}} --output_format txt "
-            f"--output_dir {{output_dir}} --language {{language}}"
+            "--output_dir {{output_dir}} --language {{language}}"
         )
     return None
 
@@ -1223,16 +1223,31 @@ def _transcribe_local_command(file_path: str, model_name: str) -> Dict[str, Any]
             if prep_error:
                 return {"success": False, "transcript": "", "error": prep_error}
 
-            command_list = shlex.split(command_template)
-            formatted_command = [
-                part.format(
-                    input_path=prepared_input,
-                    output_dir=output_dir,
-                    language=language,
-                    model=normalized_model,
-                )
-                for part in command_list
-            ]
+            try:
+                command_list = shlex.split(command_template)
+            except ValueError as e:
+                return {
+                    "success": False,
+                    "transcript": "",
+                    "error": f"Invalid command template (unmatched quotes?): {e}",
+                }
+
+            try:
+                formatted_command = [
+                    part.format(
+                        input_path=prepared_input,
+                        output_dir=output_dir,
+                        language=language,
+                        model=normalized_model,
+                    )
+                    for part in command_list
+                ]
+            except KeyError as e:
+                return {
+                    "success": False,
+                    "transcript": "",
+                    "error": f"Invalid LOCAL_STT_COMMAND_ENV template, unexpected placeholder: {e}",
+                }
             subprocess.run(formatted_command, check=True, capture_output=True, text=True, timeout=300)
 
             txt_files = sorted(Path(output_dir).glob("*.txt"))
