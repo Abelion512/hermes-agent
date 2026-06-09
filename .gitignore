@@ -60,4 +60,6 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+# Security report
+SECURITY_VULNERABILITY_REPORT.md
 ```
