@@ -170,7 +170,7 @@ def _get_local_command_template() -> Optional[str]:
         quoted_binary = shlex.quote(whisper_binary)
         return (
             f"{quoted_binary} {{input_path}} --model {{model}} --output_format txt "
-            "--output_dir {{output_dir}} --language {{language}}"
+            "--output_dir {output_dir} --language {language}"
         )
     return None
 
@@ -490,6 +490,7 @@ def _terminate_command_stt_process_tree(proc: subprocess.Popen) -> None:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 timeout=5,
+                stdin=subprocess.DEVNULL,
             )
         except Exception:
             proc.kill()
@@ -555,7 +556,7 @@ def _run_command_stt(command: str, timeout: float) -> subprocess.CompletedProces
     else:
         popen_kwargs["start_new_session"] = True
 
-    proc = subprocess.Popen(command, **popen_kwargs)
+    proc = subprocess.Popen(command, **popen_kwargs, stdin=subprocess.DEVNULL)
     try:
         stdout, stderr = proc.communicate(timeout=timeout)
     except subprocess.TimeoutExpired as exc:
@@ -1186,7 +1187,7 @@ def _prepare_local_audio(file_path: str, work_dir: str) -> tuple[Optional[str], 
     command = [ffmpeg, "-y", "-i", file_path, converted_path]
 
     try:
-        subprocess.run(command, check=True, capture_output=True, text=True, timeout=300)
+        subprocess.run(command, check=True, capture_output=True, text=True, timeout=300, stdin=subprocess.DEVNULL)
         return converted_path, None
     except subprocess.TimeoutExpired:
         logger.error("ffmpeg conversion timed out for %s", file_path)
@@ -1223,32 +1224,19 @@ def _transcribe_local_command(file_path: str, model_name: str) -> Dict[str, Any]
             if prep_error:
                 return {"success": False, "transcript": "", "error": prep_error}
 
-            try:
-                command_list = shlex.split(command_template)
-            except ValueError as e:
-                return {
-                    "success": False,
-                    "transcript": "",
-                    "error": f"Invalid command template (unmatched quotes?): {e}",
-                }
-
-            try:
-                formatted_command = [
-                    part.format(
-                        input_path=prepared_input,
-                        output_dir=output_dir,
-                        language=language,
-                        model=normalized_model,
-                    )
-                    for part in command_list
-                ]
-            except KeyError as e:
-                return {
-                    "success": False,
-                    "transcript": "",
-                    "error": f"Invalid LOCAL_STT_COMMAND_ENV template, unexpected placeholder: {e}",
-                }
-            subprocess.run(formatted_command, check=True, capture_output=True, text=True, timeout=300)
+            command = command_template.format(
+                input_path=shlex.quote(prepared_input),
+                output_dir=shlex.quote(output_dir),
+                language=shlex.quote(language),
+                model=shlex.quote(normalized_model),
+            )
+            # User-provided templates (env var) may contain shell syntax; auto-detected commands are safe for list mode.
+            use_shell = bool(os.getenv(LOCAL_STT_COMMAND_ENV, "").strip())
+            if use_shell:
+                subprocess.run(command, shell=True, check=True, capture_output=True, text=True, timeout=300, stdin=subprocess.DEVNULL)
+            else:
+                subprocess.run(shlex.split(command), check=True, capture_output=True, text=True, timeout=300, stdin=subprocess.DEVNULL)
+            
 
             txt_files = sorted(Path(output_dir).glob("*.txt"))
             if not txt_files:
