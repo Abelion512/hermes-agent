@@ -1393,7 +1393,7 @@ class TrajectoryCompressorArgs:
             if self.sample_percent is not None:
                 random.seed(self.seed)
                 sample_size = max(1, int(total_entries * self.sample_percent / 100))
-                entries = random.sample(entries, sample_size)
+                entries = random.sample(entries, min(sample_size, len(entries)))
                 print(f"   Sampled {len(entries):,} trajectories ({self.sample_percent}% of {total_entries:,})")
         
             if self.dry_run:
