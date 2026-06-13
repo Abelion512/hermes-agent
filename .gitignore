@@ -1,6 +1,12 @@
-# Binary / generated files
-docs/abelion/Notebook/mp3/
-docs/abelion/Notebook/*.csv
+# Binary / generated
+__pycache__/
+*.pyc
+*.pyo
 
 # Qoder IDE
 .qoderignore
+
+# docs/abelion — exclude binary, keep all .md
+docs/abelion/Notebook/mp3/
+docs/abelion/Notebook/*.csv
+docs/abelion/**/*.m4a
