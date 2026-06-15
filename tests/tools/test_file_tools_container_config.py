@@ -31,8 +31,9 @@ class TestFileToolsContainerConfig:
         captured = {}
         mock_env = MagicMock()
 
-        def fake_create_env(**kwargs):
-            captured.update(kwargs)
+        def fake_create_env(config):
+            import dataclasses
+            captured.update(dataclasses.asdict(config))
             return mock_env
 
         with patch("tools.terminal_tool._get_env_config", return_value=env_config),              patch("tools.terminal_tool._task_env_overrides", {}),              patch("tools.terminal_tool._active_environments", {}),              patch("tools.terminal_tool._creation_locks", {}),              patch("tools.terminal_tool._creation_locks_lock", __import__("threading").Lock()),              patch("tools.terminal_tool._create_environment", side_effect=fake_create_env),              patch("tools.terminal_tool._start_cleanup_thread"),              patch("tools.terminal_tool._check_disk_usage_warning"),              patch("tools.file_tools._file_ops_cache", {}),              patch("tools.file_tools._file_ops_lock", __import__("threading").Lock()):

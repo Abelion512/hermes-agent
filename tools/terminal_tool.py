@@ -44,6 +44,7 @@ import shutil
 import subprocess
 from pathlib import Path
 from typing import Optional, Dict, Any, List
+from dataclasses import dataclass
 
 from utils import env_var_enabled
 
@@ -1154,11 +1155,20 @@ def _get_modal_backend_state(modal_mode: object | None) -> Dict[str, Any]:
     )
 
 
-def _create_environment(env_type: str, image: str, cwd: str, timeout: int,
-                        ssh_config: dict = None, container_config: dict = None,
-                        local_config: dict = None,
-                        task_id: str = "default",
-                        host_cwd: str = None):
+
+@dataclass
+class EnvironmentConfig:
+    env_type: str
+    image: str
+    cwd: str
+    timeout: int
+    ssh_config: Optional[dict] = None
+    container_config: Optional[dict] = None
+    local_config: Optional[dict] = None
+    task_id: str = "default"
+    host_cwd: Optional[str] = None
+
+def _create_environment(config: EnvironmentConfig):
     """
     Create an execution environment for sandboxed command execution.
     
@@ -1176,6 +1186,16 @@ def _create_environment(env_type: str, image: str, cwd: str, timeout: int,
     Returns:
         Environment instance with execute() method
     """
+    env_type = config.env_type
+    image = config.image
+    cwd = config.cwd
+    timeout = config.timeout
+    ssh_config = config.ssh_config
+    container_config = config.container_config
+    local_config = config.local_config
+    task_id = config.task_id
+    host_cwd = config.host_cwd
+
     cc = container_config or {}
     cpu = cc.get("container_cpu", 1)
     memory = cc.get("container_memory", 5120)
@@ -1949,15 +1969,17 @@ def terminal_tool(
                             }
 
                         new_env = _create_environment(
-                            env_type=env_type,
-                            image=image,
-                            cwd=cwd,
-                            timeout=effective_timeout,
-                            ssh_config=ssh_config,
-                            container_config=container_config,
-                            local_config=local_config,
-                            task_id=effective_task_id,
-                            host_cwd=config.get("host_cwd"),
+                            EnvironmentConfig(
+                                env_type=env_type,
+                                image=image,
+                                cwd=cwd,
+                                timeout=effective_timeout,
+                                ssh_config=ssh_config,
+                                container_config=container_config,
+                                local_config=local_config,
+                                task_id=effective_task_id,
+                                host_cwd=config.get("host_cwd"),
+                            )
                         )
                     except ImportError as e:
                         return json.dumps({
