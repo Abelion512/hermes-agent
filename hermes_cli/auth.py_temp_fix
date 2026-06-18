@@ -1,0 +1,26 @@
+    "xai-oauth": ProviderConfig(
+        id="xai-oauth",
+        name="xAI Grok OAuth (SuperGrok / Premium+)",
+        auth_type="oauth_external",
+        inference_base_url=DEFAULT_XAI_OAUTH_BASE_URL,
+    ),
+    "qwen-oauth": ProviderConfig(
+        id="qwen-oauth",
+        name="Qwen OAuth",
+        auth_type="oauth_external",
+        inference_base_url=DEFAULT_QWEN_BASE_URL,
+    ),
+    "9router": ProviderConfig(
+        id="9router",
+        name="9router",
+        auth_type="api_key",
+        inference_base_url="https://api.9router.ai/v1",
+        api_key_env_vars=("NINEROUTER_API_KEY", "OPENROUTER_API_KEY"),
+        base_url_env_var="NINEROUTER_BASE_URL",
+    ),
+}
+
+PROVIDER_REGISTRY.update({
+    "google-gemini-cli": ProviderConfig(
+        id="google-gemini-cli",
+        name="Google Gemini (OAuth)",

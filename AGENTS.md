@@ -4,6 +4,12 @@ Instructions for AI coding assistants and developers working on the hermes-agent
 
 **Never give up on the right solution.**
 
+## 🚨 MANDATORY: Documentation Policy
+Every session and significant change MUST be documented. Failure to do so invalidates the experience-driven learning of the system.
+- **Update WORK_LOG.md**: Every change must be recorded in `docs/abelion/notes/WORK_LOG.md`.
+- **Summarize Sessions**: Architectural decisions must be summarized in `docs/abelion/agent-session/`.
+- **GEMINI.md**: Refer to the root `GEMINI.md` for specific formatting and lifecycle requirements.
+
 ## What Hermes Is
 
 Hermes is a personal AI agent that runs the same agent core across a CLI, a

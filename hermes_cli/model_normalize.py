@@ -61,6 +61,9 @@ _VENDOR_PREFIXES: dict[str, str] = {
     "llama": "meta-llama",
     "step": "stepfun",
     "trinity": "arcee-ai",
+    "oc": "opencode",
+    "gc": "google",
+    "mmf": "xiaomi",
 }
 
 # Providers whose APIs consume vendor/model slugs.
@@ -68,6 +71,7 @@ _AGGREGATOR_PROVIDERS: frozenset[str] = frozenset({
     "openrouter",
     "nous",
     "kilocode",
+    "9router",
 })
 
 # Providers that want bare names with dots replaced by hyphens.
@@ -129,10 +133,10 @@ _DEEPSEEK_REASONER_KEYWORDS: frozenset[str] = frozenset({
 })
 
 _DEEPSEEK_CANONICAL_MODELS: frozenset[str] = frozenset({
-    "deepseek-chat",       # V3 on DeepSeek direct and most aggregators
-    "deepseek-reasoner",   # R1-family reasoning model
-    "deepseek-v4-pro",     # V4 Pro — first-class model ID
-    "deepseek-v4-flash",   # V4 Flash — first-class model ID
+    "deepseek-chat",  # V3 on DeepSeek direct and most aggregators
+    "deepseek-reasoner",  # R1-family reasoning model
+    "deepseek-v4-pro",  # V4 Pro — first-class model ID
+    "deepseek-v4-flash",  # V4 Flash — first-class model ID
 })
 
 # First-class V-series IDs (``deepseek-v4-pro``, ``deepseek-v4-flash``,
@@ -182,6 +186,7 @@ def _normalize_for_deepseek(model_name: str) -> str:
 # ---------------------------------------------------------------------------
 # Helper utilities
 # ---------------------------------------------------------------------------
+
 
 def _strip_vendor_prefix(model_name: str) -> str:
     """Remove a ``vendor/`` prefix if present.
@@ -322,6 +327,7 @@ def _prepend_vendor(model_name: str) -> str:
 # ---------------------------------------------------------------------------
 # Main normalisation entry point
 # ---------------------------------------------------------------------------
+
 
 def normalize_model_for_provider(model_input: str, target_provider: str) -> str:
     """Translate a model name into the format the target provider's API expects.
@@ -469,4 +475,3 @@ def normalize_model_for_provider(model_input: str, target_provider: str) -> str:
 # ---------------------------------------------------------------------------
 # Batch / convenience helpers
 # ---------------------------------------------------------------------------
-

@@ -305,32 +305,39 @@ async function startSocket() {
       }
 
       // Handle !fromMe messages (from other people) based on mode.
-      // Self-chat mode only responds to the user's own messages to
-      // themselves — stranger DMs / group pings must never reach the
-      // Python gateway, otherwise a pairing-code reply fires in response
-      // to arbitrary incoming messages (#8389).
+      // In either mode, group messages (WAGs) are let through because the
+      // agent needs to read them (Zoom links, event info, etc.). The
+      // Python gateway won't auto-reply to group chatter.
+      // Self-chat mode: still reject non-group DMs from strangers to
+      // avoid auto-replying to random messages (#8389).
+      // Bot mode: allowlist check applies to DMs; group messages bypass it.
       if (!msg.key.fromMe) {
-        if (WHATSAPP_MODE === 'self-chat') {
-          try {
-            console.log(JSON.stringify({
-              event: 'ignored',
-              reason: 'self_chat_mode_rejects_non_self',
-              chatId,
-              senderId,
-            }));
-          } catch {}
-          continue;
-        }
-        if (!matchesAllowedUser(senderId, ALLOWED_USERS, SESSION_DIR)) {
-          try {
-            console.log(JSON.stringify({
-              event: 'ignored',
-              reason: 'allowlist_mismatch',
-              chatId,
-              senderId,
-            }));
-          } catch {}
-          continue;
+        if (isGroup) {
+          // Group messages always pass — agent polls /messages for them
+        } else {
+          // DM from another person
+          if (WHATSAPP_MODE === 'self-chat') {
+            try {
+              console.log(JSON.stringify({
+                event: 'ignored',
+                reason: 'self_chat_mode_rejects_non_self_dm',
+                chatId,
+                senderId,
+              }));
+            } catch {}
+            continue;
+          }
+          if (!matchesAllowedUser(senderId, ALLOWED_USERS, SESSION_DIR)) {
+            try {
+              console.log(JSON.stringify({
+                event: 'ignored',
+                reason: 'allowlist_mismatch',
+                chatId,
+                senderId,
+              }));
+            } catch {}
+            continue;
+          }
         }
       }
 

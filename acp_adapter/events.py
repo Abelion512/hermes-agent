@@ -11,7 +11,7 @@ import asyncio
 import json
 import logging
 from collections import deque
-from typing import Any, Callable, Deque, Dict
+from typing import Any, Callable, Deque, Dict, Optional
 
 import acp
 from acp.schema import AgentPlanUpdate, PlanEntry
@@ -111,6 +111,7 @@ def _send_update(
 # Tool progress callback
 # ------------------------------------------------------------------
 
+
 def make_tool_progress_cb(
     conn: acp.Client,
     session_id: str,
@@ -131,9 +132,15 @@ def make_tool_progress_cb(
     ``reasoning.available``) are silently ignored.
     """
 
-    def _tool_progress(event_type: str, name: str = None, preview: str = None, args: Any = None, **kwargs) -> None:
+    def _tool_progress(
+        event_type: str,
+        name: Optional[str] = None,
+        preview: Optional[str] = None,
+        args: Any = None,
+        **kwargs,
+    ) -> None:
         # Only emit ACP ToolCallStart for tool.started; ignore other event types
-        if event_type != "tool.started":
+        if event_type != "tool.started" or name is None:
             return
         if isinstance(args, str):
             try:
@@ -148,8 +155,8 @@ def make_tool_progress_cb(
         if queue is None:
             queue = deque()
             tool_call_ids[name] = queue
-        elif isinstance(queue, str):
-            queue = deque([queue])
+        elif not isinstance(queue, deque):
+            queue = deque([str(queue)])
             tool_call_ids[name] = queue
         queue.append(tc_id)
 
@@ -160,13 +167,18 @@ def make_tool_progress_cb(
 
                 snapshot = capture_local_edit_snapshot(name, args)
             except Exception:
-                logger.debug("Failed to capture ACP edit snapshot for %s", name, exc_info=True)
+                logger.debug(
+                    "Failed to capture ACP edit snapshot for %s", name, exc_info=True
+                )
         tool_call_meta[tc_id] = {"args": args, "snapshot": snapshot}
 
         edit_diff = None
         if name in {"write_file", "patch"} and edit_approval_policy_getter is not None:
             try:
-                from acp_adapter.edit_approval import build_edit_proposal, should_auto_approve_edit
+                from acp_adapter.edit_approval import (
+                    build_edit_proposal,
+                    should_auto_approve_edit,
+                )
 
                 proposal = build_edit_proposal(name, args)
                 if proposal is not None:
@@ -174,7 +186,11 @@ def make_tool_progress_cb(
                     if should_auto_approve_edit(proposal, policy, cwd):
                         edit_diff = proposal
             except Exception:
-                logger.debug("Failed to prepare auto-approved ACP edit diff for %s", name, exc_info=True)
+                logger.debug(
+                    "Failed to prepare auto-approved ACP edit diff for %s",
+                    name,
+                    exc_info=True,
+                )
 
         update = build_tool_start(tc_id, name, args, edit_diff=edit_diff)
         _send_update(conn, session_id, loop, update)
@@ -185,6 +201,7 @@ def make_tool_progress_cb(
 # ------------------------------------------------------------------
 # Thinking callback
 # ------------------------------------------------------------------
+
 
 def make_thinking_cb(
     conn: acp.Client,
@@ -205,6 +222,7 @@ def make_thinking_cb(
 # ------------------------------------------------------------------
 # Step callback
 # ------------------------------------------------------------------
+
 
 def make_step_cb(
     conn: acp.Client,
@@ -263,16 +281,34 @@ def make_step_cb(
 # Agent message callback
 # ------------------------------------------------------------------
 
+
 def make_message_cb(
     conn: acp.Client,
     session_id: str,
     loop: asyncio.AbstractEventLoop,
+    agent: Any = None,
 ) -> Callable:
     """Create a callback that streams agent response text to the editor."""
 
     def _message(text: str) -> None:
         if not text:
             return
+
+        # Apply scrubbers if an agent instance was provided. Prevents internal
+        # <thinking> and <memory-context> tags from leaking into the visible
+        # buffer during streaming. Matches the logic in AIAgent._run_conversation.
+        if agent is not None:
+            think_scrubber = getattr(agent, "_stream_think_scrubber", None)
+            if think_scrubber is not None:
+                text = think_scrubber.scrub(text)
+
+            context_scrubber = getattr(agent, "_stream_context_scrubber", None)
+            if context_scrubber is not None:
+                text = context_scrubber.scrub(text)
+
+        if not text:
+            return
+
         update = acp.update_agent_message_text(text)
         _send_update(conn, session_id, loop, update)
 

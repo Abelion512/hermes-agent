@@ -1,0 +1,9 @@
+name: display_aesthetics
+description: Enhances LLM output formatting. Wraps tables in code blocks and ensures neatness.
+version: 0.1.0
+author: Gemini CLI
+kind: general
+metadata:
+  hermes:
+    category: ui
+    tags: [aesthetics, formatting, tables]

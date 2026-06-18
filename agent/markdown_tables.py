@@ -66,9 +66,9 @@ def split_table_row(row: str) -> List[str]:
     """Split ``| a | b | c |`` into ``["a", "b", "c"]`` with trims."""
 
     s = row.strip()
-    if s.startswith("|"):
+    while s.startswith("|"):
         s = s[1:]
-    if s.endswith("|"):
+    while s.endswith("|"):
         s = s[:-1]
     return [c.strip() for c in s.split("|")]
 
@@ -77,7 +77,25 @@ def is_table_divider(row: str) -> bool:
     """True when ``row`` is a markdown table separator line."""
 
     cells = split_table_row(row)
-    return len(cells) > 1 and all(_DIVIDER_CELL_RE.match(c) for c in cells)
+    if not cells:
+        return False
+
+    # A valid divider must start with at least two cells matching the pattern.
+    # We allow trailing non-divider cells (like "(1/2)") to support model
+    # comments appended to the divider row.
+    valid_cells = 0
+    for c in cells:
+        if _DIVIDER_CELL_RE.match(c):
+            valid_cells += 1
+        elif valid_cells >= 2:
+            # Found a non-divider cell after finding at least two valid ones.
+            # Treat the rest as trailing garbage.
+            break
+        else:
+            # Found a non-divider cell before finding two valid ones.
+            return False
+
+    return valid_cells >= 2
 
 
 def looks_like_table_row(row: str) -> bool:
@@ -102,7 +120,9 @@ def looks_like_table_row(row: str) -> bool:
     return stripped.count("|") >= 2
 
 
-def _render_block(rows: List[List[str]], available_width: int | None = None) -> List[str]:
+def _render_block(
+    rows: List[List[str]], available_width: int | None = None
+) -> List[str]:
     """Render ``rows`` (header + body, divider implied) at uniform widths.
 
     If ``available_width`` is given and the rebuilt horizontal table
@@ -117,8 +137,7 @@ def _render_block(rows: List[List[str]], available_width: int | None = None) -> 
     rows = [r + [""] * (ncols - len(r)) for r in rows]
 
     widths = [
-        max(_MIN_COL_WIDTH, *(_disp_width(r[c]) for r in rows))
-        for c in range(ncols)
+        max(_MIN_COL_WIDTH, *(_disp_width(r[c]) for r in rows)) for c in range(ncols)
     ]
 
     # Total horizontal width for the rendered row:
@@ -284,11 +303,7 @@ def realign_markdown_tables(text: str, available_width: int | None = None) -> st
     while i < n:
         line = lines[i]
         # A table starts with a header row whose next line is a divider.
-        if (
-            "|" in line
-            and i + 1 < n
-            and is_table_divider(lines[i + 1])
-        ):
+        if "|" in line and i + 1 < n and is_table_divider(lines[i + 1]):
             header = split_table_row(line)
             body: List[List[str]] = []
             j = i + 2

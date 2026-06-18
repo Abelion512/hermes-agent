@@ -1,7 +1,8 @@
-# Binary / generated
-__pycache__/
-*.pyc
-*.pyo
+# Local Memory & Data
+memory/
+.hermes/
+.env
+*.log
 
 # Qoder IDE
 .qoderignore
@@ -10,3 +11,33 @@ __pycache__/
 docs/abelion/Notebook/mp3/
 docs/abelion/Notebook/*.csv
 docs/abelion/**/*.m4a
+
+# Python standard
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Node.js
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temp & IDE
+.vscode/
+.idea/
+.DS_Store
+cli-config.yaml
+cli-config-temp.yaml
+dummy.txt
+test_durations.json

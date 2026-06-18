@@ -11,11 +11,17 @@
 - **Research -> Strategy -> Execution**: Follow this lifecycle for all changes.
 - **Done means Done**: A task is only complete when it has been linted, built, and verified.
 
-## 3. Reference Files
+## 3. ATA Principle & Architectural Philosophy (MUST READ)
+All agents operating in this repository MUST adhere to the following architectural guidelines dictated by the Project Lead (Abelion):
+- **ATA (Amati, Tiru, Adopsi)**: Before building any custom tools, classes, or architecture (like sandboxes or hierarchy managers), you MUST observe existing open-source integrations in Hermes (e.g., `daytona`, `modal`, `honcho`, `kanban`). Do not reinvent the wheel. 
+- **System Constraints > Prompt Engineering**: Relying solely on prompts to make the LLM juggle multiple personas or complex instructions leads to "Attention Deficit" and "Lost in the Middle" phenomena. Real architectural security and hierarchy must be enforced at the system/code level (Reverse-Engineering/State Machines), using tools like Hermes' native `Kanban` queues rather than deeply nested prompt wrappers.
+- **Context-Aware Architecture ("Mobil vs Motor")**: Architecture is highly context-dependent. A multi-agent framework that holds 3 agents simultaneously in RAM is a "luxury car"—useless for a 4GB RAM "narrow alley" Linux VPS. Optimize for asynchronous, state-machine-driven execution (e.g., saving task states to SQLite and killing processes) to prevent Out of Memory (OOM) errors.
+
+## 4. Reference Files
 - `AGENTS.md`: Technical guide and contribution rubric.
 - `docs/abelion/`: Primary research and session documentation.
 
-## 4. Visual & Output Standards
+*Failure to document changes is considered a violation of the project's integrity.*
 - **Neat Tables**: All tables emitted by the LLM must be wrapped in ` ```table ` block codes (handled by `display_aesthetics` plugin).
 - **Asa-Style Status**: Use structured status blocks for reports. Example:
   ```status

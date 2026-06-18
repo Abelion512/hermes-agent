@@ -16,9 +16,33 @@ platform the gateway truncates it and points the user at the dashboard / file.
 from __future__ import annotations
 
 import json
+import re
 from typing import List, Optional
 
 from tools import write_approval as wa
+
+
+_SKILL_RE = re.compile(
+    r"(?:patch|create|rewrite|delete)\s+(?:skill\s+)?'([^']+)'"
+    r"|(?:patch|write)\s+\S+?\s+in\s+'([^']+)'"
+    r"|^'([^']+)'"
+)
+
+
+def _extract_skill(summary: str) -> str:
+    """Extract the skill name from a pending-item summary."""
+    # Common patterns:
+    #   patch 'xxx' SKILL.md ...
+    #   create 'xxx' — ...
+    #   rewrite 'xxx' — ...
+    #   delete skill 'xxx'
+    #   write references/xxx.md in 'repo-name'
+    m = _SKILL_RE.search(summary)
+    if m:
+        return m.group(1) or m.group(2) or m.group(3) or "?"
+    # Fallback: first quoted string
+    m2 = re.search(r"'([^']+)'", summary)
+    return m2.group(1) if m2 else "?"
 
 
 def _fmt_state(subsystem: str) -> str:
@@ -34,17 +58,61 @@ def _fmt_pending_list(subsystem: str) -> str:
     records = wa.list_pending(subsystem)
     if not records:
         return f"No pending {subsystem} writes."
-    lines = [f"Pending {subsystem} writes ({len(records)}):"]
+
+    label = "SKILLS" if subsystem == "skills" else "MEMORY"
+    sep = "─" * 50
+
+    if subsystem == "memory":
+        # Flat list for memory (fewer items, no skill grouping)
+        lines = [
+            f"  📋 PENDING {label} ({len(records)})",
+            f"  {sep}",
+        ]
+        for r in records:
+            origin = r.get("origin", "foreground")
+            tag = "⚡" if origin == "background_review" else " "
+            summary = r.get("summary", "").replace("'", "").replace('"', "")
+            if len(summary) > 72:
+                summary = summary[:69] + "..."
+            lines.append(f"  [{r['id']}]{tag} {summary}")
+        lines.append(f"  {sep}")
+        lines.append("  ✅ approve <id>    ❌ reject <id>    ✅✅ all")
+        body = "\n".join(lines)
+        return f"```\n{body}\n```"
+
+    # Skills: group by skill name
+    groups = {}  # skill_name -> [(id, tag, summary), ...]
     for r in records:
         origin = r.get("origin", "foreground")
-        tag = " [auto]" if origin == "background_review" else ""
-        lines.append(f"  {r['id']}{tag}  {r.get('summary', '')}")
-    where = "/{s} approve <id>".format(s=subsystem)
-    lines.append("")
-    lines.append(f"Apply: {where}   Reject: /{subsystem} reject <id>")
-    if subsystem == wa.SKILLS:
-        lines.append("Review full diff: /skills diff <id>")
-    return "\n".join(lines)
+        tag = "⚡" if origin == "background_review" else " "
+        raw = r.get("summary", "")
+        # Extract skill BEFORE cleaning quotes
+        skill = _extract_skill(raw)
+        summary = raw.replace("'", "").replace('"', "")
+        if len(summary) > 72:
+            summary = summary[:69] + "..."
+        groups.setdefault(skill, []).append((r["id"], tag, summary))
+
+    lines = [
+        f"  📋 PENDING {label} ({len(records)})",
+        f"  {sep}",
+    ]
+
+    for skill in sorted(groups.keys()):
+        items = groups[skill]
+        lines.append(f"")
+        lines.append(f"  ▸ {skill} ({len(items)})")
+        for pid, tag, summary in items:
+            lines.append(f"    [{pid}]{tag} {summary}")
+
+    lines.append(f"")
+    lines.append(f"  {sep}")
+    lines.append(
+        "  ✅ approve <id>    ❌ reject <id>    ✅✅ all    📄 diff <id>"
+    )
+
+    body = "\n".join(lines)
+    return f"```\n{body}\n```"
 
 
 # ---------------------------------------------------------------------------

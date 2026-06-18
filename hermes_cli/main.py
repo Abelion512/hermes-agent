@@ -264,6 +264,7 @@ from typing import Optional
 
 from hermes_cli.subcommands._shared import add_accept_hooks_flag as _add_accept_hooks_flag
 from hermes_cli.subcommands.cron import build_cron_parser
+from hermes_cli.subcommands.news import build_news_parser
 from hermes_cli.subcommands.gateway import build_gateway_parser
 from hermes_cli.subcommands.profile import build_profile_parser
 from hermes_cli.subcommands.model import build_model_parser
@@ -4074,6 +4075,13 @@ def cmd_cron(args):
     from hermes_cli.cron import cron_command
 
     cron_command(args)
+
+
+def cmd_news(args):
+    """News ingestion pipeline."""
+    from hermes_cli.news_cmd import news_command
+
+    return news_command(args)
 
 
 def cmd_webhook(args):
@@ -11273,6 +11281,11 @@ def main():
     # cron command  (parser built in hermes_cli/subcommands/cron.py)
     # =========================================================================
     build_cron_parser(subparsers, cmd_cron=cmd_cron)
+
+    # =========================================================================
+    # news command  (parser built in hermes_cli/subcommands/news.py)
+    # =========================================================================
+    build_news_parser(subparsers, cmd_news=cmd_news)
 
     # =========================================================================
     # webhook command  (parser built in hermes_cli/subcommands/webhook.py)

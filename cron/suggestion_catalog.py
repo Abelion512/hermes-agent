@@ -118,6 +118,29 @@ CATALOG: List[CatalogEntry] = [
             "deliver": "origin",
         },
     ),
+    CatalogEntry(
+        key="catalog:news-fetcher",
+        title="News feed fetcher",
+        description="Fetch configured RSS feeds every 15 minutes, filter by "
+        "keywords and source whitelist, deduplicate, and stage items "
+        "in the news inbox for review. No LLM cost.",
+        job_spec={
+            "prompt": (
+                "Run the Hermes News ingestion pipeline: execute "
+                "`hermes news fetch` to pull configured RSS feeds, apply "
+                "keyword + source whitelist filters, deduplicate against "
+                "existing items, and stage new items in the pending inbox. "
+                "Report the ingestion summary (fetched / filtered / new). "
+                "If no feeds are configured, tell the user to run "
+                "`hermes news config add-feed <name> <url>` first and stop."
+            ),
+            "schedule": "every 15m",
+            "name": "News feed fetcher",
+            "deliver": "origin",
+            "no_agent": True,
+            "script": None,
+        },
+    ),
 ]
 
 

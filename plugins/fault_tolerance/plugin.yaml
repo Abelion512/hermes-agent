@@ -1,0 +1,12 @@
+name: fault_tolerance
+description: Automatic retry logic, circuit breakers, and error logging for "Zero-Alpha" learning.
+version: 0.1.0
+author: Gemini CLI
+kind: general
+metadata:
+  hermes:
+    category: stability
+    tags: [reliability, rsi, autonomous]
+    config:
+      max_retries: 3
+      failure_threshold: 5

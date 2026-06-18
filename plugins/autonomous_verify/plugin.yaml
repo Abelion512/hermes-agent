@@ -1,0 +1,9 @@
+name: autonomous_verify
+description: "Unified 'Edit -> Lint -> Build -> Test -> Verify' pipeline for autonomous code changes."
+version: 0.1.0
+author: Gemini CLI
+kind: general
+metadata:
+  hermes:
+    category: software-development
+    tags: [autonomous, testing, validation]
