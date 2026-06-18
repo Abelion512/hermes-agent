@@ -56,61 +56,33 @@ from hermes_cli.cli_output import (  # noqa: E402 — late import block
 # Each entry: (toolset_name, label, description)
 # These map to keys in toolsets.py TOOLSETS dict.
 CONFIGURABLE_TOOLSETS = [
-    ("web", "🔍 Web Search & Scraping", "web_search, web_extract"),
-    ("browser", "🌐 Browser Automation", "navigate, click, type, scroll"),
-    ("terminal", "💻 Terminal & Processes", "terminal, process"),
-    ("file", "📁 File Operations", "read, write, patch, search"),
-    ("code_execution", "⚡ Code Execution", "execute_code"),
-    ("vision", "👁️  Vision / Image Analysis", "vision_analyze"),
-    ("video", "🎬 Video Analysis", "video_analyze (requires video-capable model)"),
-    ("image_gen", "🎨 Image Generation", "image_generate"),
-    (
-        "video_gen",
-        "🎬 Video Generation",
-        "video_generate (text-to-video + image-to-video)",
-    ),
-    (
-        "x_search",
-        "🐦 X (Twitter) Search",
-        "x_search (requires xAI OAuth or XAI_API_KEY)",
-    ),
-    ("moa", "🧠 Mixture of Agents", "mixture_of_agents"),
-    ("tts", "🔊 Text-to-Speech", "text_to_speech"),
-    ("skills", "📚 Skills", "list, view, manage"),
-    ("todo", "📋 Task Planning", "todo"),
-    ("memory", "💾 Memory", "persistent memory across sessions"),
-    (
-        "context_engine",
-        "🧩 Context Engine",
-        "runtime tools from the active context engine",
-    ),
-    ("session_search", "🔎 Session Search", "search past conversations"),
-    ("clarify", "❓ Clarifying Questions", "clarify"),
-    ("delegation", "👥 Task Delegation", "delegate_task"),
-    (
-        "cronjob",
-        "⏰ Cron Jobs",
-        "create/list/update/pause/resume/run, with optional attached skills",
-    ),
-    ("messaging", "📨 Cross-Platform Messaging", "send_message"),
-    ("homeassistant", "🏠 Home Assistant", "smart home device control"),
-    ("spotify", "🎵 Spotify", "playback, search, playlists, library"),
-    (
-        "discord",
-        "💬 Discord (read/participate)",
-        "fetch messages, search members, create thread",
-    ),
-    (
-        "discord_admin",
-        "🛡️  Discord Server Admin",
-        "list channels/roles, pin, assign roles",
-    ),
-    ("yuanbao", "🤖 Yuanbao", "group info, member queries, DM"),
-    (
-        "computer_use",
-        "🖱️  Computer Use (macOS)",
-        "background desktop control via cua-driver",
-    ),
+    ("web",             "🔍 Web Search & Scraping",    "web_search, web_extract"),
+    ("browser",         "🌐 Browser Automation",       "navigate, click, type, scroll"),
+    ("terminal",        "💻 Terminal & Processes",      "terminal, process"),
+    ("file",            "📁 File Operations",           "read, write, patch, search"),
+    ("code_execution",  "⚡ Code Execution",            "execute_code"),
+    ("vision",          "👁️  Vision / Image Analysis",  "vision_analyze"),
+    ("video",           "🎬 Video Analysis",            "video_analyze (requires video-capable model)"),
+    ("image_gen",       "🎨 Image Generation",          "image_generate"),
+    ("video_gen",       "🎬 Video Generation",          "video_generate (text-to-video + image-to-video)"),
+    ("x_search",        "🐦 X (Twitter) Search",        "x_search (requires xAI OAuth or XAI_API_KEY)"),
+    ("moa",             "🧠 Mixture of Agents",         "mixture_of_agents"),
+    ("tts",             "🔊 Text-to-Speech",            "text_to_speech"),
+    ("skills",          "📚 Skills",                    "list, view, manage"),
+    ("todo",            "📋 Task Planning",             "todo"),
+    ("memory",          "💾 Memory",                    "persistent memory across sessions"),
+    ("context_engine",  "🧩 Context Engine",            "runtime tools from the active context engine"),
+    ("session_search",  "🔎 Session Search",            "search past conversations"),
+    ("clarify",         "❓ Clarifying Questions",      "clarify"),
+    ("delegation",      "👥 Task Delegation",           "delegate_task"),
+    ("cronjob",         "⏰ Cron Jobs",                 "create/list/update/pause/resume/run, with optional attached skills"),
+    ("messaging",       "📨 Cross-Platform Messaging",  "send_message"),
+    ("homeassistant",    "🏠 Home Assistant",           "smart home device control"),
+    ("spotify",          "🎵 Spotify",                  "playback, search, playlists, library"),
+    ("discord",         "💬 Discord (read/participate)", "fetch messages, search members, create thread"),
+    ("discord_admin",   "🛡️  Discord Server Admin",    "list channels/roles, pin, assign roles"),
+    ("yuanbao",          "🤖 Yuanbao",                  "group info, member queries, DM"),
+    ("computer_use",     "🖱️  Computer Use (macOS)",     "background desktop control via cua-driver"),
 ]
 
 
@@ -2367,13 +2339,8 @@ def _toolset_needs_configuration_prompt(
         tts_cfg = config.get("tts", {})
         return not isinstance(tts_cfg, dict) or "provider" not in tts_cfg
     if ts_key == "web":
-        # Web works out of the box via Parallel's free Search MCP (no key), so
-        # don't force setup just because ``web.backend`` is unset — only prompt
-        # when web isn't actually usable (e.g. an explicit backend configured
-        # without its credentials). Lazy import: web_tools is heavy and most
-        # tools_config callers don't need it.
-        from tools.web_tools import check_web_api_key
-        return not check_web_api_key()
+        web_cfg = config.get("web", {})
+        return not isinstance(web_cfg, dict) or "backend" not in web_cfg
     if ts_key == "browser":
         browser_cfg = config.get("browser", {})
         return not isinstance(browser_cfg, dict) or "cloud_provider" not in browser_cfg

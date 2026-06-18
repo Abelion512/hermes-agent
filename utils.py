@@ -1,8 +1,10 @@
 """Shared utility functions for hermes-agent."""
 
+import errno
 import json
 import logging
 import os
+import shutil
 import stat
 import tempfile
 from pathlib import Path
@@ -71,16 +73,38 @@ def atomic_replace(tmp_path: Union[str, Path], target: Union[str, Path]) -> str:
     This helper resolves the symlink first so ``os.replace`` writes to
     the real file in-place while the symlink survives.  For non-symlink
     and non-existent paths the behavior is identical to a plain
-    ``os.replace`` call.
+    ``os.replace`` call unless the rename fails with ``EXDEV`` or ``EBUSY``;
+    those cases fall back to copy/fsync/unlink for cross-device, bind-mount,
+    and busy-file deployments.
 
     Returns the resolved real path used for the replace, so callers that
     need to re-apply permissions can target it instead of the symlink.
     """
     target_str = str(target)
-    real_path = (
-        os.path.realpath(target_str) if os.path.islink(target_str) else target_str
-    )
-    os.replace(str(tmp_path), real_path)
+    real_path = os.path.realpath(target_str) if os.path.islink(target_str) else target_str
+    tmp_str = str(tmp_path)
+    try:
+        os.replace(tmp_str, real_path)
+    except OSError as exc:
+        if exc.errno not in (errno.EXDEV, errno.EBUSY):
+            raise
+        logger.debug(
+            "atomic_replace: %s -> %s failed with %s; falling back to copy",
+            tmp_str,
+            real_path,
+            errno.errorcode.get(exc.errno, exc.errno),
+        )
+        shutil.copyfile(tmp_str, real_path)
+        try:
+            shutil.copystat(tmp_str, real_path)
+        except OSError:
+            pass
+        try:
+            with open(real_path, "rb") as f:
+                os.fsync(f.fileno())
+        except OSError:
+            pass
+        os.unlink(tmp_str)
     return real_path
 
 
@@ -88,7 +112,7 @@ def atomic_json_write(
     path: Union[str, Path],
     data: Any,
     *,
-    indent: int | None = 2,
+    indent: int = 2,
     mode: int | None = None,
     **dump_kwargs: Any,
 ) -> None:
@@ -187,9 +211,7 @@ def atomic_yaml_write(
     )
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
-            yaml.dump(
-                data, f, default_flow_style=default_flow_style, sort_keys=sort_keys
-            )
+            yaml.dump(data, f, default_flow_style=default_flow_style, sort_keys=sort_keys)
             if extra_content:
                 f.write(extra_content)
             f.flush()
@@ -310,12 +332,8 @@ def env_bool(key: str, default: bool = False) -> bool:
 
 
 _PROXY_ENV_KEYS = (
-    "HTTPS_PROXY",
-    "HTTP_PROXY",
-    "ALL_PROXY",
-    "https_proxy",
-    "http_proxy",
-    "all_proxy",
+    "HTTPS_PROXY", "HTTP_PROXY", "ALL_PROXY",
+    "https_proxy", "http_proxy", "all_proxy",
 )
 
 
@@ -330,7 +348,7 @@ def normalize_proxy_url(proxy_url: str | None) -> str | None:
     if not candidate:
         return None
     if candidate.lower().startswith("socks://"):
-        return f"socks5://{candidate[len('socks://') :]}"
+        return f"socks5://{candidate[len('socks://'):]}"
     return candidate
 
 
