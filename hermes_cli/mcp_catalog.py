@@ -360,8 +360,9 @@ def _install_root() -> Path:
 def _run_bootstrap(cwd: Path, commands: List[str]) -> None:
     """Execute bootstrap commands in *cwd*. Raise CatalogError on first failure.
 
-    The output is streamed to the user's terminal for visibility.
-    Multiple commands can be chained with `&&` for convenience.
+    Commands may be chained with ``&&`` for convenience.  Each sub-command
+    is parsed via ``shlex.split`` and executed with ``shell=False`` to
+    prevent shell injection from manifest-supplied strings.
     """
     for cmd in commands:
         print(color(f"  $ {cmd}", Colors.DIM))
@@ -370,8 +371,8 @@ def _run_bootstrap(cwd: Path, commands: List[str]) -> None:
         except ValueError as e:
             raise CatalogError(f"Failed to parse bootstrap command: {cmd}") from e
 
-        sub_cmds = []
-        current = []
+        sub_cmds: list[list[str]] = []
+        current: list[str] = []
         for token in tokens:
             if token == "&&":
                 if current:

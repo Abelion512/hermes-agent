@@ -738,6 +738,125 @@ class TestGitInstallShaRef:
 
 
 # ---------------------------------------------------------------------------
+# _run_bootstrap — shell injection hardening (shlex.split + shell=False)
+# ---------------------------------------------------------------------------
+
+
+class TestRunBootstrapShellHardening:
+    """After the fix, _run_bootstrap must never pass user-controlled strings
+    through the shell.  Every sub-command is parsed via ``shlex.split`` and
+    executed with ``shell=False``."""
+
+    def _make_fake_run(self):
+        """Return a fake subprocess.run that records calls and always succeeds."""
+        calls = []
+
+        class _FakeProc:
+            def __init__(self, returncode=0):
+                self.returncode = returncode
+
+        def fake_run(argv, *args, **kwargs):
+            calls.append({"argv": list(argv), "kwargs": kwargs})
+            # Assert shell=False was passed (the core invariant)
+            assert kwargs.get("shell", False) is False, (
+                f"shell=True detected in subprocess.run call: {argv}"
+            )
+            return _FakeProc(returncode=0)
+
+        return calls, fake_run
+
+    def test_simple_command_no_shell(self, tmp_path, monkeypatch):
+        """A plain command like ``pip install .`` is parsed and executed
+        without shell=True."""
+        from hermes_cli import mcp_catalog
+        from hermes_cli.mcp_catalog import _run_bootstrap
+
+        calls, fake_run = self._make_fake_run()
+        monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
+
+        _run_bootstrap(tmp_path, ["pip install -e ."])
+
+        assert len(calls) == 1
+        assert calls[0]["argv"] == ["pip", "install", "-e", "."]
+
+    def test_chained_command_split_on_and_and(self, tmp_path, monkeypatch):
+        """``cmd1 && cmd2`` is split into two independent subprocess.run calls,
+        each with shell=False."""
+        from hermes_cli import mcp_catalog
+        from hermes_cli.mcp_catalog import _run_bootstrap
+
+        calls, fake_run = self._make_fake_run()
+        monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
+
+        _run_bootstrap(tmp_path, ["npm install && npm run build"])
+
+        assert len(calls) == 2
+        assert calls[0]["argv"] == ["npm", "install"]
+        assert calls[1]["argv"] == ["npm", "run", "build"]
+
+    def test_shell_metacharacters_not_interpreted(self, tmp_path, monkeypatch):
+        """Metacharacters like ``; rm -rf /`` are treated as literal arguments
+        by shlex, NOT interpreted by a shell. Only ONE subprocess.run call
+        should be made (no shell splitting on ;)."""
+        from hermes_cli import mcp_catalog
+        from hermes_cli.mcp_catalog import _run_bootstrap
+
+        calls, fake_run = self._make_fake_run()
+        monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
+
+        # A malicious manifest trying command injection
+        _run_bootstrap(tmp_path, ["echo hello; rm -rf /"])
+
+        # The key invariant: only one call (no shell splitting on ;)
+        assert len(calls) == 1
+        # shlex treats ; as literal; it becomes part of the 'echo' argument
+        # The command runs: echo "hello; rm -rf /" (safe)
+        argv = calls[0]["argv"]
+        assert argv[0] == "echo"
+        assert "hello;" in argv  # semicolon is literal part of argument
+        assert "rm" in argv       # rm is literal part of argument, NOT executed
+
+    def test_backtick_substitution_prevented(self, tmp_path, monkeypatch):
+        """Backtick command substitution ```malicious`` is NOT executed."""
+        from hermes_cli import mcp_catalog
+        from hermes_cli.mcp_catalog import _run_bootstrap
+
+        calls, fake_run = self._make_fake_run()
+        monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
+
+        _run_bootstrap(tmp_path, ["echo `whoami`"])
+
+        assert len(calls) == 1
+        # shlex treats backticks as literal characters in non-shell mode
+        assert "`whoami`" in calls[0]["argv"]
+
+    def test_failed_command_raises_catalog_error(self, tmp_path, monkeypatch):
+        """A non-zero exit code raises CatalogError."""
+
+        class _FailProc:
+            returncode = 1
+
+        def fake_run(argv, **kwargs):
+            assert kwargs.get("shell", False) is False
+            return _FailProc()
+
+        from hermes_cli import mcp_catalog
+        from hermes_cli.mcp_catalog import _run_bootstrap, CatalogError
+
+        monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
+
+        with pytest.raises(CatalogError, match="bootstrap step failed"):
+            _run_bootstrap(tmp_path, ["false"])
+
+    def test_empty_command_list_is_noop(self, tmp_path):
+        """An empty command list does nothing (no subprocess calls)."""
+        from hermes_cli.mcp_catalog import _run_bootstrap
+
+        # Should not raise
+        _run_bootstrap(tmp_path, [])
+
+
+# ---------------------------------------------------------------------------
 # Existing tools_config converged to tools.include
 # ---------------------------------------------------------------------------
 
