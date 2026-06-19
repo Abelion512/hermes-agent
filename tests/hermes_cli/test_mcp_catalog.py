@@ -796,7 +796,8 @@ class TestRunBootstrapShellHardening:
 
     def test_shell_metacharacters_not_interpreted(self, tmp_path, monkeypatch):
         """Metacharacters like ``; rm -rf /`` are treated as literal arguments
-        by shlex, NOT interpreted by a shell."""
+        by shlex, NOT interpreted by a shell. Only ONE subprocess.run call
+        should be made (no shell splitting on ;)."""
         from hermes_cli import mcp_catalog
         from hermes_cli.mcp_catalog import _run_bootstrap
 
@@ -806,11 +807,14 @@ class TestRunBootstrapShellHardening:
         # A malicious manifest trying command injection
         _run_bootstrap(tmp_path, ["echo hello; rm -rf /"])
 
-        assert len(calls) == 1
-        # shlex.split preserves the metacharacters as literals
-        assert "rm" not in calls[0]["argv"] or ";" in calls[0]["argv"]
         # The key invariant: only one call (no shell splitting on ;)
         assert len(calls) == 1
+        # shlex treats ; as literal; it becomes part of the 'echo' argument
+        # The command runs: echo "hello; rm -rf /" (safe)
+        argv = calls[0]["argv"]
+        assert argv[0] == "echo"
+        assert "hello;" in argv  # semicolon is literal part of argument
+        assert "rm" in argv       # rm is literal part of argument, NOT executed
 
     def test_backtick_substitution_prevented(self, tmp_path, monkeypatch):
         """Backtick command substitution ```malicious`` is NOT executed."""
