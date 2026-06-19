@@ -1,11 +1,11 @@
 name: abelion-core
 version: 1.0.0
-description: "Unified Abelion Architecture: RSI Experience Loop, RAM-safe Caching, and Multi-Agent Hierarchy."
+description: "Abelion plugin: RSI experience loop, RAM-safe caching, circuit breaker, and health checks."
 author: "Abelion"
 hooks:
-  - post_llm_call
-  - on_session_end
   - pre_tool_call
+  - post_llm_call
   - pre_llm_call
+  - on_session_end
 middleware:
   - llm_request

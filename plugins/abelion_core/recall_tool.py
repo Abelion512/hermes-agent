@@ -130,18 +130,22 @@ Your response MUST be ONLY the raw JSON array (enclosed in []). Do not include a
 """
 
         try:
-            rerank_res = ctx.llm.complete(
-                messages=[{"role": "user", "content": prompt}],
-                purpose="recall_reranking"
-            )
-            text = rerank_res.text.strip()
-            if "```json" in text:
-                text = text.split("```json")[1].split("```")[0].strip()
-            elif "```" in text:
-                text = text.split("```")[1].split("```")[0].strip()
+            if hasattr(ctx, "llm") and ctx.llm is not None:
+                rerank_res = ctx.llm.complete(
+                    messages=[{"role": "user", "content": prompt}],
+                    purpose="recall_reranking"
+                )
+                text = rerank_res.text.strip()
+                if "```json" in text:
+                    text = text.split("```json")[1].split("```")[0].strip()
+                elif "```" in text:
+                    text = text.split("```")[1].split("```")[0].strip()
 
-            final_results = json.loads(text)
-            if not isinstance(final_results, list):
+                final_results = json.loads(text)
+                if not isinstance(final_results, list):
+                    final_results = top_candidates[:3]
+            else:
+                logger.warning("[abelion_core.recall] PluginContext lacks 'llm' facade. Falling back to FTS top candidates.")
                 final_results = top_candidates[:3]
         except Exception as e:
             logger.warning(f"[abelion_core.recall] LLM Reranking failed or returned invalid JSON: {e}. Falling back to top candidates.")

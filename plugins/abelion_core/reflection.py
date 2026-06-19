@@ -4,6 +4,7 @@ import os
 import re
 from datetime import datetime
 from pathlib import Path
+from hermes_constants import get_hermes_home
 
 logger = logging.getLogger(__name__)
 
@@ -11,8 +12,7 @@ logger = logging.getLogger(__name__)
 _session_messages = {}
 
 # Local research path for isolation
-PROJECT_ROOT = Path("/media/abelion/Isaf/ican/project/references/hermes-agent")
-RESEARCH_DATA_DIR = PROJECT_ROOT / "docs/abelion/reflections"
+RESEARCH_DATA_DIR = get_hermes_home() / "abelion" / "reflections"
 
 REFLECTION_PROMPT = """
 Analyze the conversation history above. Your goal is to extract "Experience" data for a Recursive Self-Improvement (RSI) loop.

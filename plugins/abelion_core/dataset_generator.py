@@ -9,7 +9,7 @@ from hermes_constants import get_hermes_home
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_OUTPUT_DIR = Path("/media/abelion/Isaf/ican/project/OlivXOS/data_chat")
+DEFAULT_OUTPUT_DIR = get_hermes_home() / "abelion" / "data_chat"
 
 def export_all_sessions_to_olivxos(output_dir=None, db_path=None, filename_format="dataset_{timestamp}.jsonl"):
     """

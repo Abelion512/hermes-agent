@@ -87,11 +87,6 @@ def register_health_tools(ctx):
     def handler(args, **kwargs):
         agent = kwargs.get("parent_agent")
         if not agent:
-            from plugins.abelion_core import _find_agent_on_stack
-
-            agent = _find_agent_on_stack()
-
-        if not agent:
             return json.dumps({"error": "No agent context available for health check."})
 
         # Temporarily swap model/provider if specified

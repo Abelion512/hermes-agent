@@ -2,10 +2,11 @@ import os
 import logging
 from datetime import datetime
 from pathlib import Path
+from hermes_constants import get_hermes_home
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_VAULT_PATH = Path("/home/abelion/Downloads/HermesVault")
+DEFAULT_VAULT_PATH = get_hermes_home() / "abelion" / "obsidian_vault"
 
 def get_profile_name():
     """
