@@ -605,7 +605,7 @@ def _get_or_create_env(task_id: str):
     Returns ``(env, env_type)`` tuple.
     """
     from tools.terminal_tool import (
-        _active_environments, _env_lock, _create_environment,
+        EnvironmentConfig, _active_environments, _env_lock, _create_environment,
         _get_env_config, _last_activity, _start_cleanup_thread,
         _creation_locks, _creation_locks_lock, _task_env_overrides,
         _resolve_container_task_id,
@@ -678,15 +678,17 @@ def _get_or_create_env(task_id: str):
         logger.info("Creating new %s environment for execute_code task %s...",
                      env_type, effective_task_id[:8])
         env = _create_environment(
-            env_type=env_type,
-            image=image,
-            cwd=cwd,
-            timeout=config["timeout"],
-            ssh_config=ssh_config,
-            container_config=container_config,
-            local_config=local_config,
-            task_id=effective_task_id,
-            host_cwd=config.get("host_cwd"),
+            EnvironmentConfig(
+                env_type=env_type,
+                image=image,
+                cwd=cwd,
+                timeout=config["timeout"],
+                ssh_config=ssh_config,
+                container_config=container_config,
+                local_config=local_config,
+                task_id=effective_task_id,
+                host_cwd=config.get("host_cwd"),
+            )
         )
 
         with _env_lock:
