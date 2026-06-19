@@ -7,12 +7,31 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_VAULT_PATH = Path("/home/abelion/Downloads/HermesVault")
 
+def get_profile_name():
+    """
+    Infers the current profile name from HERMES_HOME env var with fallback to active_profile.
+    """
+    hermes_home = os.environ.get("HERMES_HOME")
+    if hermes_home:
+        path = Path(hermes_home).resolve()
+        if path.parent.name == "profiles":
+            return path.name
+    # Fallback to active_profile file
+    try:
+        active_profile_file = Path.home() / ".hermes" / "active_profile"
+        if active_profile_file.exists():
+            return active_profile_file.read_text().strip() or "default"
+    except Exception:
+        pass
+    return "default"
+
 def export_session_to_obsidian(session_id, final_record, vault_path=None):
     """
     Exports the recorded reflection data to a Markdown file in the Obsidian vault.
     """
     if not vault_path:
-        vault_path = DEFAULT_VAULT_PATH
+        profile_name = get_profile_name()
+        vault_path = DEFAULT_VAULT_PATH / profile_name
 
     try:
         os.makedirs(vault_path, exist_ok=True)

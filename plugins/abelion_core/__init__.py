@@ -641,6 +641,13 @@ def register(ctx):
     """
     Register the unified abelion_core plugin.
     """
+    # Ensure memory store DB is initialized on plugin load
+    try:
+        from .memory_store import init_db
+        init_db()
+    except Exception as e:
+        logger.error(f"[abelion_core] Failed to auto-initialize memory store DB: {e}")
+
     # 1. Caching & RAM Guard
     ctx.register_middleware("llm_request", optimize_caching)
 
