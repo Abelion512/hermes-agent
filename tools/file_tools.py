@@ -1429,11 +1429,15 @@ def patch_tool(mode: str = "replace", path: str = None, old_string: str = None,
         return tool_error(str(e))
 
 
-def search_tool(pattern: str, target: str = "content", path: str = ".",
-                file_glob: str = None, limit: int = 50, offset: int = 0,
-                output_mode: str = "content", context: int = 0,
-                task_id: str = "default") -> str:
+def search_tool(pattern: str, task_id: str = "default", **kwargs) -> str:
     """Search for content or files."""
+    target = kwargs.get("target", "content")
+    path = kwargs.get("path", ".")
+    file_glob = kwargs.get("file_glob", None)
+    limit = kwargs.get("limit", 50)
+    offset = kwargs.get("offset", 0)
+    output_mode = kwargs.get("output_mode", "content")
+    context = kwargs.get("context", 0)
     try:
         offset, limit = normalize_search_pagination(offset, limit)
 
