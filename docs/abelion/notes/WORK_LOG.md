@@ -97,3 +97,27 @@
 ### Current Status
 - Resolved the Cloudflare Tunnel slow loading/timeout issue: the user modified NetworkManager DNS to 1.1.1.1/8.8.8.8, successfully bypassing the ISP's NXDOMAIN hijack and allowing the tunnel subdomain to resolve.
 - Tailscale tunnel issue remains diagnosed (needs Tailnet Funnel enablement on the user's Tailscale admin account).
+
+## Session: 2026-06-19
+
+### Goals
+- Clean up branch: revert personal core edits, extract upstream-viable fixes to PR branch, strip monkey-patches from abelion_core plugin.
+
+### Actions
+- [x] **Tahap 0**: Stashed uncommitted work (plugin files + test).
+- [x] **Tahap 1**: Created clean branch `fix/security-mcp-bootstrap-shell-injection` from `upstream/main`.
+- [x] **Tahap 2**: Fixed shell injection in `hermes_cli/mcp_catalog.py:_run_bootstrap` — replaced `shell=True` with `shlex.split` + `shell=False`. Added `shlex` import. Added test class `TestRunBootstrapShellHardening` in `tests/hermes_cli/test_mcp_catalog.py` (115 lines, 5 tests covering simple commands, `&&` chaining, shell metachar literals, non-zero exit, empty list). Committed to PR branch.
+- [x] **Tahap 3**: Reverted personal PII redaction / local provider edits from 5 core files to match upstream/main: `tools/memory_tool.py`, `agent/tool_dispatch_helpers.py`, `tools/session_search_tool.py`, `gateway/config.py`, `acp_adapter/server.py`. Committed `b9bf5a95e`.
+- [x] **Tahap 4**: Cleaned `plugins/abelion_core/`:
+  - Removed `_patch_kanban_db`, `_patch_validate_requested_model`, `_patch_model_switch_is_custom`, `_patch_discord_model_picker_view`, `_patch_list_authenticated_providers` functions.
+  - Removed monkey-patch injection in `register()` (tool_dispatch_helpers, messaging toolset injection, local provider patches).
+  - Fixed hardcoded absolute paths in `reflection.py`, `dataset_generator.py`, `obsidian_exporter.py` → `get_hermes_home()`.
+  - Removed `_find_agent_on_stack` from `health.py`.
+  - Updated `plugin.yaml` to match actual hooks/middleware.
+  - Removed PII redaction tests (11-18) from `test_abelion_error_handler.py`, renumbered remaining 22 tests.
+  - All 21 tests pass (1 skipped).
+  - Committed `780f88839`.
+
+### Current Status
+- Branch `implement-research-z.ai`: clean working tree, 3 commits ahead of baseline.
+- Branch `fix/security-mcp-bootstrap-shell-injection`: ready for upstream PR (1 commit, 2 files).
