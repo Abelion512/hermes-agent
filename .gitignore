@@ -137,3 +137,15 @@ RELEASE_v*.md
 # Desktop demo-run scratch output (hermes writes demo/*.txt during recorded
 # walkthroughs). Throwaway artifacts, never part of the app.
 apps/desktop/demo/
+
+# Personal config / env-local files (Abelion fork)
+.qoderignore
+cli-config-temp.yaml
+dummy.txt
+
+# docs/abelion — exclude non-research directories (personal workspace, kept on disk)
+docs/abelion/agent-session/
+docs/abelion/notes/
+docs/abelion/reflections/
+docs/abelion/tasks/
+docs/abelion/scratch/
