@@ -32,11 +32,10 @@ only choice that is universally correct across self-hosted IDPs. (The ``nous``
 provider verifies its *access* token because Nous Portal mints a custom JWT
 access token with the dashboard claims baked in — a non-OIDC shortcut.)
 
-Public PKCE clients only. Confidential clients (with a ``client_secret``) are
-not yet supported — see the ``# TODO(confidential-client)`` seam in
-``complete_login`` / ``refresh_session``. Self-hosters configuring a CLI/SPA
-client almost always register a public + PKCE client, which is the smaller,
-simpler surface.
+Supports both public PKCE clients and confidential clients (when a
+``client_secret`` is configured). Self-hosters configuring a CLI/SPA client
+almost always register a public + PKCE client, which is the smaller, simpler
+surface, but confidential clients are fully supported.
 
 Configuration surfaces (env wins over config.yaml when set non-empty, so a
 provisioned-but-not-populated secret can't shadow a valid config.yaml entry —
@@ -171,6 +170,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         *,
         issuer: str,
         client_id: str,
+        client_secret: str = "",
         scopes: str = _DEFAULT_SCOPES,
     ) -> None:
         if not issuer:
@@ -185,6 +185,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         self._issuer = issuer.rstrip("/")
         _require_https_or_loopback(self._issuer, field="issuer")
         self._client_id = client_id
+        self._client_secret = client_secret
         self._scopes = scopes.strip() or _DEFAULT_SCOPES
 
         # Discovery + JWKS are lazily resolved on first use so plugin
@@ -245,9 +246,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
             "client_id": self._client_id,
             "code_verifier": code_verifier,
         }
-        # TODO(confidential-client): when client_secret support lands, add it
-        # here (and switch to HTTP Basic auth if the IDP's
-        # token_endpoint_auth_methods_supported prefers client_secret_basic).
+
         return self._exchange(
             disco["token_endpoint"], data, bad_request_exc=InvalidCodeError
         )
@@ -265,7 +264,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
             # identity claims (some IDPs narrow scope on refresh otherwise).
             "scope": self._scopes,
         }
-        # TODO(confidential-client): add client_secret here when supported.
+
         return self._exchange(
             disco["token_endpoint"],
             data,
@@ -305,13 +304,33 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         if not endpoint:
             return None
         try:
+            data = {
+                "token": refresh_token,
+                "token_type_hint": "refresh_token",
+                "client_id": self._client_id,
+            }
+            auth = None
+            if self._client_secret:
+                supported_auth = disco.get("revocation_endpoint_auth_methods_supported")
+                if not supported_auth:
+                    # Fallback to token endpoint auth methods
+                    supported_auth = disco.get(
+                        "token_endpoint_auth_methods_supported", ["client_secret_basic"]
+                    )
+
+                if "client_secret_basic" in supported_auth:
+                    auth = (self._client_id, self._client_secret)
+                    del data["client_id"]
+                elif "client_secret_post" in supported_auth:
+                    data["client_secret"] = self._client_secret
+                else:
+                    auth = (self._client_id, self._client_secret)
+                    del data["client_id"]
+
             httpx.post(
                 endpoint,
-                data={
-                    "token": refresh_token,
-                    "token_type_hint": "refresh_token",
-                    "client_id": self._client_id,
-                },
+                data=data,
+                auth=auth,
                 headers={"Accept": "application/json"},
                 timeout=_TOKEN_ENDPOINT_TIMEOUT_SEC,
             )
@@ -336,24 +355,43 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         ``InvalidCodeError`` for the auth-code path, ``RefreshExpiredError``
         for the refresh path — preserving the middleware's distinct handling.
         """
+        auth = None
+        if self._client_secret:
+            disco = self._get_discovery()
+            # OIDC Core 1.0 section 9: token_endpoint_auth_methods_supported
+            # default is client_secret_basic
+            supported_auth = disco.get(
+                "token_endpoint_auth_methods_supported", ["client_secret_basic"]
+            )
+
+            if "client_secret_basic" in supported_auth:
+                auth = (self._client_id, self._client_secret)
+                # OIDC spec says client_id MUST NOT be sent in body if sent in Authorization header
+                if "client_id" in data:
+                    del data["client_id"]
+            elif "client_secret_post" in supported_auth:
+                data["client_secret"] = self._client_secret
+            else:
+                # Fallback to basic if neither is explicitly supported but we have a secret
+                auth = (self._client_id, self._client_secret)
+                if "client_id" in data:
+                    del data["client_id"]
+
         try:
             response = httpx.post(
                 token_endpoint,
                 data=data,
+                auth=auth,
                 headers={"Accept": "application/json"},
                 timeout=_TOKEN_ENDPOINT_TIMEOUT_SEC,
             )
         except httpx.RequestError as exc:
-            raise ProviderError(
-                f"OIDC token endpoint unreachable: {exc}"
-            ) from exc
+            raise ProviderError(f"OIDC token endpoint unreachable: {exc}") from exc
 
         if response.status_code == 400:
             body = self._parse_json_body(response)
             error_code = body.get("error", "invalid_request")
-            raise bad_request_exc(
-                f"IDP rejected token request: {error_code}"
-            )
+            raise bad_request_exc(f"IDP rejected token request: {error_code}")
         if response.status_code != 200:
             raise ProviderError(
                 f"OIDC token endpoint returned {response.status_code}: "
@@ -463,9 +501,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         _require_https_or_loopback(token_endpoint, field="token_endpoint")
         _require_https_or_loopback(jwks_uri, field="jwks_uri")
 
-        revocation_endpoint = str(
-            payload.get("revocation_endpoint", "") or ""
-        ).strip()
+        revocation_endpoint = str(payload.get("revocation_endpoint", "") or "").strip()
 
         return {
             "issuer": advertised_issuer or self._issuer,
@@ -473,6 +509,12 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
             "token_endpoint": token_endpoint,
             "jwks_uri": jwks_uri,
             "revocation_endpoint": revocation_endpoint,
+            "token_endpoint_auth_methods_supported": payload.get(
+                "token_endpoint_auth_methods_supported", ["client_secret_basic"]
+            ),
+            "revocation_endpoint_auth_methods_supported": payload.get(
+                "revocation_endpoint_auth_methods_supported", None
+            ),
         }
 
     # ---- internals: JWT verification --------------------------------------
@@ -495,9 +537,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         disco = self._get_discovery()
 
         try:
-            signing_key = self._get_jwks_client().get_signing_key_from_jwt(
-                id_token
-            )
+            signing_key = self._get_jwks_client().get_signing_key_from_jwt(id_token)
         except jwt.PyJWKClientError as exc:
             raise ProviderError(f"JWKS lookup failed: {exc}") from exc
         except Exception as exc:  # pragma: no cover - defensive
@@ -598,9 +638,7 @@ class SelfHostedOIDCProvider(DashboardAuthProvider):
         """
         parsed = urllib.parse.urlparse(redirect_uri)
         if parsed.scheme not in ("https", "http"):
-            raise ProviderError(
-                f"redirect_uri must be http(s), got {redirect_uri!r}"
-            )
+            raise ProviderError(f"redirect_uri must be http(s), got {redirect_uri!r}")
         if parsed.scheme == "http" and parsed.hostname not in (
             "localhost",
             "127.0.0.1",
@@ -691,11 +729,12 @@ def register(ctx) -> None:
     oauth_section = _load_config_oauth_section()
     oidc_cfg = _oidc_subsection(oauth_section)
 
-    issuer = _resolve_setting(
-        "HERMES_DASHBOARD_OIDC_ISSUER", oidc_cfg.get("issuer")
-    )
+    issuer = _resolve_setting("HERMES_DASHBOARD_OIDC_ISSUER", oidc_cfg.get("issuer"))
     client_id = _resolve_setting(
         "HERMES_DASHBOARD_OIDC_CLIENT_ID", oidc_cfg.get("client_id")
+    )
+    client_secret = _resolve_setting(
+        "HERMES_DASHBOARD_OIDC_CLIENT_SECRET", oidc_cfg.get("client_secret")
     )
     scopes = (
         _resolve_setting("HERMES_DASHBOARD_OIDC_SCOPES", oidc_cfg.get("scopes"))
@@ -717,12 +756,13 @@ def register(ctx) -> None:
 
     try:
         provider = SelfHostedOIDCProvider(
-            issuer=issuer, client_id=client_id, scopes=scopes
+            issuer=issuer,
+            client_id=client_id,
+            client_secret=client_secret,
+            scopes=scopes,
         )
     except (ValueError, ProviderError) as exc:
-        LAST_SKIP_REASON = (
-            f"SelfHostedOIDCProvider construction failed: {exc}"
-        )
+        LAST_SKIP_REASON = f"SelfHostedOIDCProvider construction failed: {exc}"
         logger.warning("dashboard-auth-self-hosted: %s", LAST_SKIP_REASON)
         return
 

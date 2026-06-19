@@ -20,7 +20,8 @@ if str(_repo_root) not in sys.path:
     sys.path.insert(0, str(_repo_root))
 
 try:
-    import tools.terminal_tool  # noqa: F401
+    import tools.terminal_tool
+    from tools.terminal_tool import EnvironmentConfig  # noqa: F401
     _tt_mod = sys.modules["tools.terminal_tool"]
 except ImportError:
     pytest.skip("hermes-agent tools not importable (missing deps)", allow_module_level=True)
@@ -141,12 +142,14 @@ class TestCwdHandling:
         monkeypatch.setattr(_tt_mod, "_DockerEnvironment", _fake_docker_environment)
 
         env = _tt_mod._create_environment(
+            EnvironmentConfig(
             env_type="docker",
             image="python:3.11",
             cwd="/workspace",
             timeout=60,
             container_config={"docker_mount_cwd_to_workspace": True},
             host_cwd="/home/user/project",
+            )
         )
 
         assert env is sentinel

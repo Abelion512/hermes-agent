@@ -474,6 +474,7 @@ def test_terminal_tool_prefers_managed_modal_when_gateway_ready_and_no_direct_cr
             patch.object(Path, "exists", return_value=False),
         ):
             result = terminal_tool._create_environment(
+                terminal_tool.EnvironmentConfig(
                 env_type="modal",
                 image="python:3.11",
                 cwd="/root",
@@ -486,6 +487,7 @@ def test_terminal_tool_prefers_managed_modal_when_gateway_ready_and_no_direct_cr
                     "modal_mode": "auto",
                 },
                 task_id="task-modal-managed",
+                )
             )
 
     assert result == "managed-modal-env"
@@ -510,6 +512,7 @@ def test_terminal_tool_auto_mode_prefers_managed_modal_when_available():
             patch.object(terminal_tool, "_ModalEnvironment", return_value="direct-modal-env") as direct_ctor,
         ):
             result = terminal_tool._create_environment(
+                terminal_tool.EnvironmentConfig(
                 env_type="modal",
                 image="python:3.11",
                 cwd="/root",
@@ -522,6 +525,7 @@ def test_terminal_tool_auto_mode_prefers_managed_modal_when_available():
                     "modal_mode": "auto",
                 },
                 task_id="task-modal-auto",
+                )
             )
 
     assert result == "managed-modal-env"
@@ -546,6 +550,7 @@ def test_terminal_tool_auto_mode_falls_back_to_direct_modal_when_managed_unavail
             patch.object(terminal_tool, "_ModalEnvironment", return_value="direct-modal-env") as direct_ctor,
         ):
             result = terminal_tool._create_environment(
+                terminal_tool.EnvironmentConfig(
                 env_type="modal",
                 image="python:3.11",
                 cwd="/root",
@@ -558,6 +563,7 @@ def test_terminal_tool_auto_mode_falls_back_to_direct_modal_when_managed_unavail
                     "modal_mode": "auto",
                 },
                 task_id="task-modal-direct-fallback",
+                )
             )
 
     assert result == "direct-modal-env"
@@ -579,7 +585,8 @@ def test_terminal_tool_respects_direct_modal_mode_without_falling_back_to_manage
             patch.object(Path, "exists", return_value=False),
         ):
             with pytest.raises(ValueError, match="direct Modal credentials"):
-                terminal_tool._create_environment(
+                result = terminal_tool._create_environment(
+                    terminal_tool.EnvironmentConfig(
                     env_type="modal",
                     image="python:3.11",
                     cwd="/root",
@@ -592,6 +599,7 @@ def test_terminal_tool_respects_direct_modal_mode_without_falling_back_to_manage
                         "modal_mode": "direct",
                     },
                     task_id="task-modal-direct-only",
+                    )
                 )
 
 

@@ -9,7 +9,7 @@ import pytest
 import sys
 import tools.terminal_tool  # noqa: F401 -- ensure module is loaded
 _tt_mod = sys.modules["tools.terminal_tool"]
-from tools.terminal_tool import _parse_env_var
+from tools.terminal_tool import _parse_env_var, EnvironmentConfig
 
 
 class TestParseEnvVar:
@@ -43,11 +43,13 @@ class TestParseEnvVar:
         fake_env = object()
         with patch.object(_tt_mod, "_DockerEnvironment", return_value=fake_env) as mock_docker:
             result = _tt_mod._create_environment(
-                "docker",
+                EnvironmentConfig(
+                    env_type="docker",
                 image="python:3.11",
                 cwd="/root",
                 timeout=180,
                 container_config={"docker_forward_env": ["GITHUB_TOKEN"]},
+                )
             )
 
         assert result is fake_env

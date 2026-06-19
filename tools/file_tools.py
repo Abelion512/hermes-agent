@@ -655,7 +655,7 @@ def _get_file_ops(task_id: str = "default") -> ShellFileOperations:
     a registered env override keep their isolation.
     """
     from tools.terminal_tool import (
-        _active_environments, _env_lock, _create_environment,
+        EnvironmentConfig, _active_environments, _env_lock, _create_environment,
         _get_env_config, _last_activity, _start_cleanup_thread,
         _creation_locks,
         _creation_locks_lock,
@@ -747,15 +747,17 @@ def _get_file_ops(task_id: str = "default") -> ShellFileOperations:
                 }
 
             terminal_env = _create_environment(
-                env_type=env_type,
-                image=image,
-                cwd=cwd,
-                timeout=config["timeout"],
-                ssh_config=ssh_config,
-                container_config=container_config,
-                local_config=local_config,
-                task_id=task_id,
-                host_cwd=config.get("host_cwd"),
+                EnvironmentConfig(
+                    env_type=env_type,
+                    image=image,
+                    cwd=cwd,
+                    timeout=config["timeout"],
+                    ssh_config=ssh_config,
+                    container_config=container_config,
+                    local_config=local_config,
+                    task_id=task_id,
+                    host_cwd=config.get("host_cwd"),
+                )
             )
 
             with _env_lock:
@@ -1427,11 +1429,15 @@ def patch_tool(mode: str = "replace", path: str = None, old_string: str = None,
         return tool_error(str(e))
 
 
-def search_tool(pattern: str, target: str = "content", path: str = ".",
-                file_glob: str = None, limit: int = 50, offset: int = 0,
-                output_mode: str = "content", context: int = 0,
-                task_id: str = "default") -> str:
+def search_tool(pattern: str, task_id: str = "default", **kwargs) -> str:
     """Search for content or files."""
+    target = kwargs.get("target", "content")
+    path = kwargs.get("path", ".")
+    file_glob = kwargs.get("file_glob", None)
+    limit = kwargs.get("limit", 50)
+    offset = kwargs.get("offset", 0)
+    output_mode = kwargs.get("output_mode", "content")
+    context = kwargs.get("context", 0)
     try:
         offset, limit = normalize_search_pagination(offset, limit)
 

@@ -31,8 +31,9 @@ class TestFileToolsContainerConfig:
         captured = {}
         mock_env = MagicMock()
 
-        def fake_create_env(**kwargs):
-            captured.update(kwargs)
+        def fake_create_env(config):
+            import dataclasses
+            captured.update(dataclasses.asdict(config))
             return mock_env
 
         with patch("tools.terminal_tool._get_env_config", return_value=env_config), \
