@@ -83,7 +83,7 @@ class TestAbelionErrorHandler(unittest.TestCase):
         files = list(self.reflections_dir.glob("reflection_*.json"))
         self.assertTrue(len(files) > 0, "Reflection file was not created!")
 
-        with open(files[0], "r") as f:
+        with open(files[0], "r", encoding="utf-8") as f:
             data = json.load(f)
 
         self.assertEqual(data["session_id"], "test_error_session")
@@ -111,7 +111,7 @@ class TestAbelionErrorHandler(unittest.TestCase):
         files = list(vault.glob("*.md"))
         self.assertEqual(len(files), 1)
         
-        with open(files[0], "r") as f:
+        with open(files[0], "r", encoding="utf-8") as f:
             content = f.read()
             
         self.assertIn('session_id: "session_123"', content)
@@ -424,7 +424,7 @@ class TestAbelionErrorHandler(unittest.TestCase):
 
         mem_total = 0
         mem_avail = 0
-        with open(meminfo_path, "r") as f:
+        with open(meminfo_path, "r", encoding="utf-8") as f:
             for line in f:
                 if line.startswith("MemTotal:"):
                     mem_total = int(line.split()[1])
@@ -495,12 +495,12 @@ class TestAbelionErrorHandler(unittest.TestCase):
         STATUS_FILE_PATH = Path("/tmp/ram_status")
 
         # Write a status file with known value
-        with open(STATUS_FILE_PATH, "w") as f:
+        with open(STATUS_FILE_PATH, "w", encoding="utf-8") as f:
             f.write("73")
 
         try:
             # Read directly — test the file parsing logic
-            with open(STATUS_FILE_PATH, "r") as f:
+            with open(STATUS_FILE_PATH, "r", encoding="utf-8") as f:
                 content = f.read().strip()
             self.assertEqual(content, "73")
             self.assertTrue(content.isdigit())

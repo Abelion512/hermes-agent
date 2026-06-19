@@ -17,7 +17,7 @@ def get_system_ram_percent():
     # 1. Try status file
     if STATUS_FILE_PATH.exists():
         try:
-            with open(STATUS_FILE_PATH, "r") as f:
+            with open(STATUS_FILE_PATH, "r", encoding="utf-8") as f:
                 content = f.read().strip()
                 if content.isdigit():
                     return int(content)
@@ -29,7 +29,7 @@ def get_system_ram_percent():
         try:
             mem_total = 0
             mem_avail = 0
-            with open("/proc/meminfo", "r") as f:
+            with open("/proc/meminfo", "r", encoding="utf-8") as f:
                 for line in f:
                     if line.startswith("MemTotal:"):
                         mem_total = int(line.split()[1]) # in kB
@@ -57,7 +57,7 @@ def get_hermes_rss_bytes():
     """
     if os.path.exists("/proc/self/status"):
         try:
-            with open("/proc/self/status", "r") as f:
+            with open("/proc/self/status", "r", encoding="utf-8") as f:
                 for line in f:
                     if line.startswith("VmRSS:"):
                         rss_kb = int(line.split()[1]) # in kB

@@ -130,7 +130,7 @@ def record_reflection(ctx, session_id=None, **kwargs):
         filename = f"reflection_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{session_id[:8]}.json"
         filepath = RESEARCH_DATA_DIR / filename
 
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             json.dump(final_record, f, indent=2)
         logger.info(f"[abelion_autonomous] Recorded isolated reflection: {filepath}")
 
@@ -166,7 +166,7 @@ def _record_passive(session_id, kwargs):
     filename = f"reflection_passive_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{session_id[:8]}.json"
     filepath = RESEARCH_DATA_DIR / filename
     try:
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             json.dump(reflection, f, indent=2)
     except Exception:
         pass

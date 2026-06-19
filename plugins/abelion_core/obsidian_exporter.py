@@ -96,7 +96,7 @@ tags:
     filepath = vault_path / filename
 
     try:
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(md_content)
         logger.info(f"[abelion_core.obsidian] Successfully exported reflection to Obsidian: {filepath}")
         return True

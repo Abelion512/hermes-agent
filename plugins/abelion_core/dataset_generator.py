@@ -149,17 +149,7 @@ def export_all_sessions_to_olivxos(output_dir=None, db_path=None, filename_forma
 
         if fname.endswith(".jsonl"):
             # Write line by line for safety and memory efficiency
-            with open(output_file, "w") as f:
-                for session_record in dataset:
-                    f.write(json.dumps(session_record) + "\n")
-        else:
-            # Wrap in OlivXOS success structure
-            output_data = {
-                "success": True,
-                "request_id": str(uuid.uuid4()),
-                "data": dataset
-            }
-            with open(output_file, "w") as f:
+            with open(output_file, "w", encoding="utf-8") as f:
                 json.dump(output_data, f, indent=2)
 
         logger.info(f"[abelion_core.dataset] Exported {len(dataset)} sessions to {output_file}")

@@ -35,7 +35,7 @@ def track_link(url, title=None, status="fresh"):
     found = False
     if log_path.exists():
         try:
-            with open(log_path, "r") as f:
+            with open(log_path, "r", encoding="utf-8") as f:
                 for line in f:
                     if not line.strip():
                         continue
@@ -58,7 +58,7 @@ def track_link(url, title=None, status="fresh"):
 
     # Write back
     try:
-        with open(log_path, "w") as f:
+        with open(log_path, "w", encoding="utf-8") as f:
             for item in entries:
                 f.write(json.dumps(item) + "\n")
         logger.debug(f"[abelion_core.link] Tracked link: {url} (status: {status})")
@@ -76,7 +76,7 @@ def get_link_status(url):
         return None
 
     try:
-        with open(log_path, "r") as f:
+        with open(log_path, "r", encoding="utf-8") as f:
             for line in f:
                 if not line.strip():
                     continue
