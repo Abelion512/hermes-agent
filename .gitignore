@@ -150,3 +150,7 @@ dummy.txt
 docs/abelion/Notebook/mp3/
 docs/abelion/Notebook/*.csv
 docs/abelion/**/*.m4a
+
+# RSI experiment output (CSV, JSON, lessons)
+docs/abelion/research/scripts/data/*.csv
+docs/abelion/research/scripts/data/*.json
