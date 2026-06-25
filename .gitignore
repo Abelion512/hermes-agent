@@ -146,11 +146,17 @@ memory/
 cli-config-temp.yaml
 dummy.txt
 
-# docs/abelion — exclude binary, keep all .md
-docs/abelion/Notebook/mp3/
-docs/abelion/Notebook/*.csv
-docs/abelion/**/*.m4a
+# docs/abelion — personal workspace, exclude non-research dirs from public repo
+/docs/abelion/agent-session/
+/docs/abelion/notes/
+/docs/abelion/reflections/
+/docs/abelion/scratch/
+/docs/abelion/tasks/
+/docs/abelion/README.md
+/docs/abelion/RSI_EXPERIENTIAL_LEARNING_ARCHITECTURE_ID.md
+/docs/abelion/rsi_experiential_learning_architecture_id.md
+/docs/abelion/Notebook/
+/docs/abelion/by_chatgpt/
+/docs/abelion/security/
 
-# RSI experiment output (CSV, JSON, lessons)
-docs/abelion/research/scripts/data/*.csv
-docs/abelion/research/scripts/data/*.json
+testsprite_tests/tmp/config.json
