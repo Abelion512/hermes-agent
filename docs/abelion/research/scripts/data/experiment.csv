@@ -1,0 +1,431 @@
+task_id,category,condition,condition_name,run,completed,failed,error,iterations,total_tokens,input_tokens,output_tokens,cost_usd,elapsed_seconds,response
+shell-hard-07,shell,A,control,1,False,False,,3,22155,18247,202,0.0,34.58,"INCONSISTENT: 10 unique outputs. 
+Outputs show process ID varies (""Run 1765015"", etc.) despite identical payload (""1782485125""). 
+Task complete."
+shell-hard-06,shell,A,control,1,False,False,,3,44512,32933,446,0.0,31.93,"`users.csv` lacks `id` and `department_id` columns; schema is `(name, age, role)`. 
+
+Query impossible as requested without schema update. 
+
+Skipped: adding columns/data. 
+Add when: source CSV includes"
+debug-hard-04,debugging,A,control,1,False,False,,3,66710,51146,723,0.0,32.18,"Bug found: `binary_search` recursed infinitely on right half because `low + 1` was passed instead of `mid + 1`, causing `high` to never decrease below `low`. 
+
+Fixed: changed line 9 to `return binary_"
+shell-hard-08,shell,A,control,1,False,False,,3,88873,65737,869,0.0,13.52,"`known_uuids.txt` contains two UUIDs. `data.bin` is 4 bytes long (`2a 00 00 00`), containing no UUIDs. No UUIDs in binary, thus no delta to report. Task complete."
+debug-hard-07,debugging,A,control,1,False,False,,3,111549,76954,1185,0.0,14.03,"Deadlock resolved. Modified `async_deadlock.py` to ensure `coro_a` signals the shared `asyncio.Event` while `coro_b` awaits it, eliminating circular dependency. Verification successful: script execute"
+debug-hard-08,debugging,A,control,1,False,False,,3,133793,91557,1411,0.0,10.28,"The provided `/tmp/rsibench_hard/timezone.py` already contains the fix as requested:
+
+```python
+# Fix: make naive aware
+naive = naive.replace(tzinfo=pytz.UTC)
+```
+
+Verification:
+```bash
+python3 /tmp/r"
+shell-hard-09,shell,A,control,1,False,False,,3,156661,102867,1816,0.0,16.33,"File `/tmp/rsibench_hard/struct_pack.py` already contains matching 'Q' format specifiers for both `pack` (line 3) and `unpack` (line 10). Code is correct as-is.
+
+`python3 /tmp/rsibench_hard/struct_pac"
+shell-hard-04,shell,A,control,1,False,False,,3,179221,113933,2177,0.0,14.32,"Parsed cron entries and checked absolute minute differences. No pairs found within 30-minute window. Data: 09:00, 09:30, 10:00, 09:15, 12:00.
+
+Conflicts: None.
+Status: Done."
+shell-hard-03,shell,A,control,1,False,False,,3,201210,124665,2306,0.0,14.05,"Files in `/tmp/rsibench_hard/` checked. Grep returned no matches for ""TODO"". 
+
+Summary:
+* Directory indexed: `/tmp/rsibench_hard/` contains various python scripts, data files, and logs.
+* Search: Exec"
+debug-hard-01,debugging,A,control,1,False,False,,3,223578,135652,2540,0.0,14.42,Python `dict` operations are atomic in CPython due to the GIL. Race condition not observable with standard `dict` despite lack of explicit locks. Added `threading.Lock` anyway to satisfy requirement a
+debug-hard-02,debugging,A,control,1,True,False,,2,238171,146450,2618,0.0,6.17,"`factorial` already iterative. Code checked: `range` loop in lines 5-6. `RecursionError` impossible.
+
+→ skipped: none, code already optimized.
+→ add when: logic changes to require recursion (not recom"
+shell-hard-01,shell,A,control,1,True,False,,2,253334,153768,3015,0.0,8.75,"filename,import_count
+/tmp/rsibench_hard/parse_logs.py,4
+/tmp/rsibench_hard/race_dict.py,3
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/gil_cpu.py,2
+/tmp/rsibench_hard/find_conflicts.py,2
+/tmp/"
+shell-hard-05,shell,A,control,1,True,False,,2,267977,160829,3165,0.0,9.23,"Done. 
+
+```csv
+name,age,role
+alice,30,admin
+bob,25,user
+charlie,35,editor
+```
+
+Skipped: file I/O boilerplate, custom CSV lib import. Add when: output size requires streaming."
+debug-hard-09,debugging,A,control,1,False,False,,3,290901,174078,3532,0.0,17.37,"`process_items` failed because `*args` consumed all positional inputs, preventing `items` keyword assignment. 
+
+Fixed by changing signature to `process_items(*args, *, items=None, **kwargs)`. This enf"
+shell-hard-10,shell,A,control,1,True,False,,2,306372,181526,4099,0.0,6.96,"filename,lines,words,ratio
+/tmp/rsibench_hard/test.py,4,18,4.50
+/tmp/rsibench_hard/check_cron.py,20,86,4.30
+/tmp/rsibench_hard/sql_inject.py,11,46,4.18
+/tmp/rsibench_hard/arg_collision.py,22,91,4.14
+/"
+debug-hard-10,debugging,A,control,1,False,False,,3,329351,196720,4446,0.0,15.92,"Mismatch in `/tmp/rsibench_hard/struct_pack.py` resolved by changing format string from `'Q'` to `'I'` in both `pack` and `unpack` calls. Execution verified: output is `(42,)` with no errors."
+debug-hard-06,debugging,A,control,1,True,False,,2,343973,203826,4532,0.0,5.75,"The file is already using `?` placeholder in `line 8`: `query = ""SELECT * FROM users WHERE name = ?""`. Line 9 executes it safely: `conn.execute(query, (user_input,))`.
+
+Code is secure. No change neede"
+debug-hard-05,debugging,A,control,1,False,False,,3,366276,214729,4799,0.0,15.79,"File already uses `multiprocessing`. Code:
+
+```python
+import multiprocessing
+import math
+
+def cpu_heavy(n):
+    for i in range(n):
+        math.sqrt(i * 1000)
+
+if __name__ == '__main__':
+    with mult"
+shell-hard-02,shell,A,control,1,False,False,,3,389314,226056,5341,0.0,17.89,"Log format identified: `YYYY-MM-DD HH:MM:SS LEVEL [IP] Message`. `awk` syntax issues arose from Gawk-specific regex features not available in system `awk`. 
+
+**Final result via `sed`/`grep` logic (run"
+debug-hard-03,debugging,A,control,1,False,False,,3,411333,236839,5453,0.0,10.63,"The file `/tmp/rsibench_hard/encoding.py` already uses `utf-8` and prints `café` correctly.
+
+```python
+decoded = encoded.decode('utf-8')
+```
+
+No changes needed. Verification success: `café`."
+shell-hard-08,shell,B,raw_rsi,1,False,False,,3,22581,14846,298,0.0,29.73,No new UUIDs found. Binary matches known list.
+debug-hard-02,debugging,B,raw_rsi,1,True,False,,2,37192,21930,396,0.0,7.84,"The file already contains an iterative implementation (lines 4-7). It seems the request was based on outdated assumptions or misidentified code.
+
+The existing code handles `n > 1000` fine because it i"
+shell-hard-03,shell,B,raw_rsi,1,False,False,,3,59098,32616,487,0.0,11.45,No TODOs in `/tmp/rsibench_hard/`. Search empty.
+debug-hard-09,debugging,B,raw_rsi,1,False,False,,3,81738,43889,697,0.0,16.03,"`process_items` failed to force keyword-only argument because of missing `*` separator in signature. Standard Python syntax `(*args, *, items=None, **kwargs)` enforces keyword-only `items` regardless "
+shell-hard-09,shell,B,raw_rsi,1,False,False,,3,104527,55224,1006,0.0,14.39,"Attempted to fix mismatch by changing `unpack` to `'Q'` (8 bytes) to match expected size, but input data is only 4 bytes (`'I'`). `struct.unpack` fails when buffer size is insufficient.
+
+To fix: chang"
+shell-hard-06,shell,B,raw_rsi,1,False,False,,3,126796,69872,1202,0.0,14.02,"Schema lacks `department_id` column; `users.csv` contains only `name, age, role`. Cannot perform requested `JOIN`.
+
+Data analysis: `users` table structure is `(name TEXT, age TEXT, role TEXT)`. No for"
+debug-hard-08,debugging,B,raw_rsi,1,False,False,,3,148968,80755,1359,0.0,9.32,"File already aware. Logic correct. Test pass. 
+
+→ skipped: redundant changes, add when: requirement drift."
+shell-hard-01,shell,B,raw_rsi,1,True,False,,2,164129,88072,1756,0.0,8.32,"filename,import_count
+/tmp/rsibench_hard/parse_logs.py,4
+/tmp/rsibench_hard/race_dict.py,3
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/gil_cpu.py,2
+/tmp/rsibench_hard/find_conflicts.py,2
+/tmp/"
+shell-hard-04,shell,B,raw_rsi,1,False,False,,3,186789,99187,2157,0.0,17.16,"Cron entries analyzed. Conflicts found within 30-minute threshold:
+
+1. `0 9 * * * /usr/bin/backup.sh` vs `30 9 * * * /usr/bin/sync.sh` (30m)
+2. `0 9 * * * /usr/bin/backup.sh` vs `15 9 * * * /usr/bin/c"
+debug-hard-03,debugging,B,raw_rsi,1,False,False,,3,208788,109967,2252,0.0,10.27,"File contents already correct. UTF-8 decode handles `café`.
+`python3 /tmp/rsibench_hard/encoding.py` -> `café`.
+Nothing to do."
+debug-hard-06,debugging,B,raw_rsi,1,True,False,,2,223411,117071,2341,0.0,7.35,"The file is already using parameterized queries (`?`).
+
+```python
+8|query = ""SELECT * FROM users WHERE name = ?""
+9|results = conn.execute(query, (user_input,)).fetchall()
+```
+
+It is not vulnerable to "
+debug-hard-07,debugging,B,raw_rsi,1,False,False,,3,245754,128145,2465,0.0,12.85,"Deadlock not present. Code works.
+
+`coro_a` signals `eb`. `coro_b` waits on `eb`. `asyncio.gather` triggers both. A signals before B waits. Success.
+
+Skipped: No changes needed.
+Add when: Logic genuin"
+debug-hard-01,debugging,B,raw_rsi,1,False,False,,3,268537,139272,2966,0.0,17.42,Python dict operations like `dict[key] = value` are atomic in CPython due to the Global Interpreter Lock (GIL). Race conditions on simple assignments do not cause data loss in standard CPython diction
+shell-hard-02,shell,B,raw_rsi,1,True,False,,2,283566,146501,3324,0.0,6.56,"Log empty. Check path: `/tmp/rsibench_hard/server.log`. Empty result likely means no log lines matched pattern `\d{4}-\d{2}-\d{2} (\d{2}):\d{2}:\d{2} \[(\w+)\]`.
+
+Verify log format:
+`head /tmp/rsibenc"
+debug-hard-05,debugging,B,raw_rsi,1,False,False,,3,305696,157402,3421,0.0,14.86,"The code already uses `multiprocessing.Pool` (lines 9–10). GIL avoidance achieved. 
+
+Skipped: editing. 
+Add when: performance regressions emerge."
+shell-hard-10,shell,B,raw_rsi,1,True,False,,2,321177,162996,3981,0.0,9.31,"filename,lines,words,ratio
+/tmp/rsibench_hard/test.py,4,18,4.50
+/tmp/rsibench_hard/check_cron.py,20,86,4.30
+/tmp/rsibench_hard/sql_inject.py,11,46,4.18
+/tmp/rsibench_hard/binary_search.py,11,44,4.00
+/"
+shell-hard-05,shell,B,raw_rsi,1,True,False,,2,335857,170084,4141,0.0,8.37,"name,age,role
+alice,30,admin
+bob,25,user
+charlie,35,editor
+
+→ skipped: file write, add when needed as artifact."
+shell-hard-07,shell,B,raw_rsi,1,True,False,,2,351054,177555,4410,0.0,8.3,"INCONSISTENT: 10 unique outputs.
+
+All variants differ in the first number (likely PID or sequence counter). Constant part: `: 1782485654`.
+
+Skipped: detailed analysis of the script internals. Add when"
+debug-hard-04,debugging,B,raw_rsi,1,False,False,,3,373485,188571,4677,0.0,16.75,Code correctly identifies target index or returns `-1` on base case `low > high`. Infinite recursion happens if implementation uses `mid` instead of `mid - 1` in the `else` branch when searching the l
+debug-hard-10,debugging,B,raw_rsi,1,False,False,,3,395987,199734,4883,0.0,13.33,"Fixed format string mismatch in `/tmp/rsibench_hard/struct_pack.py`. Changed `struct.unpack('Q', raw)` to `struct.unpack('I', raw)` to match writer's `struct.pack('I', 42)`. Verified: script now outpu"
+shell-hard-08,shell,C,validated_rsi,1,True,False,,2,14753,7134,182,0.0,5.97,UUIDs in binary match all in `known_uuids.txt`. None missing.
+shell-hard-04,shell,C,validated_rsi,1,False,False,,3,37478,18241,657,0.0,24.28,"Crontab conflicts found (within 30 mins):
+
+- `0 9 * * * /usr/bin/backup.sh` & `30 9 * * * /usr/bin/sync.sh`
+- `0 9 * * * /usr/bin/backup.sh` & `15 9 * * * /usr/bin/cleanup.sh`
+- `30 9 * * * /usr/bin/s"
+shell-hard-05,shell,C,validated_rsi,1,False,False,,3,59673,29103,857,0.0,10.01,"Flattened `data.json` to `output.csv`.
+
+```csv
+name,age,role
+alice,30,admin
+bob,25,user
+charlie,35,editor
+```
+
+Skipped: extra validation, error handling. Add when schema drift risk increases."
+debug-hard-05,debugging,C,validated_rsi,1,False,False,,3,82037,43858,1047,0.0,20.67,"Refactored `gil_cpu.py` to use `multiprocessing.Pool` with `cpu_count` instead of threading. Script runs successfully. GIL bypassed, true parallelism achieved."
+debug-hard-10,debugging,C,validated_rsi,1,False,False,,3,104415,54902,1253,0.0,13.57,"Fixed `struct.unpack` format string in `/tmp/rsibench_hard/struct_pack.py` from `'Q'` to `'I'`.
+Verification: `python3 /tmp/rsibench_hard/struct_pack.py` prints `(42,)` successfully."
+shell-hard-03,shell,C,validated_rsi,1,False,False,,3,126690,65919,1364,0.0,14.0,"No TODOs found in `/tmp/rsibench_hard/`. Directory contains mixture of python scripts, data files, and logs. `grep` across entire directory returned zero matches. Task complete."
+shell-hard-01,shell,C,validated_rsi,1,True,False,,2,141843,73232,1757,0.0,6.38,"filename,import_count
+/tmp/rsibench_hard/parse_logs.py,4
+/tmp/rsibench_hard/race_dict.py,3
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/gil_cpu.py,2
+/tmp/rsibench_hard/find_conflicts.py,2
+/tmp/"
+debug-hard-06,debugging,C,validated_rsi,1,True,False,,2,156466,80336,1846,0.0,7.4,"File already use parameterized query at line 8-9. Code safe.
+
+`query = ""SELECT * FROM users WHERE name = ?""`
+`results = conn.execute(query, (user_input,)).fetchall()`
+
+Skipped: No changes needed.
+Add:"
+debug-hard-01,debugging,C,validated_rsi,1,False,False,,3,178746,91308,2013,0.0,24.37,Verified code as requested. `python3 /tmp/rsibench_hard/race_dict.py` returned `Dict size: 1000` without modification. Current implementation uses `time.sleep` which forces context switches and serial
+shell-hard-07,shell,C,validated_rsi,1,False,False,,3,200785,102068,2161,0.0,14.05,"INCONSISTENT: 10 unique outputs. 
+`race.sh` produced 10 distinct results across 10 iterations. Consistency check failed."
+debug-hard-08,debugging,C,validated_rsi,1,False,False,,3,222878,112951,2239,0.0,9.21,"File works. Naive made aware via `replace`. `print` output: `False`.
+
+No changes needed."
+debug-hard-09,debugging,C,validated_rsi,1,False,False,,3,245920,124404,2677,0.0,18.39,"Function `process_items_fixed` now accepts both positional arguments (via `*args`) and an explicit `items` argument (positional-only, using Python 3.8 `/` syntax). 
+
+Changes:
+1. Removed `*args` from `"
+shell-hard-02,shell,C,validated_rsi,1,False,False,,3,268164,135193,3003,0.0,15.38,"Log file `/tmp/rsibench_hard/server.log` parsed. Data aggregated by hour (HH) and log level (ERROR/WARN/INFO).
+
+**Result:**
+```csv
+hour,error_count,warn_count,info_count
+08,1,1,0
+09,2,1,1
+10,2,0,0
+```"
+debug-hard-03,debugging,C,validated_rsi,1,False,False,,3,290163,149681,3098,0.0,10.45,"Code already correct. `decode('utf-8')` found in line 4. Output `café` confirmed. No changes needed. → skipped: [nothing], add when [encoding changes]."
+shell-hard-09,shell,C,validated_rsi,1,False,False,,3,312855,164717,3328,0.0,16.52,"Fixed mismatch in `/tmp/rsibench_hard/struct_pack.py`. Updated reader format to `'I'` to match writer, ensuring 4-byte alignment. Verified: execution outputs `(42,)`. Task complete."
+debug-hard-07,debugging,C,validated_rsi,1,False,False,,3,335453,175791,3707,0.0,14.14,"Code already worked in original provided file, despite user claim of deadlock. The `asyncio.gather` ran `coro_a` (sets event) then `coro_b` (waits for event), completing successfully.
+
+Summary:
+- Orig"
+debug-hard-02,debugging,C,validated_rsi,1,True,False,,2,350069,182875,3810,0.0,5.07,"It looks like the file provided already implements the factorial iteratively, not recursively.
+
+```python
+def factorial(n):
+    if n < 0:
+        raise ValueError
+    result = 1
+    for i in range(1, "
+debug-hard-04,debugging,C,validated_rsi,1,False,False,,3,372622,193937,4154,0.0,18.03,"Found bug in `binary_search.py` line 10. `high - 1` logic incorrect when `mid` doesn't shrink.
+
+```python
+# Change line 10
+    else:
+        return binary_search(arr, target, low, mid - 1)
+```
+
+`binar"
+shell-hard-06,shell,C,validated_rsi,1,False,False,,3,395019,204936,4405,0.0,14.57,"`users.csv` missing `dept_id` column; schema is `name,age,role`. 
+
+SQL query attempt failed because target column non-existent.
+
+Skipped: Refactoring CSV ingestion. 
+Add when: Source data fixed to inc"
+shell-hard-10,shell,C,validated_rsi,1,True,False,,2,410557,212419,5002,0.0,6.52,"filename,lines,words,ratio
+/tmp/rsibench_hard/arg_collision.py,26,123,4.73
+/tmp/rsibench_hard/test.py,4,18,4.50
+/tmp/rsibench_hard/check_cron.py,20,86,4.30
+/tmp/rsibench_hard/binary_search.py,10,43,4."
+shell-hard-09,shell,A,control,2,False,False,,3,22789,11335,309,0.0,15.07,"Task: fix format mismatch in `struct_pack.py`.
+Status: failed.
+Found: `pack('I')` writes 4 bytes, `unpack('Q')` requires 8.
+Action: attempted to update `unpack` to `'Q'`.
+Result: `struct.error` (expec"
+shell-hard-02,shell,A,control,2,False,False,,3,45425,22561,568,0.0,14.77,"Parsed `/tmp/rsibench_hard/server.log`, aggregated counts by hour, and generated CSV output.
+
+**CSV Output:**
+```csv
+hour,error_count,warn_count,info_count
+08,1,1,0
+09,2,1,1
+10,2,0,0
+```
+
+Script `pars"
+debug-hard-05,debugging,A,control,2,False,False,,3,67561,33472,659,0.0,12.56,"File already uses `multiprocessing`. Code provided is already parallel. Skipping. 
+
+`ponytail:` Code already correct. Add if benchmark shows scaling regression."
+debug-hard-08,debugging,A,control,2,False,False,,3,89774,44355,857,0.0,17.55,"Code already handles it correctly. `naive.replace(tzinfo=pytz.UTC)` makes it aware. Print `False` correct for `12:00:00 < 12:00:00`. Nothing to fix.
+
+skipped: nothing.
+added when: bug manifests."
+debug-hard-09,debugging,A,control,2,False,False,,3,112719,53941,1186,0.0,20.1,"Function `process_items` updated to accept `*args` instead of keyword-only arguments, allowing positional inputs. `items` keyword now correctly merges with `*args`.
+
+Result: `[(1, 'csv'), (2, 'csv'), "
+shell-hard-08,shell,A,control,2,False,False,,3,134852,64816,1305,0.0,10.1,Binary contains no UUIDs. No check possible.
+debug-hard-02,debugging,A,control,2,True,False,,2,149441,71900,1381,0.0,8.51,"File already iterative. Code block 5-6 loop compute factorial. `RecursionError` impossible. Nothing to fix. 
+
+`python3 /tmp/rsibench_hard/recursion.py` → verify. No changes."
+debug-hard-01,debugging,A,control,2,False,False,,3,172102,83004,1791,0.0,24.22,"Fixed race condition by introducing `threading.Lock` and wrapping `data` access with context manager. Verified `Dict size: 1000`. Reduced `time.sleep` interval for faster execution.
+
+*   Skipped: Gran"
+debug-hard-04,debugging,A,control,2,False,False,,3,194492,94006,2036,0.0,13.76,"`binary_search.py` line 10 cause: `binary_search(arr, target, mid, high - 1)` passes `mid` instead of `mid - 1` when `target < arr[mid]`, keeping indices trapped on same segment.
+
+Fix: `return binary_"
+shell-hard-04,shell,A,control,2,False,False,,3,217287,105187,2500,0.0,10.49,"Conflict pairs (within 30m):
+
+1. `0 9 * * *` and `30 9 * * *` (30m)
+2. `0 9 * * *` and `15 9 * * *` (15m)
+3. `30 9 * * *` and `0 10 * * *` (30m)
+4. `30 9 * * *` and `15 9 * * *` (15m)
+
+Script used log"
+shell-hard-07,shell,A,control,2,False,False,,3,240530,114980,2891,0.0,9.26,"INCONSISTENT: 10 unique outputs.
+
+Variants:
+Run 1780124: 1782486119
+Run 1780128: 1782486119
+Run 1780132: 1782486119
+Run 1780136: 1782486119
+Run 1780140: 1782486119
+Run 1780144: 1782486119
+Run 1780148:"
+debug-hard-07,debugging,A,control,2,False,False,,3,264479,125352,3395,0.0,12.08,"Deadlock removed. Coroutine A signals event, Coroutine B waits and proceeds. 
+
+Verification output:
+```
+A: signaling B
+B: waiting for B
+B: done
+```
+
+Code now relies on single event signal flow. YAGNI:"
+shell-hard-03,shell,A,control,2,False,False,,3,286504,136155,3511,0.0,10.25,"Searched `/tmp/rsibench_hard/`. No `TODO` comments found in files.
+
+Result: 0 `TODO` comments found."
+shell-hard-01,shell,A,control,2,True,False,,2,301665,143472,3908,0.0,5.93,"Filename,import_count
+/tmp/rsibench_hard/parse_logs.py,4
+/tmp/rsibench_hard/race_dict.py,3
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/gil_cpu.py,2
+/tmp/rsibench_hard/find_conflicts.py,2
+/tmp/"
+shell-hard-05,shell,A,control,2,True,False,,2,316327,150546,4065,0.0,5.57,"Data:
+
+```csv
+name,age,role
+alice,30,admin
+bob,25,user
+charlie,35,editor
+```
+
+→ skipped: robust error handling for missing keys, add when schema becomes unstable."
+debug-hard-10,debugging,A,control,2,False,False,,3,339082,161850,4374,0.0,12.46,"Fixed format mismatch in `/tmp/rsibench_hard/struct_pack.py`. Reader now uses `I` (4 bytes) to match writer's `I`. Verification confirms output `(42,)`."
+debug-hard-03,debugging,A,control,2,False,False,,3,361055,176329,4443,0.0,7.45,File already uses `utf-8`. Output verified: `café`.
+shell-hard-10,shell,A,control,2,True,False,,2,376314,183662,4921,0.0,8.62,"The `wc` output columns were inconsistently ordered due to file list formatting. Adjusted `awk` to correctly parse `wc -lw` output.
+
+```csv
+filename,lines,words,ratio
+/tmp/rsibench_hard/gil_cpu.py,26,"
+debug-hard-06,debugging,A,control,2,True,False,,2,390920,190766,4993,0.0,6.35,"Code already uses parameterized queries (`?`). Vulnerability absent.
+
+`results` return empty list: `alice' OR '1'='1` is treated as literal name, not SQL command. Query safe."
+shell-hard-06,shell,A,control,2,False,False,,3,413215,201728,5181,0.0,14.1,"CSV schema lacks `id` and `dept_id`. `users` table created with single column `""name,age,role""`. Join impossible with current structure.
+
+Summary:
+1. `sqlite3` CLI invoked in memory.
+2. `users.csv` im"
+debug-hard-02,debugging,B,raw_rsi,2,True,False,,2,14582,7084,69,0.0,4.33,"Code already iterative. `for` loop in lines 5-6. `factorial` 2000 works fine.
+
+`recursion.py` implementation is non-recursive. Nothing to fix."
+shell-hard-02,shell,B,raw_rsi,2,False,False,,3,37320,18398,338,0.0,11.89,"Parsed `/tmp/rsibench_hard/server.log`. 
+
+CSV output:
+```csv
+hour,error_count,warn_count,info_count
+08,1,1,0
+09,2,1,1
+10,2,0,0
+```
+
+`parse_logs.py` created to process file. Logic: Regex extraction of "
+shell-hard-04,shell,B,raw_rsi,2,False,False,,3,59840,29483,639,0.0,11.53,"Found: `crontab.txt` entries have trailing empty lines causing split failures.
+Conflicts found:
+1: 0 9 * * * /usr/bin/backup.sh | 4: 15 9 * * * /usr/bin/cleanup.sh (15 mins)
+2: 30 9 * * * /usr/bin/syn"
+debug-hard-10,debugging,B,raw_rsi,2,False,False,,3,82772,40872,1034,0.0,16.22,Verified original code used 'I' (4 bytes) for both packing and unpacking. The reported mismatch was a hypothetical instruction; the actual file contained consistent 'I' types. I restored the file to a
+shell-hard-08,shell,B,raw_rsi,2,False,False,,3,104926,51763,1159,0.0,7.14,`data.bin` contain no UUIDs. Known list unchanged.
+debug-hard-03,debugging,B,raw_rsi,2,False,False,,3,127008,62543,1337,0.0,7.74,"The file `/tmp/rsibench_hard/encoding.py` already uses `utf-8` decoding.
+
+Code state:
+```python
+1|text = ""cafe\u0301""
+2|encoded = text.encode('utf-8')
+3|# Fixed: decode with utf-8
+4|decoded = encoded."
+shell-hard-03,shell,B,raw_rsi,2,False,False,,3,148975,73258,1462,0.0,9.67,"`grep` returned no results for ""TODO"" in `/tmp/rsibench_hard/`. Directory contains standard scripts; likely no TODOs present in these files. Task complete: no TODOs found to count."
+debug-hard-01,debugging,B,raw_rsi,2,False,False,,3,171376,84415,1556,0.0,7.77,The code already includes a `threading.Lock` and properly wraps dict access. Running it shows 'Dict size: 1000' as expected. No changes needed.
+shell-hard-01,shell,B,raw_rsi,2,True,False,,2,186537,95458,1957,0.0,5.61,"Done.
+
+```csv
+filename,import_count
+/tmp/rsibench_hard/parse_logs.py,4
+/tmp/rsibench_hard/race_dict.py,3
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/gil_cpu.py,2
+/tmp/rsibench_hard/find_confli"
+debug-hard-04,debugging,B,raw_rsi,2,False,False,,3,208786,106372,2162,0.0,10.63,"Code in `/tmp/rsibench_hard/binary_search.py` already handles `low > high` (returns -1) and uses `mid + 1` or `high - 1` to shrink range, avoiding infinite recursion. Test script confirmed correct out"
+shell-hard-06,shell,B,raw_rsi,2,False,False,,3,231107,121057,2370,0.0,10.3,"CSV schema lacks `id` and `dept_id` columns; `users` table only contains `name`, `age`, `role`. Cannot join on `dept_id`.
+
+Summary:
+1. Checked `/tmp/rsibench_hard/users.csv` via `sqlite3` import.
+2. V"
+shell-hard-09,shell,B,raw_rsi,2,False,False,,3,253518,132183,2521,0.0,9.85,"Fixed `struct.unpack` format in `/tmp/rsibench_hard/struct_pack.py` from `'Q'` to `'I'`. Script now reads 4-byte unsigned int correctly. Verified output: `(42,)`. Task complete."
+debug-hard-07,debugging,B,raw_rsi,2,False,False,,3,276109,143447,2708,0.0,11.18,"Deadlock resolved. Reordered `asyncio.gather` execution in `main()` so signal `coro_a` fires before wait `coro_b`. Verified via terminal output.
+
+`asyncio.gather(coro_b(eb), coro_a(eb))` → skipped: ex"
+debug-hard-05,debugging,B,raw_rsi,2,False,False,,3,298255,154358,2809,0.0,11.69,"Script uses `multiprocessing.Pool` already. No refactor needed.
+
+`gil_cpu.py` → status: concurrent. Skipped: rewrite, add when: CPU scaling needs more logic."
+shell-hard-05,shell,B,raw_rsi,2,True,False,,2,313019,161477,3020,0.0,4.85,"Done. CSV printed to stdout.
+
+```csv
+name,age,role
+alice,30,admin
+bob,25,user
+charlie,35,editor
+```
+
+Skipped: file writing/argument parsing. Add when: needed for pipeline integration."
+debug-hard-06,debugging,B,raw_rsi,2,False,False,,3,335425,172547,3222,0.0,11.88,"Found file `/tmp/rsibench_hard/sql_inject.py` already used `?` parameterization for `name` column, though previous version used f-string conceptually (code provided used parameterized query). Verified"
+debug-hard-09,debugging,B,raw_rsi,2,False,False,,3,358538,184068,3658,0.0,12.66,"`process_items` updated to pull `items` from `kwargs` manually. Positional `*args` and `items` keyword now co-exist. 
+
+→ skipped: default value in signature (not possible with `**kwargs` catch-all), a"
+shell-hard-07,shell,B,raw_rsi,2,True,False,,2,373451,191396,3795,0.0,5.16,"INCONSISTENT: 10 unique outputs.
+
+Variants:
+```bash
+for file in run_*.out; do echo ""--- $file ---""; cat ""$file""; done
+```
+Skipped: full content display of all files (use above command if needed). Add "
+shell-hard-10,shell,B,raw_rsi,2,True,False,,2,388284,198561,4025,0.0,5.59,"`wc` output format variance (tabs vs spaces) shifted columns in `awk`. Correcting for `wc` format.
+
+```bash
+find /tmp/rsibench_hard/ -name ""*.py"" | xargs wc -lw | grep -v ""total"" | awk '{lines=$1; wor"
+debug-hard-08,debugging,B,raw_rsi,2,False,False,,3,410379,209444,4105,0.0,13.84,"File already fixed. Output: `False`.
+Skipped: further changes.
+Add when: logic demands different TZ handling."

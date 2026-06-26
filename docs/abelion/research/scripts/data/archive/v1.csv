@@ -1,0 +1,722 @@
+task_id,category,condition,condition_name,run,completed,failed,error,iterations,total_tokens,input_tokens,output_tokens,cost_usd,elapsed_seconds,response
+shell-09,shell,A,control,1,True,False,,3,22119,18171,232,0.0,10.11,"`find /tmp/rsibench_data/ -type f -exec du -b {} + | awk -F. '{ext=$NF; if(NF==1) ext=""no-ext""} {sum[ext]+=$1} END {for (ext in sum) print sum[ext], ext}' | sort -rn`
+
+→ skipped: recursive human-reada"
+debug-05,debugging,A,control,1,True,False,,2,36614,28898,283,0.0,6.16,"The file already uses `with`. Resource leak absent. 
+
+Skipped: Nothing.
+Add: Nothing."
+debug-08,debugging,A,control,1,True,False,,5,74195,53267,568,0.0,11.25,"`process_items` fixed. Mutable default `[]` replaced by `None`.
+
+```python
+def process_items(items=None):
+    if items is None:
+        items = []
+    items.append('new')
+    return items
+```
+
+Skipped"
+debug-03,debugging,A,control,1,True,False,,3,96460,67934,764,0.0,8.58,"Range correct. `range(len(items))` already includes all indices. Bug was likely misidentified or context missed.
+
+Code: `items = [1, 2, 3, 4, 5]; for i in range(len(items)): print(items[i])` → skipped"
+debug-10,debugging,A,control,1,True,False,,7,152129,93714,1017,0.0,18.13,"Regex fixed. `(\d+(` -> `(\d+)`. Matches digits. → skipped: nothing, add when extra complexity required."
+shell-02,shell,A,control,1,True,False,,2,166534,100659,1054,0.0,6.73,"0 lines, 1 word, 4 characters."
+shell-01,shell,A,control,1,True,False,,2,181461,107842,1358,0.0,4.09,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+shell-03,shell,A,control,1,True,False,,2,196000,114866,1445,0.0,6.32,[2026-06-25 14:30:00] ERROR: connection failed
+debug-06,debugging,A,control,1,True,False,,3,218162,125679,1683,0.0,7.04,"The user wants to create a file named `c.txt` with some content. The prompt says ""tạo file c.txt có ộii dung b"" which means ""create file c.txt with content b"" in Vietnamese.
+
+Plan:
+1. Use `Write` tool"
+shell-04,shell,A,control,1,True,False,,2,232659,132641,1795,0.0,6.18,"Archive created: `/tmp/rsibench_data/archive.tar.gz`. Permissions preserved via `-p` (default in many tar implementations) or implied by user context.
+
+Verified: `ls -l /tmp/rsibench_data/archive.tar."
+debug-07,debugging,A,control,1,True,False,,2,247413,139897,1853,0.0,56.55,"File contents already acquire `lock_a` then `lock_b`. Code is correct.
+
+`ponytail: Lock order consistent. No change needed.`"
+shell-05,shell,A,control,1,True,False,,2,261886,150591,1916,0.0,8.42,"Sorted output complete.
+
+Skipped: file creation, script persistence.
+Add when: recurring need arises."
+debug-09,debugging,A,control,1,True,False,,5,299673,171572,2132,0.0,20.5,"Lazy fix: Moved `foo` import inside `bar`. 
+
+`b` no longer imports `a` at top-level. Circular dependency broken. → skipped: extracting to 3rd module, add when: shared code grows."
+shell-10,shell,A,control,1,True,False,,2,314360,186097,2294,0.0,7.13,"Files with identical content:
+
+`5b15452c268a7d3adf9d03387d69b4fb`:
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`
+
+Skipped: fil"
+shell-07,shell,A,control,1,True,False,,2,328991,193126,2467,0.0,5.75,"`grep -oE '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' /tmp/rsibench_data/access.log | sort | uniq -c | sort -nr | head -n 10`
+
+Result:
+3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1"
+shell-06,shell,A,control,1,True,False,,2,343384,200059,2505,0.0,7.99,Empty. No directories removed.
+debug-01,debugging,A,control,1,True,False,,3,365341,210820,2578,0.0,12.54,Variable name correct in f-string. Output `Hello World` verified. No action needed.
+debug-04,debugging,A,control,1,True,False,,3,387559,221761,2736,0.0,12.47,"File already guarded. Code remains safe.
+
+→ skipped: redundant edits, add when: `result` is needed even if `None`."
+debug-02,debugging,A,control,1,True,False,,6,433269,241392,2992,0.0,38.67,"The file `/tmp/rsibench_fix_import.py` actually imports from `pytest` directly: `from pytest import approx`. There is no `pytest.utils`. The code works as is.
+
+`# Bug: pytest.utils doesn't exist` comm"
+shell-08,shell,A,control,1,True,False,,2,447727,248365,3052,0.0,6.85,`/tmp/rsibench_data/todo_work.py`
+debug-04,debugging,B,raw_rsi,1,True,False,,6,46128,21824,329,0.0,17.39,"Guard added. → skipped: nothing, add when: real usage demands more robust error handling (e.g., logging or default configs)."
+debug-02,debugging,B,raw_rsi,1,True,False,,4,77751,37111,489,0.0,12.55,"The file `/tmp/rsibench_fix_import.py` contained an invalid import `from pytest.utils import approx`. `approx` is directly available under the `pytest` namespace.
+
+Fixed:
+```python
+from pytest import "
+shell-02,shell,B,raw_rsi,1,True,False,,2,92156,44056,526,0.0,7.22,"0 lines, 1 word, 4 characters."
+debug-09,debugging,B,raw_rsi,1,True,False,,4,122032,58920,759,0.0,16.57,"Moving `from rsibench_circular_a import foo` inside `bar()` stops circularity.
+
+```python
+# /tmp/rsibench_circular_b.py
+def bar():
+    return ""hello""
+```
+
+Skipped: Moving both, extracting third module"
+debug-07,debugging,B,raw_rsi,1,True,False,,2,136799,66176,830,0.0,6.04,"File `/tmp/rsibench_deadlock.py` already uses consistent `lock_a` then `lock_b` order. No changes needed.
+
+Code matches request. Skipped edits. Added nothing."
+debug-01,debugging,B,raw_rsi,1,True,False,,3,158768,76937,915,0.0,9.32,"Typo absent. Code prints ""Hello World"". File content correct.
+
+Skipped: No changes needed.
+Add when: Variable name mismatch appears."
+debug-06,debugging,B,raw_rsi,1,True,False,,3,181062,87883,1145,0.0,9.85,"Exception updated to ValueError. Skip callers update. Added test case.
+
+```python
+# /tmp/rsibench_wrong_exception.py
+def lookup(key):
+    raise ValueError(f""not found: {key}"")
+
+try:
+    lookup(""foo"")
+"
+debug-03,debugging,B,raw_rsi,1,True,False,,4,210897,102697,1364,0.0,12.56,"Fix `range(len(items) - 1)` to `range(len(items))`.
+
+`items = [1, 2, 3, 4, 5]`
+`for i in range(len(items)):`
+`    print(items[i])`
+
+→ skipped: none, add when: index bounds check dynamic."
+shell-08,shell,B,raw_rsi,1,True,False,,4,240482,117283,1541,0.0,12.73,/tmp/rsibench_data/todo_work.py
+shell-10,shell,B,raw_rsi,1,True,False,,2,255144,124374,1678,0.0,7.39,"Duplicates group found:
+
+- `5b15452c268a7d3adf9d03387d69b4fb`:
+  - `/tmp/rsibench_data/duplicates/a.txt`
+  - `/tmp/rsibench_data/duplicates/b.txt`
+  - `/tmp/rsibench_data/duplicates/d.txt`"
+shell-09,shell,B,raw_rsi,1,True,False,,3,277403,135194,1982,0.0,10.76,"`find /tmp/rsibench_data/ -type f -exec du -b {} + | awk '{ext=""no_ext""; if(match($2, /\.[^/]+$/)) ext=substr($2, RSTART+1); sizes[ext]+=$1} END {for (e in sizes) print sizes[e], e}' | sort -nr`
+
+Skip"
+debug-08,debugging,B,raw_rsi,1,True,False,,2,291972,142222,2099,0.0,6.72,"Wait. `/tmp/rsibench_mutable_default.py` code already use `None` default. Mutable default bug absent.
+
+```python
+def process_items(items=None):
+    if items is None:
+        items = []
+    items.appen"
+shell-05,shell,B,raw_rsi,1,True,False,,2,306477,149206,2194,0.0,5.97,"Sorted.
+
+```bash
+sort -t, -k3,3nr /tmp/rsibench_data/data.csv | head -n 5
+```
+
+Skipped: file creation, output formatting.
+Add when: persistent processing needed."
+shell-06,shell,B,raw_rsi,1,True,False,,2,320882,156139,2244,0.0,7.12,No empty directories found under `/tmp/rsibench_data/`. Nothing removed.
+shell-03,shell,B,raw_rsi,1,True,False,,2,335395,163151,2318,0.0,5.96,[2026-06-25 14:30:00] ERROR: connection failed
+shell-04,shell,B,raw_rsi,1,True,False,,2,349870,170113,2408,0.0,7.54,"`tar -czf /tmp/rsibench_data/archive.tar.gz -C /tmp/rsibench_data archive` → archive created. skipped: none, add when: need encryption or split archives."
+debug-10,debugging,B,raw_rsi,1,True,False,,7,405534,195896,2656,0.0,22.07,"`pattern` fixed. Regex `(\d+)` is valid. → skipped: nothing, add when necessary."
+shell-01,shell,B,raw_rsi,1,True,False,,2,420461,203079,2960,0.0,8.69,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+debug-05,debugging,B,raw_rsi,1,True,False,,4,450164,217841,3099,0.0,11.49,"File already use context manager. No leak. → skipped: nothing, add when: leak found."
+shell-07,shell,B,raw_rsi,1,True,False,,2,464779,224880,3245,0.0,6.71,"IP count:
+
+```
+3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1
+```
+
+Skipped: file write (ad-hoc request). Add when persistent report needed."
+shell-02,shell,C,validated_rsi,1,True,False,,2,14405,6945,37,0.0,4.7,"0 lines, 1 word, 4 characters."
+debug-05,debugging,C,validated_rsi,1,True,False,,3,36440,17761,140,0.0,9.22,File already used context manager. No leak. Skipped.
+shell-01,shell,C,validated_rsi,1,True,False,,2,51367,24944,444,0.0,6.46,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+debug-09,debugging,C,validated_rsi,1,True,False,,4,81315,39808,749,0.0,13.42,"`rsibench_circular_a.py` and `rsibench_circular_b.py` import each other at module level. Already lazy. Move imports inside `foo`/`bar` functions to keep load-time clean. 
+
+`rsibench_circular_a.py`:
+``"
+shell-04,shell,C,validated_rsi,1,True,False,,2,95784,46770,832,0.0,6.74,Done. Compressed `/tmp/rsibench_data/archive/` to `/tmp/rsibench_data/archive.tar.gz`. Permissions preserved via standard `tar` behavior.
+shell-07,shell,C,validated_rsi,1,True,False,,2,110355,53799,945,0.0,6.18,"IP counts:
+3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1"
+debug-04,debugging,C,validated_rsi,1,True,False,,6,156551,75656,1299,0.0,20.67,"Fixed. Added `if result is not None` guard.
+
+`if result is not None: print(result.theme)` → skipped: proper logging/fallback, add when production requirements clarify error handling."
+shell-10,shell,C,validated_rsi,1,True,False,,2,171208,82747,1431,0.0,6.68,"Duplicate groups:
+
+`5b15452c268a7d3adf9d03387d69b4fb`:
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`"
+shell-03,shell,C,validated_rsi,1,True,False,,2,185742,89746,1540,0.0,7.22,"No logs match criteria. File empty or timestamps outside 14:00-15:00.
+
+Check file content:
+`head -n 20 /tmp/rsibench_data/logs.txt`"
+debug-03,debugging,C,validated_rsi,1,True,False,,4,215568,104566,1740,0.0,14.15,"`range(len(items))` already correct for `[1, 2, 3, 4, 5]`. Loop visits `0, 1, 2, 3, 4`. Indices valid. No error found.
+
+`ponytail:` Code correct as is. Skip further action."
+shell-06,shell,C,validated_rsi,1,True,False,,2,229962,111499,1779,0.0,6.65,None found. Directory list empty.
+debug-08,debugging,C,validated_rsi,1,True,False,,3,252035,126040,1901,0.0,9.99,"Function already correct in source. `None` default used, list created inside. 
+
+`ponytail:` Code already compliant; skipped rewriting."
+debug-10,debugging,C,validated_rsi,1,True,False,,7,307118,151284,2158,0.0,24.59,"Pattern fixed. Parentheses closed.
+
+```python
+pattern = r""(\d+)""
+```
+
+`→` skipped: nothing, verified match with terminal."
+shell-05,shell,C,validated_rsi,1,True,False,,2,321636,158268,2266,0.0,7.08,"Sorted. Output:
+
+```csv
+grace,31,96
+alice,30,95
+charlie,35,92
+evan,32,91
+henry,27,90
+```
+
+Skipped: extra tools, file saving. Add if persistence needed."
+debug-07,debugging,C,validated_rsi,1,True,False,,2,336479,165524,2413,0.0,6.91,"Deadlock fixed. Order unified to `lock_a` then `lock_b`.
+
+```python
+import threading
+lock_a = threading.Lock()
+lock_b = threading.Lock()
+
+def thread1():
+    with lock_a:
+        with lock_b:
+         "
+debug-01,debugging,C,validated_rsi,1,True,False,,3,358442,176285,2492,0.0,10.62,"Code match variable. Already output correct. Nothing fix.
+
+Skipped: No change. Add when: Typo reappear."
+debug-06,debugging,C,validated_rsi,1,True,False,,4,388619,193292,2723,0.0,14.51,"Exception raised as `KeyError`. Callers now match. → skipped: nothing, YAGNI."
+shell-09,shell,C,validated_rsi,1,True,False,,3,410766,204095,2933,0.0,9.92,"15360 bin
+381 log
+288 txt
+180 tar.gz
+150 py
+110 csv"
+shell-08,shell,C,validated_rsi,1,True,False,,2,425207,211054,2991,0.0,7.08,No files match. `grep` return empty. Stop.
+debug-02,debugging,C,validated_rsi,1,True,False,,5,463512,228725,3232,0.0,37.62,Import unnecessary. `approx` already imported from `pytest`. File cleaned.
+shell-07,shell,A,control,2,True,False,,2,14620,7039,151,0.0,6.98,"Sorted list (count/IP):
+
+```
+3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1
+```
+
+Skipped: file write (ad-hoc request). Add: file save if needed."
+debug-01,debugging,A,control,2,True,False,,3,36598,21518,245,0.0,10.92,"Typo nonexistent. Code works.
+
+`print(f""Hello {name}"")` → executed: `Hello World`.
+Skipped: changes.
+Add when: variable name mismatch occurs."
+debug-02,debugging,A,control,2,True,False,,5,73925,40110,488,0.0,22.62,"Fixed. `from pytest.utils import approx` → `from pytest import approx`.
+
+Code is correct. Deleted non-existent path. Skipped extra verification, one-liner change."
+shell-01,shell,A,control,2,True,False,,2,88852,47293,792,0.0,8.39,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+shell-08,shell,A,control,2,True,False,,2,103290,54252,848,0.0,8.51,Empty result. No `.py` files match criteria.
+shell-03,shell,A,control,2,True,False,,4,133137,69081,1027,0.0,10.74,[2026-06-25 14:30:00] ERROR: connection failed
+debug-05,debugging,A,control,2,True,False,,3,155186,79897,1144,0.0,8.96,"File already use `with`. No leak.
+
+`ponytail:` File handles managed by context manager correctly. No change needed."
+shell-06,shell,A,control,2,True,False,,2,169579,86830,1182,0.0,7.04,Empty. No directories found.
+shell-04,shell,A,control,2,True,False,,2,184051,93793,1267,0.0,7.4,"Done. `/tmp/rsibench_data/archive.tar.gz` created.
+
+Skipped: extra verbose flags.
+Add when: specific compression ratios or multi-volume support needed."
+shell-05,shell,A,control,2,True,False,,2,198552,100777,1358,0.0,8.46,"`sort -t, -k3,3rn /tmp/rsibench_data/data.csv | head -n 5`
+
+→ Done. Skip: no further processing, formatting unnecessary. Add when: output requires transformation."
+debug-07,debugging,A,control,2,True,False,,2,213328,108033,1438,0.0,7.87,"File already uses consistent order (lines 12-13, 24-25). Both acquire `lock_a` then `lock_b`. No deadlock.
+
+Skipped: No changes needed.
+Add when: New locking requirements emerge."
+shell-10,shell,A,control,2,True,False,,2,228014,115129,1594,0.0,6.47,"Duplicates:
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`
+
+All share hash `5b15452c268a7d3adf9d03387d69b4fb`. 
+
+Skipped: scrip"
+debug-04,debugging,A,control,2,True,False,,6,274141,140667,1919,0.0,18.63,"Fixed file.
+
+`ponytail: skipped re-verification (trivial change), add when new regression tests added.`"
+debug-09,debugging,A,control,2,True,False,,4,304064,155531,2199,0.0,12.94,"`rsibench_circular_a.py`:
+```python
+def foo():
+    from rsibench_circular_b import bar
+    return bar()
+```
+
+`rsibench_circular_b.py`:
+```python
+def bar():
+    import rsibench_circular_a
+    return ""h"
+debug-10,debugging,A,control,2,True,False,,7,359754,181322,2473,0.0,26.26,"Fixed `/tmp/rsibench_regex_error.py`. Unbalanced `(` in regex `r""(\d+(""` caused `re.error`. Reverted to `r""(\d+)""`. Pattern valid now."
+debug-08,debugging,A,control,2,True,False,,2,374278,188350,2545,0.0,6.36,"File `/tmp/rsibench_mutable_default.py` already correct. It uses `items=None` and initializes inside. No changes needed.
+
+Skipped: No changes needed.
+Add: Nothing."
+shell-02,shell,A,control,2,True,False,,2,388683,195295,2582,0.0,5.68,"0 lines, 1 word, 4 characters."
+shell-09,shell,A,control,2,True,False,,2,403342,202343,2763,0.0,8.78,"Sorted disk usage (/tmp/rsibench_data/):
+
+```
+txt: 40K total
+bin: 20K total
+py: 12K total
+log: 4,0K total
+gz: 4,0K total
+csv: 4,0K total
+```
+
+→ Skipped: separate extensionless files. Add if requested."
+debug-06,debugging,A,control,2,True,False,,5,440899,219358,2998,0.0,18.81,"File content shows `KeyError` already. Checked `/tmp/rsibench_wrong_exception.py`. Callers use `except KeyError`. Match.
+
+Code unchanged → skipped: Nothing to fix."
+debug-03,debugging,A,control,2,True,False,,4,470683,234172,3166,0.0,13.54,"Fix: `range(len(items))` covers all indices.
+Skipped: None.
+Add when: None."
+debug-02,debugging,B,raw_rsi,2,True,False,,5,41554,19665,158,0.0,39.88,The import error in `/tmp/rsibench_fix_import.py` is resolved by changing `from pytest.utils import approx` to `from pytest import approx`.
+shell-08,shell,B,raw_rsi,2,True,False,,2,56011,26638,217,0.0,5.71,/tmp/rsibench_data/todo_work.py
+debug-10,debugging,B,raw_rsi,2,True,False,,9,127662,62666,859,0.0,32.01,"Fixed unbalanced parentheses in `/tmp/rsibench_regex_error.py`.
+
+```python
+pattern = r""(\d+)""
+```
+
+Tests pass."
+shell-02,shell,B,raw_rsi,2,True,False,,2,142067,69611,896,0.0,6.56,"0 lines, 1 word, 4 characters."
+debug-09,debugging,B,raw_rsi,2,True,False,,4,172082,84475,1268,0.0,13.45,"Circular import found. `a` imports `b` inside `foo`, `b` imports `a` inside `bar`. Currently, `bar` imports `a` globally inside function scope, triggering load-time import if called. Both already lazy"
+debug-05,debugging,B,raw_rsi,2,True,False,,4,202014,99403,1476,0.0,16.42,"`with` block applied. Leak closed. → skipped: nothing, add when: nothing."
+debug-06,debugging,B,raw_rsi,2,True,False,,3,224091,110223,1621,0.0,11.18,"`ValueError` → `KeyError` in `/tmp/rsibench_wrong_exception.py`.
+
+Skipped: adding test suite. Add when logic grows."
+debug-01,debugging,B,raw_rsi,2,True,False,,3,246042,120984,1688,0.0,9.75,File correct. Output: `Hello World`. No fix needed.
+shell-04,shell,B,raw_rsi,2,True,False,,2,260509,127946,1770,0.0,6.86,Task complete. Compressed `/tmp/rsibench_data/archive/` to `/tmp/rsibench_data/archive.tar.gz` with `-p` flag for permissions.
+shell-03,shell,B,raw_rsi,2,True,False,,2,275055,134969,1865,0.0,6.44,"[2026-06-25 14:30:00] ERROR: connection failed
+
+skipped: none, add when needed."
+debug-08,debugging,B,raw_rsi,2,True,False,,5,312903,152324,2059,0.0,30.74,"Function `process_items` already used `None` default in `/tmp/rsibench_mutable_default.py`.
+
+Skipped: redundant rewrite.
+Add when: logic actually uses `[]` as default."
+shell-01,shell,B,raw_rsi,2,True,False,,2,327830,159507,2363,0.0,6.06,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+shell-06,shell,B,raw_rsi,2,True,False,,2,342224,166440,2402,0.0,6.74,Nothing found. No directories removed.
+shell-07,shell,B,raw_rsi,2,True,False,,2,356791,173469,2511,0.0,7.21,"3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1"
+debug-03,debugging,B,raw_rsi,2,True,False,,4,386769,188415,2734,0.0,15.25,"Code correct, no error existed. 
+
+`for i in range(len(items))` iterates 0 to 4. `items` has 5 elements. All items print. → skipped: none, add when: never."
+shell-09,shell,B,raw_rsi,2,True,False,,2,401473,195496,2924,0.0,7.25,"Size (bytes) Extension
+15360 bin
+381 log
+288 txt
+180 gz
+150 py
+110 csv
+
+→ skipped: recursive directory depth limits, human-readable formatting. Add when requested."
+shell-05,shell,B,raw_rsi,2,True,False,,2,415992,202480,3033,0.0,8.6,"Sorted data:
+
+```csv
+grace,31,96
+alice,30,95
+charlie,35,92
+evan,32,91
+henry,27,90
+```
+
+Skipped: file creation (result shown directly). Add if permanent file needed."
+debug-07,debugging,B,raw_rsi,2,True,False,,2,430748,213453,3093,0.0,9.01,"Deadlock already fixed in file. Thread 1, 2 both acquire `lock_a` then `lock_b`. Code matches request. No action needed."
+shell-10,shell,B,raw_rsi,2,True,False,,2,445430,220544,3250,0.0,5.94,"Duplicates found:
+Hash: `5b15452c268a7d3adf9d03387d69b4fb`
+Files:
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`
+
+Skipped: file"
+debug-04,debugging,B,raw_rsi,2,True,False,,4,475496,233719,3505,0.0,15.87,"Guard added.
+
+```python
+def get_config():
+    return None
+
+# Bug: result could be None
+result = get_config()
+if result is not None:
+    print(result.theme)
+```
+
+skipped: full error context, add when: "
+shell-04,shell,C,validated_rsi,2,True,False,,2,14506,6978,103,0.0,12.04,"Archive created at `/tmp/rsibench_data/archive.tar.gz`.
+
+`tar -czvf /tmp/rsibench_data/archive.tar.gz -C /tmp/rsibench_data/ archive/` → skipped: nothing, complete."
+debug-03,debugging,C,validated_rsi,2,True,False,,2,29103,14046,205,0.0,4.81,"/tmp/rsibench_off_by_one.py correct. `range(len(items))` for `len=5` yields `0, 1, 2, 3, 4`. `items[4]` is `5`. No error found.
+
+Nothing fixed. Skipped: nothing. Added: when bug found."
+shell-05,shell,C,validated_rsi,2,True,False,,2,43647,21030,339,0.0,11.35,"Result:
+```csv
+grace,31,96
+alice,30,95
+charlie,35,92
+evan,32,91
+henry,27,90
+```
+Command: `sort -t, -k3,3rn /tmp/rsibench_data/data.csv | head -n 5` → skipped: file save, added when requested."
+shell-08,shell,C,validated_rsi,2,True,False,,5,87302,41926,489,0.0,28.14,/tmp/rsibench_data/todo_work.py
+shell-07,shell,C,validated_rsi,2,True,False,,2,101869,48955,598,0.0,7.96,"3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1"
+debug-05,debugging,C,validated_rsi,2,True,False,,4,131824,63903,808,0.0,23.51,Fixed. `with` statement added. Leak closed.
+debug-06,debugging,C,validated_rsi,2,True,False,,3,153898,74723,950,0.0,15.61,"Fixed. Exception changed to `KeyError` to match caller expectations.
+
+`patch` applied. → skipped: nothing, add when: test coverage required."
+shell-03,shell,C,validated_rsi,2,True,False,,2,168417,85431,1044,0.0,12.95,No errors found between 14:00 and 15:00 in `/tmp/rsibench_data/logs.txt`. Output empty.
+shell-09,shell,C,validated_rsi,2,True,False,,2,183099,92485,1241,0.0,12.0,"Disk usage by extension (descending):
+
+```text
+txt: 40K	total
+bin: 20K	total
+py: 12K	total
+log: 4,0K	total
+gz: 4,0K	total
+csv: 4,0K	total
+```
+
+Skipped: aggregation scripts, permanent stats. Add when: "
+debug-08,debugging,C,validated_rsi,2,True,False,,5,226497,121279,1435,0.0,51.11,"Fixed `/tmp/rsibench_mutable_default.py`.
+
+```python
+def process_items(items=None):
+    if items is None:
+        items = []
+    items.append('new')
+    return items
+```"
+debug-09,debugging,C,validated_rsi,2,True,False,,6,273109,146935,2094,0.0,40.58,"It works fine. Code is already lazy. Circular dependencies at import time only block if top-level. Your files are fine. 
+
+If this was failing in your real app: move shared constants/logic to `common.p"
+debug-07,debugging,C,validated_rsi,2,True,False,,6,321274,176079,2582,0.0,21.77,Fix lock acquisition order. `thread2` now locks `lock_a` then `lock_b`. Matches `thread1`. Deadlock gone.
+shell-06,shell,C,validated_rsi,2,True,False,,2,335677,183012,2630,0.0,6.35,Directory `/tmp/rsibench_data/` empty. None removed.
+debug-10,debugging,C,validated_rsi,2,True,False,,3,357778,193834,2793,0.0,12.31,"The code snippet provided did not actually have an error (it was valid regex `r""(\d+)""`). I replaced it with the same valid logic. If you have a specific failing string or pattern, paste it. 
+
+→ skipp"
+debug-02,debugging,C,validated_rsi,2,True,False,,5,400440,211160,2935,0.0,27.35,Fixed. `from pytest.utils import approx` → `from pytest import approx`.
+shell-02,shell,C,validated_rsi,2,True,False,,2,414845,218105,2972,0.0,4.99,"0 lines, 1 word, 4 characters."
+debug-04,debugging,C,validated_rsi,2,True,False,,6,460961,239925,3293,0.0,18.76,"Guard added. File updated. 
+
+skipped: logging for None case, add when production diagnostics needed."
+shell-01,shell,C,validated_rsi,2,True,False,,2,475888,247108,3597,0.0,8.11,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+debug-01,debugging,C,validated_rsi,2,True,False,,3,497853,257869,3678,0.0,11.58,File `/tmp/rsibench_fix_variable.py` correct. Output `Hello World` match. No typo found.
+shell-10,shell,C,validated_rsi,2,True,False,,2,512529,264960,3829,0.0,15.6,"Duplicates found:
+Hash: `5b15452c268a7d3adf9d03387d69b4fb`
+Files:
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`
+
+Skipped: file"
+shell-04,shell,A,control,3,True,False,,2,14456,6962,70,0.0,8.81,"Done.
+
+`/tmp/rsibench_data/archive.tar.gz` created. Permissions preserved via default tar behavior."
+debug-08,debugging,A,control,3,True,False,,4,44211,21721,251,0.0,46.68,"The code already uses `items=None` and `items = []`. No fix needed.
+
+`→` skipped: nothing, file already corrected."
+shell-10,shell,A,control,3,True,False,,2,58884,32529,399,0.0,11.41,"Duplicate groups (hash `5b15452c268a7d3adf9d03387d69b4fb`):
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`
+
+skipped: grouping U"
+debug-02,debugging,A,control,3,True,False,,5,102598,61606,584,0.0,41.81,The file `/tmp/rsibench_fix_import.py` is fixed. `pytest.approx` was imported correctly.
+debug-07,debugging,A,control,3,True,False,,2,117246,68724,683,0.0,11.25,"The file `/tmp/rsibench_deadlock.py` already uses the same lock order (`lock_a` then `lock_b`) in both threads. No deadlock present.
+
+```python
+# No changes needed. Both threads already use (lock_a ->"
+debug-06,debugging,A,control,3,True,False,,3,139318,83260,823,0.0,23.17,"File updated. Exception type changed to `KeyError`.
+
+`KeyError` match callers. → skipped: nothing, add when: requirement change."
+shell-09,shell,A,control,3,True,False,,2,153993,94022,1022,0.0,11.35,"`find /tmp/rsibench_data/ -type f | sed 's/.*\.//' | sort | uniq -c | awk '{print $2}' | xargs -I {} bash -c ""echo -n '{}: '; du -ch /tmp/rsibench_data/*.{} 2>/dev/null | tail -n 1"" | sort -hr -k2` → "
+shell-07,shell,A,control,3,True,False,,2,168647,104774,1207,0.0,12.86,"`grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' /tmp/rsibench_data/access.log | sort | uniq -c | sort -nr | head -n 10` → count: 3 (192.168.1.1), 2 (192.168.1.2), 2 (10.0.0.1). Done."
+debug-04,debugging,A,control,3,True,False,,6,214836,133955,1594,0.0,65.1,"File patched. Guard added.
+
+```python
+def get_config():
+    return None
+
+# Bug: result could be None
+result = get_config()
+if result is not None:
+    print(result.theme)
+```
+
+Skipped: validation of `r"
+debug-01,debugging,A,control,3,True,False,,3,236803,148414,1677,0.0,23.9,"Already fixed. Script runs correctly.
+
+`python3 /tmp/rsibench_fix_variable.py` → `Hello World`."
+shell-08,shell,A,control,3,True,False,,2,251258,155386,1736,0.0,19.95,/tmp/rsibench_data/todo_work.py
+debug-03,debugging,A,control,3,True,False,,2,265852,166171,1835,0.0,4.08,"File `/tmp/rsibench_off_by_one.py` correct. `range(len(items))` for `len=5` yields `0, 1, 2, 3, 4`. `items[4]` exists. No error.
+
+Skipped: No changes. Add when: Bug manifests."
+debug-09,debugging,A,control,3,True,False,,4,295882,184732,2222,0.0,29.28,"Circular imports found in `rsibench_circular_a.py` and `rsibench_circular_b.py`. Fix: extract shared code to `rsibench_circular_shared.py`.
+
+`write_file(path='/tmp/rsibench_circular_shared.py', conten"
+shell-03,shell,A,control,3,True,False,,2,310438,195472,2327,0.0,10.31,"`[2026-06-25 14:30:00] ERROR: connection failed`
+
+Skipped: extra parsing/formatting. Add when requirement changes to structured output."
+shell-02,shell,A,control,3,True,False,,2,324843,202417,2364,0.0,11.41,"0 lines, 1 word, 4 characters."
+shell-05,shell,A,control,3,True,False,,3,346816,213124,2498,0.0,13.45,"grace,31,96
+alice,30,95
+charlie,35,92
+evan,32,91
+henry,27,90
+
+→ skipped: validation, add when data source change."
+shell-06,shell,A,control,3,True,False,,2,361209,220057,2536,0.0,20.07,Empty. No directories found.
+shell-01,shell,A,control,3,True,False,,2,376136,230956,2840,0.0,9.33,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+debug-05,debugging,A,control,3,True,False,,7,430263,262506,3332,0.0,33.47,"Leak fixed. Used `with` block.
+
+```python
+with open(""/tmp/rsibench_data/sample.txt"", ""w"") as f:
+    f.write(""data"")
+```
+
+Skipped: extra resource cleanup code. Added when: never (context manager handle"
+debug-10,debugging,A,control,3,True,False,,6,475674,281841,3583,0.0,28.62,"Regex fine. `r""(\d+)""` match `123`. Code run: `python3 /tmp/rsibench_regex_error.py`. → skipped: additional test cases, add when: failure persists."
+debug-02,debugging,B,raw_rsi,3,True,False,,5,40051,23458,261,0.0,61.55,"The `pytest.utils` module does not exist; `pytest.approx` is available directly under the `pytest` package. Fixed the import.
+
+```python
+import pytest
+
+def test_foo():
+    assert pytest.approx(0.1 + 0"
+debug-10,debugging,B,raw_rsi,3,True,False,,4,69835,41985,422,0.0,22.2,"Regex fixed. Escaped parentheses used for literal matching. `re.match` now handles `""(123)""`.
+
+`ponytail: regex too simple. Add complex validation when requirement demands parsing nested structures.`"
+shell-01,shell,B,raw_rsi,3,True,False,,2,84762,52884,726,0.0,15.17,"/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data.csv
+/t"
+shell-09,shell,B,raw_rsi,3,True,False,,3,107150,67488,1083,0.0,14.1,"`find /tmp/rsibench_data/ -type f | awk -F. '{if (NF>1) print $NF}' | sort | uniq | while read ext; do size=$(find /tmp/rsibench_data/ -type f -name ""*.$ext"" -exec du -cb {} + | tail -n 1 | cut -f1); "
+debug-03,debugging,B,raw_rsi,3,True,False,,2,121751,78266,1189,0.0,13.47,"File `/tmp/rsibench_off_by_one.py` contains `range(len(items))` which covers indices `0, 1, 2, 3, 4` for `len=5`. Loop correct. No off-by-one error present.
+
+Skipped: No changes needed.
+Add when: Bug "
+shell-02,shell,B,raw_rsi,3,True,False,,2,136156,85211,1226,0.0,30.54,"0 lines, 1 word, 4 characters."
+shell-10,shell,B,raw_rsi,3,True,False,,2,150823,96024,1363,0.0,16.34,"Found:
+`/tmp/rsibench_data/duplicates/a.txt`
+`/tmp/rsibench_data/duplicates/b.txt`
+`/tmp/rsibench_data/duplicates/d.txt`
+
+All share content hash `5b15452c268a7d3adf9d03387d69b4fb`."
+debug-08,debugging,B,raw_rsi,3,True,False,,3,172892,110565,1481,0.0,15.79,File `/tmp/rsibench_mutable_default.py` already used `None` default. No changes needed.
+shell-04,shell,B,raw_rsi,3,True,False,,2,187374,121252,1560,0.0,12.1,"Archive created at `/tmp/rsibench_data/archive.tar.gz`.
+
+Skipped: file validation, size check. Add if required by deployment pipeline."
+shell-06,shell,B,raw_rsi,3,True,False,,2,201769,128185,1600,0.0,14.51,Empty. No directories found/deleted.
+debug-06,debugging,B,raw_rsi,3,True,False,,4,233028,151331,2274,0.0,27.32,"File `/tmp/rsibench_wrong_exception.py` already raises `KeyError` and catches `KeyError`.
+
+```python
+def lookup(key):
+    raise KeyError(f""not found: {key}"")
+```
+
+Perhaps confusion with different file"
+shell-07,shell,B,raw_rsi,3,True,False,,2,247611,158360,2399,0.0,14.08,"Result:
+```
+3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1
+```
+→ skipped: nothing, logic exhausted."
+shell-05,shell,B,raw_rsi,3,True,False,,2,262136,169060,2514,0.0,14.31,"Sorted top 5 numeric (column 3, desc):
+
+```csv
+grace,31,96
+alice,30,95
+charlie,35,92
+evan,32,91
+henry,27,90
+```
+
+→ skipped: save to file, add when needed for pipeline."
+debug-05,debugging,B,raw_rsi,3,True,False,,5,299807,195375,2771,0.0,37.87,"Context manager already present in `/tmp/rsibench_unclosed_file.py`. No change needed. Skipped: unnecessary edits, add when requirement changes."
+debug-07,debugging,B,raw_rsi,3,True,False,,2,314443,202493,2858,0.0,9.86,"The file `/tmp/rsibench_deadlock.py` already implements the correct lock acquisition order (lock_a then lock_b in both threads). No deadlock possible.
+
+Skipped: No changes needed.
+Add: If deadlock obs"
+debug-09,debugging,B,raw_rsi,3,True,False,,5,352354,227185,3195,0.0,29.95,"`rsibench_circular_b.py` patched. Cyclic import broken via lazy import.
+
+```python
+def bar():
+    # Deferred import to break circular dependency
+    from rsibench_circular_a import foo
+    return ""hel"
+debug-04,debugging,B,raw_rsi,3,True,False,,4,382400,240360,3430,0.0,23.64,"Guard added. `if result is not None:` wrapped `result.theme` access.
+
+`ponytail: check existence before access. Add more robust error handling if get_config() type evolves.`"
+debug-01,debugging,B,raw_rsi,3,True,False,,3,404397,254839,3543,0.0,11.46,"The file already prints ""Hello World"". No typo found.
+
+```python
+name = ""World""
+# Bug: variable in f-string doesn't match
+print(f""Hello {name}"")
+```
+
+Skipped: No changes needed. Add when: requirements"
+shell-03,shell,B,raw_rsi,3,True,False,,2,418980,265589,3664,0.0,4.27,"[2026-06-25 14:30:00] ERROR: connection failed
+
+→ Skipped: exact date validation (assumed constant date); added when: cross-day logs become common."
+shell-08,shell,B,raw_rsi,3,True,False,,2,433482,272562,3768,0.0,3.96,"grep -rlE ""TODO"" /tmp/rsibench_data/ --include=""*.py"" | xargs grep -L ""FIXME""
+
+→ skipped: recursive grep logic, added when needed.
+/tmp/rsibench_data/todo_work.py"
+shell-07,shell,C,validated_rsi,3,True,False,,2,14533,7007,98,0.0,5.66,"Top 10 IPs:
+
+```text
+3 192.168.1.1
+2 192.168.1.2
+2 10.0.0.1
+```"
+debug-05,debugging,C,validated_rsi,3,True,False,,4,44525,21950,350,0.0,8.68,"Fixed leak. Used `with` block.
+
+`with open(""/tmp/rsibench_data/sample.txt"", ""w"") as f:`
+`    f.write(""data"")`
+
+→ skipped: redundant manual close. Add when: never."
+shell-04,shell,C,validated_rsi,3,True,False,,2,58976,28913,414,0.0,9.16,Done. Archive created: `/tmp/rsibench_data/archive.tar.gz`.
+shell-09,shell,C,validated_rsi,3,True,False,,2,73710,35998,630,0.0,7.94,"find /tmp/rsibench_data/ -type f -printf ""%s %f\n"" | awk -F. '{ext=(NF>1)?$NF:""noext""; sum[ext]+=$1} END {for(e in sum) print sum[e], e}' | sort -rn → skipped: fancy formatting, add when requirement c"
+shell-10,shell,C,validated_rsi,3,True,False,,2,88369,43089,764,0.0,4.56,"Group 1 (hash `5b15452c268a7d3adf9d03387d69b4fb`):
+- `/tmp/rsibench_data/duplicates/a.txt`
+- `/tmp/rsibench_data/duplicates/b.txt`
+- `/tmp/rsibench_data/duplicates/d.txt`"
+debug-09,debugging,C,validated_rsi,3,True,False,,5,126117,63970,1064,0.0,8.88,Neither file has a load-time circular import. Both use lazy imports. No change needed.
+debug-01,debugging,C,validated_rsi,3,True,False,,3,148080,74731,1143,0.0,7.68,File correct. Typo absent. Code run output: `Hello World`. Skipped: nothing. Add when: none.
+debug-02,debugging,C,validated_rsi,3,True,False,,5,207481,107638,1385,0.0,13.08,Fixed import. Removed non-existent `pytest.utils`. `pytest` provides `approx` directly.
+shell-05,shell,C,validated_rsi,3,True,False,,2,221977,114622,1471,0.0,3.86,"Output:
+grace,31,96
+alice,30,95
+charlie,35,92
+evan,32,91
+henry,27,90"
+debug-10,debugging,C,validated_rsi,3,True,False,,3,243938,125351,1582,0.0,7.87,"The regex `r""\(\d+\)""` is valid and runs successfully against `""(123)""`. 
+
+If you encountered a `re.error`, the file content may have changed or the runtime environment differs. Show the specific erro"
+shell-03,shell,C,validated_rsi,3,True,False,,2,258496,132374,1689,0.0,3.89,"[2026-06-25 14:30:00] ERROR: connection failed
+
+skipped: date validation (assumed format), regex robustness.
+add when: logs format drift."
+shell-06,shell,C,validated_rsi,3,True,False,,2,272901,139307,1739,0.0,5.64,Directories `/tmp/rsibench_data/` empty: none. Nothing removed.
+debug-06,debugging,C,validated_rsi,3,True,False,,3,294947,150114,1867,0.0,5.71,"File already correct. `lookup` raises `KeyError`. Callers expect `KeyError`.
+
+Skipped: No changes needed.
+Add: Nothing."
+debug-07,debugging,C,validated_rsi,3,True,False,,3,317317,161176,2046,0.0,6.79,"Fix order lock_a then lock_b. → skipped: complex hierarchy, add when lock count > 2."
+debug-03,debugging,C,validated_rsi,3,True,False,,2,331929,168244,2163,0.0,3.91,"The file `/tmp/rsibench_off_by_one.py` has no error. `range(len(items))` covers all indices.
+
+```python
+items = [1, 2, 3, 4, 5]
+for i in range(len(items)):
+    print(items[i])
+```
+
+skipped: none.
+add "
+debug-08,debugging,C,validated_rsi,3,True,False,,7,393208,196098,2440,0.0,12.72,Fixed. `def process_items(items=None):` used. `items` initialized to `[]` inside.
+debug-04,debugging,C,validated_rsi,3,True,False,,5,431173,215275,2756,0.0,10.0,"Guard added. `result` checked for `None` before `result.theme` access. 
+
+Skipped: automated verification script (trivial file). 
+Add when: logic scales to complex objects."
+shell-08,shell,C,validated_rsi,3,True,False,,2,445696,222248,2882,0.0,4.26,"grep -rl ""TODO"" /tmp/rsibench_data/ --include=""*.py"" | xargs grep -L ""FIXME"" 2>/dev/null
+
+/tmp/rsibench_data/todo_work.py
+
+→ Skipped: Error code 123 handling (grep exit status 1 if no files match), ad"
+shell-01,shell,C,validated_rsi,3,True,False,,2,460626,233147,3189,0.0,3.54,"Found:
+/tmp/rsibench_data/clean.py
+/tmp/rsibench_data/data.bin
+/tmp/rsibench_data/sample.txt
+/tmp/rsibench_data/note.txt
+/tmp/rsibench_data/logs.txt
+/tmp/rsibench_data/logs.bin
+/tmp/rsibench_data/data"
+shell-02,shell,C,validated_rsi,3,True,False,,2,475053,240092,3248,0.0,3.14,"`0` lines, `1` word, `4` characters. 
+Skipped: formatting fluff. Add when: output needs machine-readable parse."
