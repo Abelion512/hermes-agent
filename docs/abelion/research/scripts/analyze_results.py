@@ -42,6 +42,12 @@ def compute_aggregates(df: "pd.DataFrame") -> "pd.DataFrame":
         "failed_count": grouped["failed"].sum(),
     })
 
+    # Token efficiency: completion_rate adjusted by token cost
+    # Higher = more efficient (fewer tokens per successful task)
+    agg["efficiency_score"] = (
+        agg["completion_rate"] / agg["avg_total_tokens"].clip(lower=1) * 1_000_000
+    ).round(2)
+
     return agg.round(2)
 
 
@@ -163,40 +169,50 @@ def main():
     print()
     print("=== RQ1: Does RSI work? ===")
     if "A" in conditions and "B" in conditions:
-        comp = compare_conditions(df, "A", "B")
         rate_a = agg.loc["A", "completion_rate"]
         rate_b = agg.loc["B", "completion_rate"]
-        print(f"  Control (A):   {rate_a:.1%} completion")
-        print(f"  Raw RSI (B):   {rate_b:.1%} completion")
-        p_vals = comp[comp["metric"] == "completed"]["p_value"].values
-        if len(p_vals) > 0:
-            p = p_vals[0]
-            print(f"  p-value: {p:.4f}")
-            if p < 0.05 and rate_b > rate_a:
-                print("  → RSI significantly improves performance")
-            elif p < 0.05 and rate_b < rate_a:
-                print("  → RSI significantly degrades performance")
-            else:
-                print("  → No significant effect detected")
+        eff_a = agg.loc["A", "efficiency_score"]
+        eff_b = agg.loc["B", "efficiency_score"]
+        print(f"  Control (A):   {rate_a:.1%} completion, eff={eff_a:.1f} tasks/1M tk")
+        print(f"  Raw RSI (B):   {rate_b:.1%} completion, eff={eff_b:.1f} tasks/1M tk")
+        if rate_a == rate_b:
+            delta = (eff_b - eff_a) / eff_a * 100 if eff_a > 0 else 0
+            print(f"  → Ceiling (both {rate_a:.0%}). Efficiency: B is {delta:+.1f}% vs A")
+        else:
+            comp = compare_conditions(df, "A", "B")
+            p_vals = comp[comp["metric"] == "completed"]["p_value"].values
+            if len(p_vals) > 0:
+                p = p_vals[0]
+                if p < 0.05 and rate_b > rate_a:
+                    print(f"  → RSI significantly improves performance (p={p:.4f})")
+                elif p < 0.05 and rate_b < rate_a:
+                    print(f"  → RSI significantly degrades performance (p={p:.4f})")
+                else:
+                    print(f"  → No significant effect (p={p:.4f})")
 
     print()
     print("=== RQ4: Does validation help? ===")
     if "B" in conditions and "C" in conditions:
-        comp = compare_conditions(df, "B", "C")
         rate_b = agg.loc["B", "completion_rate"]
         rate_c = agg.loc["C", "completion_rate"]
-        print(f"  Raw RSI (B):       {rate_b:.1%} completion")
-        print(f"  Validated RSI (C): {rate_c:.1%} completion")
-        p_vals = comp[comp["metric"] == "completed"]["p_value"].values
-        if len(p_vals) > 0:
-            p = p_vals[0]
-            print(f"  p-value: {p:.4f}")
-            if p < 0.05 and rate_c > rate_b:
-                print("  → Validation significantly improves RSI")
-            elif p < 0.05 and rate_c < rate_b:
-                print("  → Raw RSI outperforms validated (unexpected)")
-            else:
-                print("  → No significant difference between raw and validated")
+        eff_b = agg.loc["B", "efficiency_score"]
+        eff_c = agg.loc["C", "efficiency_score"]
+        print(f"  Raw RSI (B):       {rate_b:.1%} completion, eff={eff_b:.1f} tasks/1M tk")
+        print(f"  Validated RSI (C): {rate_c:.1%} completion, eff={eff_c:.1f} tasks/1M tk")
+        if rate_b == rate_c:
+            delta = (eff_c - eff_b) / eff_b * 100 if eff_b > 0 else 0
+            print(f"  → Ceiling. Efficiency: C is {delta:+.1f}% vs B")
+        else:
+            comp = compare_conditions(df, "B", "C")
+            p_vals = comp[comp["metric"] == "completed"]["p_value"].values
+            if len(p_vals) > 0:
+                p = p_vals[0]
+                if p < 0.05 and rate_c > rate_b:
+                    print(f"  → Validation significantly improves RSI (p={p:.4f})")
+                elif p < 0.05 and rate_c < rate_b:
+                    print(f"  → Raw RSI outperforms validated (p={p:.4f})")
+                else:
+                    print(f"  → No significant difference (p={p:.4f})")
 
     # Save if output specified
     if args.output:

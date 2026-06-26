@@ -14,9 +14,15 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-# Ensure we can import from project root
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+# Ensure we can import from project root (walk up until we find run_agent.py)
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR
+while not (PROJECT_ROOT / "run_agent.py").exists():
+    PROJECT_ROOT = PROJECT_ROOT.parent
+    if PROJECT_ROOT == PROJECT_ROOT.parent:
+        raise RuntimeError("Could not find project root (run_agent.py)")
 sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(SCRIPT_DIR))
 
 from run_agent import AIAgent
 from tasks import get_task_batch
@@ -31,12 +37,13 @@ CONDITIONS = {
 }
 
 
-def create_agent(api_key: str, model: str, max_iterations: int = 10) -> AIAgent:
+def create_agent(api_key: str, model: str, max_iterations: int = 10,
+                 base_url: str = None, provider: str = None) -> AIAgent:
     """Create a fresh AIAgent instance for a single run."""
     return AIAgent(
         api_key=api_key,
-        base_url="https://openrouter.ai/api/v1",
-        provider="openrouter",
+        base_url=base_url or "https://openrouter.ai/api/v1",
+        provider=provider or "openrouter",
         model=model,
         max_iterations=max_iterations,
         quiet_mode=True,
@@ -47,40 +54,46 @@ def create_agent(api_key: str, model: str, max_iterations: int = 10) -> AIAgent:
 
 
 def run_single_task(agent: AIAgent, task) -> dict:
-    """Run a single benchmark task and return metrics."""
+    """Run a single benchmark task and return metrics + message history."""
     start_time = time.time()
     try:
-        result = agent.run_conversation(task.prompt)
+        conversation = agent.run_conversation(task.prompt)
         elapsed = time.time() - start_time
 
         return {
-            "task_id": task.id,
-            "category": task.category,
-            "completed": result.get("completed", False),
-            "failed": result.get("failed", False),
-            "error": result.get("error", "") or "",
-            "iterations": result.get("api_calls", 0),
-            "total_tokens": result.get("total_tokens", 0),
-            "input_tokens": result.get("input_tokens", 0),
-            "output_tokens": result.get("output_tokens", 0),
-            "cost_usd": result.get("estimated_cost_usd", 0.0),
-            "response": (result.get("final_response") or "")[:200],
-            "elapsed_seconds": round(elapsed, 2),
+            "metrics": {
+                "task_id": task.id,
+                "category": task.category,
+                "completed": conversation.get("completed", False),
+                "failed": conversation.get("failed", False),
+                "error": conversation.get("error", "") or "",
+                "iterations": conversation.get("api_calls", 0),
+                "total_tokens": conversation.get("total_tokens", 0),
+                "input_tokens": conversation.get("input_tokens", 0),
+                "output_tokens": conversation.get("output_tokens", 0),
+                "cost_usd": conversation.get("estimated_cost_usd", 0.0),
+                "response": (conversation.get("final_response") or "")[:200],
+                "elapsed_seconds": round(elapsed, 2),
+            },
+            "messages": list(conversation.get("messages", [])),
         }
     except Exception as e:
         return {
-            "task_id": task.id,
-            "category": task.category,
-            "completed": False,
-            "failed": True,
-            "error": str(e),
-            "iterations": 0,
-            "total_tokens": 0,
-            "input_tokens": 0,
-            "output_tokens": 0,
-            "cost_usd": 0.0,
-            "response": "",
-            "elapsed_seconds": round(time.time() - start_time, 2),
+            "metrics": {
+                "task_id": task.id,
+                "category": task.category,
+                "completed": False,
+                "failed": True,
+                "error": str(e),
+                "iterations": 0,
+                "total_tokens": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "cost_usd": 0.0,
+                "response": "",
+                "elapsed_seconds": round(time.time() - start_time, 2),
+            },
+            "messages": [],
         }
 
 
@@ -91,13 +104,17 @@ def run_condition(
     api_key: str,
     model: str,
     run_number: int,
+    base_url: str = None,
+    provider: str = None,
+    max_iterations: int = 10,
 ) -> tuple[list[dict], list[dict]]:
     """Run all tasks under one condition for one run.
 
     Returns (results, injected_lessons).
     """
     print(f"  Condition {condition_id} ({config['name']}) — run {run_number}")
-    agent = create_agent(api_key, model)
+    agent = create_agent(api_key, model, max_iterations=max_iterations,
+                         base_url=base_url, provider=provider)
     random.shuffle(tasks)
     injected_lessons: list[dict] = []
     results: list[dict] = []
@@ -106,16 +123,16 @@ def run_condition(
         print(f"    Task {task.id}...", end=" ")
         sys.stdout.flush()
 
-        result = run_single_task(agent, task)
+        execution = run_single_task(agent, task)
+        result = execution["metrics"]
         result["condition"] = condition_id
         result["condition_name"] = config["name"]
         result["run"] = run_number
         results.append(result)
 
         if config["rsi"] and not result["failed"]:
-            # Extract lesson candidates from this task
-            conv = agent.run_conversation(task.prompt)
-            candidates = extract_lesson_candidates(conv.get("messages", []))
+            # Extract lesson candidates from the same conversation
+            candidates = extract_lesson_candidates(execution["messages"])
 
             if config["validated"]:
                 for candidate in candidates:
@@ -136,11 +153,17 @@ def run_condition(
 
 def main():
     parser = argparse.ArgumentParser(description="Run RSI experiment")
-    parser.add_argument("--api-key", required=True, help="OpenRouter API key")
+    parser.add_argument("--api-key", required=True, help="API key")
     parser.add_argument("--model", default="anthropic/claude-sonnet-4", help="Model name")
+    parser.add_argument("--base-url", help="API base URL (default: OpenRouter)")
+    parser.add_argument("--provider", help="Provider name (default: openrouter)")
     parser.add_argument("--runs", type=int, default=3, help="Number of runs per condition")
     parser.add_argument("--output", default="", help="Output CSV path")
     parser.add_argument("--conditions", default="A,B,C", help="Conditions to run (comma-separated)")
+    parser.add_argument("--tasks", default="standard",
+                        help="Task set: 'standard' (from tasks) or 'hard' (from tasks_hard)")
+    parser.add_argument("--max-iterations", type=int, default=10,
+                        help="Max iterations per task (default 10)")
     args = parser.parse_args()
 
     # Create output filename
@@ -153,12 +176,18 @@ def main():
         "task_id", "category", "condition", "condition_name", "run",
         "completed", "failed", "error",
         "iterations", "total_tokens", "input_tokens", "output_tokens",
-        "cost_usd", "elapsed_seconds",
+        "cost_usd", "elapsed_seconds", "response",
     ]
 
     tasks = get_task_batch()
     condition_ids = args.conditions.split(",")
 
+    # Switch task sets
+    if args.tasks == "hard":
+        from tasks_hard import get_task_batch as get_hard
+        tasks = get_hard()
+        print(f"[Using hard task set: {len(tasks)} tasks]")
+    
     print(f"RSI Experiment — {len(tasks)} tasks, {len(condition_ids)} conditions, {args.runs} runs")
     print(f"Model: {args.model}")
     print(f"Output: {output_path}")
@@ -184,6 +213,8 @@ def main():
                 config = CONDITIONS[cid]
                 results, lessons = run_condition(
                     cid, config, tasks, args.api_key, args.model, run,
+                    base_url=args.base_url, provider=args.provider,
+                    max_iterations=args.max_iterations,
                 )
                 all_lessons[f"{cid}_run{run}"] = lessons
                 for row in results:
