@@ -1,0 +1,5 @@
+name: preflight
+version: 1.0.0
+description: "Pre-flight spec validator — rejects incomplete /goal specs before execution"
+hooks:
+  - on_goal_received

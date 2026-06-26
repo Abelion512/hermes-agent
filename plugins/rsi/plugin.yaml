@@ -1,0 +1,8 @@
+name: rsi
+version: 2.0.0
+description: "RSI: Recurrent Self-Improvement — learns from tool errors, injects lessons via ephemeral_system_prompt"
+author: "Abelion"
+hooks:
+  - on_session_start
+  - post_tool_call
+  - on_session_end

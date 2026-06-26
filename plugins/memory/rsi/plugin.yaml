@@ -1,4 +1,0 @@
-name: rsi
-version: 0.1.0
-description: "Recurrent Self-Improvement — learns from tool errors via existing memory infrastructure"
-hooks: []
