@@ -160,3 +160,5 @@ dummy.txt
 /docs/abelion/security/
 
 testsprite_tests/tmp/config.json
+plugins/memory/rsi/__pycache__/
+plugins/memory/rsi/__pycache__/
