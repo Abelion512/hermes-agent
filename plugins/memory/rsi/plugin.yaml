@@ -1,0 +1,6 @@
+name: rsi
+version: 1.0.0
+description: "Recurrent Self-Improvement — learns from tool errors across sessions"
+pip_dependencies: []
+hooks:
+  - on_session_end
