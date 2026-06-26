@@ -94,13 +94,31 @@ def meets_criteria(
     existing: list[str],
     min_length: int = 20,
 ) -> tuple[bool, str | None]:
-    """Check lesson against criteria. Returns (valid, reason)."""
+    """Check lesson against criteria. Returns (valid, reason).
+
+    Accepts either:
+    - Cause-effect statement mentioning a tool (v1 format)
+    - Imperative heuristic with trigger:action pattern (v2 format)
+    """
     if len(content) < min_length:
         return False, f"Too short ({len(content)}<{min_length})"
-    if not has_cause_effect(content):
-        return False, "Missing cause-effect statement"
-    if not mentions_tool(content):
-        return False, "No tool mentioned"
+
+    # v2: heuristic format (trigger: action) is always valid
+    if ":" in content and len(content) > 40:
+        trigger, action = content.split(":", 1)
+        if len(trigger.strip()) > 3 and len(action.strip()) > 20:
+            # Passes heuristic format check
+            pass
+        else:
+            # Fall through to v1 criteria
+            if not has_cause_effect(content) and not mentions_tool(content):
+                return False, "Not a valid heuristic or cause-effect lesson"
+    else:
+        # v1: need cause-effect + tool mention
+        if not has_cause_effect(content):
+            return False, "Missing cause-effect statement"
+        if not mentions_tool(content):
+            return False, "No tool mentioned"
 
     for existing_content in existing:
         if _is_duplicate(content, existing_content):
