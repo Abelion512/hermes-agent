@@ -162,3 +162,8 @@ dummy.txt
 testsprite_tests/tmp/config.json
 plugins/memory/rsi/__pycache__/
 plugins/memory/rsi/__pycache__/
+
+# Allow agent-session summaries
+!/docs/abelion/agent-session/
+/docs/abelion/agent-session/*
+!/docs/abelion/agent-session/summary-*
