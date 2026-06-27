@@ -1,0 +1,513 @@
+task_id,category,condition,condition_name,run,completed,failed,error,iterations,total_tokens,input_tokens,output_tokens,cost_usd,elapsed_seconds,response
+debug-hard-02,debugging,A,control,1,False,False,,3,22133,14681,69,0.0,25.56,"File `/tmp/rsibench_hard/recursion.py` does not exist on disk, confirmed by `ls -R`. Directory listing shows only `async_deadlock.py`, `binary_search.py`, `encoding.py`, `race_dict.py`, `test.py`, `ti"
+shell-hard-02,shell,A,control,1,False,False,,3,45415,33544,760,0.0,15.51,"Script `parse_logs.py` created to extract counts per hour from `/tmp/rsibench_hard/server.log`.
+
+Fixed regex to accommodate log format `YYYY-MM-DD HH:MM:SS LEVEL`.
+Result:
+```csv
+hour,error_count,warn"
+shell-hard-05,shell,A,control,1,True,False,,2,60056,44333,894,0.0,4.67,"Output CSV:
+```csv
+name,age,role
+alice,30,admin
+```
+→ skipped: input error handling, file write. Add when output persistence needed."
+debug-hard-05,debugging,A,control,1,False,False,,3,82160,58867,1045,0.0,27.3,Target `/tmp/rsibench_hard/gil_cpu.py` missing. `find` command returned permission denied errors for systemd private directories but no file match. Unable to refactor non-existent code. Verify path or
+debug-hard-01,debugging,A,control,1,False,False,,3,104364,69841,1133,0.0,14.37,Script already contains `threading.Lock` and uses `with lock:` context manager for dict access. Race condition impossible with this implementation. Execution confirmed `Dict size: 500` because `range(
+shell-hard-06,shell,A,control,1,True,False,,2,119100,76927,1350,0.0,6.22,"Command run. SQLite memory DB. CSV imported. Join performed.
+
+`sqlite3 :memory: -csv -cmd "".import /tmp/rsibench_hard/users.csv users"" ""WITH depts(id, name) AS (VALUES (10,'Engineering'),(20,'Sales'))"
+debug-hard-09,debugging,A,control,1,False,False,,3,141157,87797,1428,0.0,19.87,File `/tmp/rsibench_hard/arg_collision.py` does not exist in the specified directory. Listing confirmed absence. Cannot perform requested fix without target file.
+debug-hard-07,debugging,A,control,1,False,False,,3,163965,99165,1721,0.0,17.53,"Coroutines now wait and set events sequentially to avoid circular dependency. `coro2` signals `ev2` to unblock `coro1`, which then signals `ev1` to unblock `coro2`. Execution verified."
+debug-hard-03,debugging,A,control,1,False,False,,3,186073,109949,1920,0.0,18.6,"Found `latin-1` decode bug. File `/tmp/rsibench_hard/encoding.py` updated to use `latin-1` for reproduction. Verified corrupt output: `cafÃ©`.
+
+To fix: replace `.decode('latin-1')` with `.decode('utf-"
+debug-hard-10,debugging,A,control,1,False,False,,3,208192,120797,2079,0.0,9.6,Target file `/tmp/rsibench_hard/struct_pack.py` does not exist on disk. Search confirmed no such file in `/tmp`. Cannot fix missing file.
+debug-hard-08,debugging,A,control,1,False,False,,3,230568,135508,2333,0.0,10.78,Read `/tmp/rsibench_hard/timezone.py`. Detected naive `datetime` object causing `TypeError` when compared against aware object. Patched code to use `.replace(tzinfo=pytz.UTC)` for naive instance. Veri
+shell-hard-08,shell,A,control,1,False,False,,3,252962,146547,2537,0.0,10.02,Paths `/tmp/rsibench_hard/known_uuids.txt` and `/tmp/rsibench_hard/data.bin` non-existent. Project search for `rsibench` yielded zero results. Unable to process.
+debug-hard-04,debugging,A,control,1,False,False,,3,275206,157485,2704,0.0,10.23,Found: `/tmp/rsibench_hard/binary_search.py` logic handles base case `lo > hi` correctly (line 3 returns -1). Executed test with target `4` returned `-1` as expected. No infinite recursion observed in
+shell-hard-09,shell,A,control,1,False,False,,3,297281,168367,2783,0.0,25.68,"File `/tmp/rsibench_hard/struct_pack.py` does not exist on disk, despite references in `./docs/abelion/research/scripts/tasks_hard.py`. Task blocked by missing source file. Need file creation or corre"
+debug-hard-06,debugging,A,control,1,False,False,,3,319373,179280,2858,0.0,18.58,Target file `/tmp/rsibench_hard/sql_inject.py` missing. Search confirms path exists in `tasks_hard.py` metadata but filesystem lacks file. Cannot patch non-existent code. Verify if `/tmp/rsibench_hard
+shell-hard-03,shell,A,control,1,False,False,,3,341448,190074,3006,0.0,12.64,"Searched directory `/tmp/rsibench_hard/`. 
+
+Result: No `TODO` comments found in any files. All files parsed. Task complete."
+shell-hard-01,shell,A,control,1,True,False,,2,356191,197206,3181,0.0,6.5,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+shell-hard-07,shell,A,control,1,False,False,,3,379231,206948,3426,0.0,10.35,No `/tmp/rsibench_hard/race.sh` found. File missing.
+shell-hard-04,shell,A,control,1,False,False,,3,401220,217646,3589,0.0,193.09,File not found. Search timed out. No data to process. Tasks incomplete.
+shell-hard-10,shell,A,control,1,True,False,,2,416142,228571,3863,0.0,6.3,"/tmp/rsibench_hard/timezone.py,185,26,0.140541
+/tmp/rsibench_hard/test.py,102,15,0.147059
+/tmp/rsibench_hard/binary_search.py,353,57,0.161473
+/tmp/rsibench_hard/async_deadlock.py,349,39,0.111748
+/tmp/"
+shell-hard-02,shell,B,raw_rsi,1,True,False,,2,15114,11019,376,0.0,5.91,"No data in `/tmp/rsibench_hard/server.log`. Empty output.
+
+Verify file path and content:
+`ls -l /tmp/rsibench_hard/server.log`
+`head /tmp/rsibench_hard/server.log`"
+shell-hard-10,shell,B,raw_rsi,1,True,False,,2,30049,18238,650,0.0,6.88,"filename,lines,words,ratio
+/tmp/rsibench_hard/binary_search.py,10,57,5.7
+/tmp/rsibench_hard/timezone.py,5,26,5.2
+/tmp/rsibench_hard/test.py,3,15,5
+/tmp/rsibench_hard/encoding.py,4,10,2.5
+/tmp/rsibench"
+debug-hard-02,debugging,B,raw_rsi,1,False,False,,3,53876,34505,732,0.0,13.92,"Requested file `/tmp/rsibench_hard/recursion.py` does not exist. Checked `/tmp/rsibench_hard/` contents; no `recursion.py` found.
+
+Task incomplete. Need correct path to proceed."
+shell-hard-08,shell,B,raw_rsi,1,False,False,,3,77708,54553,805,0.0,19.32,"Exhausted tool iterations. Directory `/tmp/rsibench_hard/` checked; `known_uuids.txt` and `data.bin` are missing from the environment. `tasks_hard.py` documents the objective as a benchmark task, but "
+debug-hard-08,debugging,B,raw_rsi,1,False,False,,3,100249,65685,1084,0.0,9.05,Fixed `TypeError` by initializing `naive` object as timezone-aware using `pytz.UTC` in `/tmp/rsibench_hard/timezone.py`. Removed redundant `replace()` call during comparison. Verified comparison logic
+debug-hard-10,debugging,B,raw_rsi,1,False,False,,3,122290,76533,1165,0.0,9.21,File `/tmp/rsibench_hard/struct_pack.py` does not exist. Searched workspace for `rsibench_hard` and `struct_pack.py` — zero results. Environment does not contain requested file. Unable to verify or fi
+shell-hard-07,shell,B,raw_rsi,1,False,False,,3,146245,89170,1365,0.0,192.56,"File `/tmp/rsibench_hard/race.sh` missing. System `find` timed out without locating it. Project files refer to it, but it is not present in the current environment. Unable to perform requested executi"
+debug-hard-01,debugging,B,raw_rsi,1,False,False,,3,168651,107679,1554,0.0,9.96,"Script ran as race condition. Modified code to remove previous (incorrect) lock usage, exposing the race. Re-introducing `threading.Lock` inside the `worker` function loop will force serialization and"
+debug-hard-04,debugging,B,raw_rsi,1,False,False,,3,190963,122339,1781,0.0,9.75,"Found `binary_search.py` contained an infinite recursion bug where `mid` was passed as `hi` instead of `mid - 1` in the `else` branch. 
+
+Verified code crashed or failed to terminate. Fixed by restorin"
+debug-hard-03,debugging,B,raw_rsi,1,False,False,,3,213133,140682,1900,0.0,9.32,File `/tmp/rsibench_hard/encoding.py` updated: changed `latin-1` decode to `utf-8`. Output verified: `café` prints correctly. Task complete.
+shell-hard-06,shell,B,raw_rsi,1,True,False,,2,227919,147785,2149,0.0,4.39,"Done.
+
+```sql
+.mode csv
+.import /tmp/rsibench_hard/users.csv users
+CREATE TABLE depts (id INT, name TEXT);
+INSERT INTO depts VALUES (10,'Engineering'),(20,'Sales');
+SELECT d.name, COUNT(u.id) 
+FROM de"
+shell-hard-09,shell,B,raw_rsi,1,False,False,,3,249996,158667,2230,0.0,11.9,File `/tmp/rsibench_hard/struct_pack.py` does not exist. System search for `rsibench_hard` returned zero results. Path is inaccessible or invalid. No changes made.
+debug-hard-06,debugging,B,raw_rsi,1,False,False,,3,272165,169580,2382,0.0,9.43,"File `/tmp/rsibench_hard/sql_inject.py` missing. `ls` confirms only `async_deadlock.py`, `binary_search.py`, `encoding.py`, `race_dict.py`, `test.py`, `timezone.py` exist in `/tmp/rsibench_hard/`. Pat"
+debug-hard-05,debugging,B,raw_rsi,1,False,False,,3,294264,180423,2528,0.0,9.38,File `/tmp/rsibench_hard/gil_cpu.py` missing. Search confirm location in `tasks_hard.py` but file does not exist on disk at provided path. Cannot refactor missing file. Check file path or create it if
+shell-hard-04,shell,B,raw_rsi,1,False,False,,3,316167,194839,2605,0.0,9.37,"Failed to locate `/tmp/rsibench_hard/crontab.txt`. Search returned no matches for ""crontab"" or ""/tmp"" contents in project scope. Tasks halted due to missing input file."
+debug-hard-07,debugging,B,raw_rsi,1,False,False,,3,338742,206113,2765,0.0,9.22,"Deadlock in `/tmp/rsibench_hard/async_deadlock.py` resolved.
+
+`coro1` now calls `ev1.set()` before awaiting `ev2`. `coro2` calls `ev2.set()` before awaiting `ev1`.
+Script runs successfully without blo"
+debug-hard-09,debugging,B,raw_rsi,1,False,False,,3,360837,217028,2838,0.0,9.21,"File `/tmp/rsibench_hard/arg_collision.py` does not exist on disk, despite task description referencing it. Listing `/tmp/rsibench_hard` confirms absence.
+
+Action blocked: cannot edit non-existent fil"
+shell-hard-03,shell,B,raw_rsi,1,True,False,,2,375363,224054,2910,0.0,4.94,No TODO comments found in `/tmp/rsibench_hard/`.
+shell-hard-05,shell,B,raw_rsi,1,True,False,,2,390130,231199,3096,0.0,5.12,Output produced. Skipped error handling for empty source; added if source missing.
+shell-hard-01,shell,B,raw_rsi,1,True,False,,2,404873,242049,3271,0.0,5.85,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+shell-hard-05,shell,C,validated_rsi,1,False,False,,3,22024,10781,122,0.0,6.82,"/tmp/rsibench_hard/data.csv created.
+
+```csv
+name,age,role
+alice,30,admin
+```
+
+Skipped: extra validation, complex parsing.
+Add: schema validation if data grows."
+debug-hard-04,debugging,C,validated_rsi,1,False,False,,3,45258,22525,421,0.0,11.28,"Infinite recursion caused by `mid` not shrinking range. Changed `mid` to `mid - 1` in recursive call to ensure `lo > hi` condition eventually triggers.
+
+Verified with `python3 /tmp/reproduce_binary_se"
+debug-hard-03,debugging,C,validated_rsi,1,False,False,,3,67256,33309,510,0.0,6.42,The code in `/tmp/rsibench_hard/encoding.py` already uses `utf-8` and prints `café` correctly. Nothing to fix.
+debug-hard-10,debugging,C,validated_rsi,1,False,False,,3,89377,44249,584,0.0,10.31,"File `/tmp/rsibench_hard/struct_pack.py` does not exist in the environment, despite references in `docs/abelion/research/scripts/tasks_hard.py`. `ls` confirms the directory `/tmp/rsibench_hard/` conta"
+debug-hard-07,debugging,C,validated_rsi,1,False,False,,3,111950,55522,743,0.0,8.87,"Deadlock resolved by removing `await ev1.wait()` in `coro2` and setting both events. File `/tmp/rsibench_hard/async_deadlock.py` verified; execution completes with zero exit code.
+
+Skipped: Refactorin"
+shell-hard-09,shell,C,validated_rsi,1,False,False,,3,134027,66404,824,0.0,8.64,"Target file `/tmp/rsibench_hard/struct_pack.py` not found. Searched filesystem, path does not exist. No action possible."
+shell-hard-03,shell,C,validated_rsi,1,True,False,,2,148553,73430,896,0.0,3.92,No TODO comments found in `/tmp/rsibench_hard/`.
+debug-hard-05,debugging,C,validated_rsi,1,False,False,,3,170657,84273,1047,0.0,10.31,"Path `/tmp/rsibench_hard/gil_cpu.py` nonexistent; search confirms existence only in task list documentation, not filesystem. Task stalled at discovery."
+shell-hard-08,shell,C,validated_rsi,1,False,False,,3,192991,95273,1233,0.0,7.03,"No such directory `/tmp/rsibench_hard`. Check path. List existing files:
+`ls -R /tmp` → skipped: file listing, add when `[verify path]`."
+shell-hard-02,shell,C,validated_rsi,1,True,False,,2,207998,102524,1545,0.0,5.91,"Hour, count data parsed. CSV follows:
+
+```csv
+hour,error_count,warn_count,info_count
+08,1,1,0
+09,1,0,0
+```
+→ skipped: file persistence, add when requested."
+debug-hard-09,debugging,C,validated_rsi,1,False,False,,3,230095,113439,1620,0.0,9.56,"Search failed. File `/tmp/rsibench_hard/arg_collision.py` nonexistent on disk. `rsibench_hard` directory missing. Cannot verify code or fix collision. 
+
+If this file exists elsewhere, provide path. Ot"
+shell-hard-01,shell,C,validated_rsi,1,True,False,,2,244838,120571,1795,0.0,4.31,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+shell-hard-06,shell,C,validated_rsi,1,True,False,,2,259533,127675,1952,0.0,6.09,"Database built in-memory. Query output:
+```
+Engineering,1
+Sales,1
+```
+Skipped: persistence, error handling for missing CSV. Add when: production use case appears."
+shell-hard-10,shell,C,validated_rsi,1,False,False,,3,281835,138541,2253,0.0,10.55,"Processed .py files in `/tmp/rsibench_hard/`. Calculated lines, words, and ratios. Results sorted descending by ratio:
+
+filename,lines,words,ratio
+/tmp/rsibench_hard/binary_search.py,9,57,6.33
+/tmp/rs"
+shell-hard-04,shell,C,validated_rsi,1,False,False,,3,303741,149239,2333,0.0,9.2,"Task stalled. `/tmp/rsibench_hard/crontab.txt` does not exist on disk; file system search returned no matches for ""rsibench"" or ""crontab"" in project directory. 
+
+Unable to compute overlaps without inp"
+debug-hard-06,debugging,C,validated_rsi,1,False,False,,3,325787,160108,2404,0.0,7.11,File not found. List `/tmp/rsibench_hard/`?
+debug-hard-02,debugging,C,validated_rsi,1,False,False,,3,347855,171002,2471,0.0,9.83,"File `/tmp/rsibench_hard/recursion.py` missing. Search failed to find any file named ""recursion"" in directory `/tmp/rsibench_hard/` or project root. Could not perform fix. Task halted."
+shell-hard-07,shell,C,validated_rsi,1,False,False,,3,371790,181774,2691,0.0,189.13,Target script `/tmp/rsibench_hard/race.sh` missing. System search (via `find`) timed out. Task blocked by environment configuration. Accomplished: verification that script location does not exist in c
+debug-hard-08,debugging,C,validated_rsi,1,False,False,,3,394334,200378,2920,0.0,11.53,"Attempted fix failed; `TypeError` persists. File `/tmp/rsibench_hard/timezone.py` contains naive `datetime` compared against aware `datetime` with `pytz`.
+
+Status:
+1. `naive` is now explicitly naive.
+"
+debug-hard-01,debugging,C,validated_rsi,1,False,False,,3,416541,214991,3087,0.0,9.87,"Found race condition: dictionary size 500 instead of 1000 due to non-atomic updates in concurrent threads.
+
+Fix:
+```python
+import threading
+
+shared_dict = {}
+lock = threading.Lock()
+
+def worker():
+   "
+shell-hard-01,shell,A,control,2,True,False,,2,14743,10850,175,0.0,5.05,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+shell-hard-10,shell,A,control,2,False,False,,3,37074,25417,515,0.0,10.73,"filename,lines,words,ratio
+/tmp/rsibench_hard/binary_search.py,9,57,6.33
+/tmp/rsibench_hard/timezone.py,5,26,5.20
+/tmp/rsibench_hard/test.py,3,15,5.00
+/tmp/rsibench_hard/encoding.py,4,10,2.50
+/tmp/rsi"
+debug-hard-06,debugging,A,control,2,False,False,,3,59160,40048,584,0.0,8.6,"I searched for `sql_inject.py` in `/tmp/rsibench_hard/` but confirmed the file is missing from the file system, despite being referenced in project documentation and search results. As I cannot locate"
+debug-hard-05,debugging,A,control,2,False,False,,3,81180,50891,651,0.0,9.16,File `/tmp/rsibench_hard/gil_cpu.py` missing. Search failed to locate it. Cannot refactor non-existent code. Verify file path.
+debug-hard-08,debugging,A,control,2,False,False,,3,103647,61991,889,0.0,9.71,"Fixed `TypeError` by forcing `tzinfo=pytz.UTC` on `naive` datetime. Verification: script outputs `False` (correctly comparing two equal UTC times).
+
+Skipped: adding logging or modular functions.
+Add w"
+debug-hard-10,debugging,A,control,2,False,False,,3,125680,72839,962,0.0,9.4,"Tool iteration limit reached.
+
+**Findings:**
+1. Requested file `/tmp/rsibench_hard/struct_pack.py` does not exist in `/tmp/rsibench_hard/`.
+2. Directory listing confirmed contents of `/tmp/rsibench_ha"
+shell-hard-02,shell,A,control,2,False,False,,3,148591,84045,1506,0.0,10.82,"Attempted log parsing via CLI tools failed due to syntax and quote-nesting errors in Python/AWK.
+
+**Status:**
+- Log file identified at `/tmp/rsibench_hard/server.log`.
+- Required logic: Extract ISO ti"
+shell-hard-08,shell,A,control,2,False,False,,3,170647,94815,1659,0.0,9.69,"`known_uuids.txt` not found. Searched `/tmp`, `/tmp/rsibench_hard`, and root; no file exists. Could not perform requested binary analysis on `/tmp/rsibench_hard/data.bin` as no known list exists to co"
+shell-hard-07,shell,A,control,2,False,False,,3,192803,105688,1802,0.0,6.95,"Missing `/tmp/rsibench_hard/race.sh`. Check path.
+
+Available files: `search_files` output empty. List directories?"
+debug-hard-04,debugging,A,control,2,False,False,,3,215115,116630,2029,0.0,11.08,"Code in `/tmp/rsibench_hard/binary_search.py` contained an infinite recursion bug when `target` was missing: the `else` branch passed `mid` as `hi`, causing `lo` and `hi` to remain constant.
+
+Fixed by"
+debug-hard-03,debugging,A,control,2,False,False,,3,237127,127414,2132,0.0,7.02,"The code already uses utf-8. Output verified.
+
+`python3 /tmp/rsibench_hard/encoding.py` → `café`
+
+Skipped: No changes needed.
+Add when: Encoding requirements change."
+shell-hard-09,shell,A,control,2,False,False,,3,259203,138296,2212,0.0,10.69,File `/tmp/rsibench_hard/struct_pack.py` does not exist in workspace. Filesystem search confirms no matching file found in project or temporary directories. Cannot verify or fix missing code.
+shell-hard-03,shell,A,control,2,True,False,,2,273723,145322,2278,0.0,3.94,Zero TODOs found. Check directory path.
+shell-hard-04,shell,A,control,2,False,False,,3,295705,156020,2434,0.0,13.08,Target file `/tmp/rsibench_hard/crontab.txt` missing. System search confirms no file by that name exists in `/tmp` or reachable project scope. Unable to perform cron scheduling conflict analysis witho
+debug-hard-07,debugging,A,control,2,False,False,,3,318429,167384,2647,0.0,11.09,"Deadlock fixed. Logic updated to ensure sequential dependency: `coro2` sets `ev1` to unblock `coro1`, which then sets `ev2` to unblock `coro2`. Execution verified (exit code 0)."
+shell-hard-06,shell,A,control,2,True,False,,2,333088,174482,2774,0.0,4.73,"Executed. → skipped: input validation, error handling, add when production-ready."
+debug-hard-01,debugging,A,control,2,False,False,,3,356192,185911,3294,0.0,13.64,"`worker` function writes to `shared_dict` inside a loop. 500 writes, 2 threads. Python GIL does not prevent dictionary state inconsistency under high contention. `with lock` only protects the dict wri"
+shell-hard-05,shell,A,control,2,False,False,,3,378578,196931,3511,0.0,8.84,"`name,age,role`
+`alice,30,admin`
+
+→ skipped: proper CSV writing library (use `csv` module if requirements grow).
+→ add when: schema changes or output format complexity increases."
+debug-hard-02,debugging,A,control,2,False,False,,3,400713,207894,3582,0.0,14.33,"File `/tmp/rsibench_hard/recursion.py` missing. Search confirms path exists in task documentation, but directory not present on disk. Cannot fix code that does not exist."
+debug-hard-09,debugging,A,control,2,False,False,,3,422774,218765,3662,0.0,8.63,Target `/tmp/rsibench_hard/arg_collision.py` does not exist in filesystem. Filesystem scan confirmed file absence. No code to fix. Task stalled by missing input.
+shell-hard-03,shell,B,raw_rsi,2,False,False,,3,22059,10801,127,0.0,7.01,No TODO comments found in `/tmp/rsibench_hard/`.
+debug-hard-03,debugging,B,raw_rsi,2,False,False,,3,44305,25473,289,0.0,10.17,"Fixed `/tmp/rsibench_hard/encoding.py` to use `utf-8` decoding.
+
+Code:
+```python
+text = 'café'
+encoded = text.encode('utf-8')
+decoded = encoded.decode('utf-8')
+print(decoded)
+```
+
+Verification: File n"
+debug-hard-06,debugging,B,raw_rsi,2,False,False,,3,66359,36342,368,0.0,17.99,"File `/tmp/rsibench_hard/sql_inject.py` missing. Search confirms path exists only as task reference in `docs/abelion/research/scripts/tasks_hard.py`, not as source code. 
+
+Result: Cannot fix missing f"
+debug-hard-04,debugging,B,raw_rsi,2,False,False,,3,89593,48086,667,0.0,10.51,"Fixed infinite recursion in `binary_search.py`. Base case index logic for `lo > hi` was unreachable because `mid` was passed as `hi` instead of `mid - 1`, causing constant re-eval of same range.
+
+→ ve"
+debug-hard-01,debugging,B,raw_rsi,2,False,False,,3,111812,57148,832,0.0,10.29,"File `/tmp/rsibench_hard/race_dict.py` already contains `threading.Lock` and properly uses `with lock` context manager. Execution confirmed: `Dict size: 500`.
+
+*Observation:* User expected 1000, but l"
+debug-hard-07,debugging,B,raw_rsi,2,False,False,,3,134547,68522,1046,0.0,10.21,"Deadlock fixed. `coro1` now signals `ev1`, `coro2` waits for `ev1` then signals `ev2`. Script executes successfully.
+
+Skipped: Refactoring into helper functions.
+Add when: Logic grows complex or requi"
+shell-hard-10,shell,B,raw_rsi,2,False,False,,3,156791,79380,1299,0.0,10.64,"Found and processed 6 Python files in `/tmp/rsibench_hard/`. Calculated line counts and word counts using `wc`, then computed word-to-line ratios.
+
+Sorted CSV (`/tmp/rsibench_stats.csv`):
+
+filename,li"
+debug-hard-10,debugging,B,raw_rsi,2,False,False,,3,178828,90228,1376,0.0,8.77,"File `/tmp/rsibench_hard/struct_pack.py` does not exist on disk, and global search for the filename failed. I verified the path you provided is unreachable from the current workspace root. I cannot pe"
+shell-hard-02,shell,B,raw_rsi,2,False,False,,3,201774,101524,1863,0.0,12.02,"Tool usage limit hit. Logic failed due to `awk` multidimensional array syntax limitations in this environment.
+
+**Findings:**
+Log format: `id|YYYY-MM-DD HH:MM:SS LEVEL [IP] MSG`
+Fields via `-F'[ |:]'`"
+debug-hard-02,debugging,B,raw_rsi,2,False,False,,3,223921,112418,2009,0.0,10.42,"File `/tmp/rsibench_hard/recursion.py` not found on system. Searched paths, verified directory content — missing. No code to fix."
+debug-hard-09,debugging,B,raw_rsi,2,False,False,,3,246016,123333,2082,0.0,9.13,"Path `/tmp/rsibench_hard/arg_collision.py` does not exist on disk. `tasks_hard.py` references it as a task requirement, but no corresponding file was created in the environment. Cannot perform request"
+shell-hard-05,shell,B,raw_rsi,2,True,False,,2,260659,130405,2222,0.0,4.28,"Data:
+```csv
+name,age,role
+alice,30,admin
+```
+Skipped: file write (printed to stdout), error handling for missing keys (assumed schema). Add file write if persistence needed."
+shell-hard-01,shell,B,raw_rsi,2,True,False,,2,275402,137537,2397,0.0,4.93,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+shell-hard-09,shell,B,raw_rsi,2,False,False,,3,297477,148419,2476,0.0,10.87,File `/tmp/rsibench_hard/struct_pack.py` does not exist. Filesystem search for `struct_pack` yielded no results. Cannot fix or verify missing code. Task aborted.
+debug-hard-08,debugging,B,raw_rsi,2,False,False,,3,320169,159600,2853,0.0,9.76,"Code in `/tmp/rsibench_hard/timezone.py` already used `pytz.UTC` for both variables. I verified content, then intentionally broke and restored it to confirm environment behavior. Script now executes w"
+shell-hard-08,shell,B,raw_rsi,2,False,False,,3,342626,170664,3093,0.0,6.73,"Files missing in `/tmp/rsibench_hard`. Check path existence:
+`ls -R /tmp/rsibench_hard`
+
+Wait, user command likely mistyped directory. Path correct? Need location."
+shell-hard-06,shell,B,raw_rsi,2,True,False,,2,357287,177760,3224,0.0,5.45,"Done. → skipped: CSV header handling, missing files handling. Add when: schema/source files become unreliable."
+debug-hard-05,debugging,B,raw_rsi,2,False,False,,3,379307,188603,3291,0.0,10.25,"File `/tmp/rsibench_hard/gil_cpu.py` nonexistent. Search confirms file path mentioned in task documentation, but physical file absent from `/tmp/rsibench_hard/`. 
+
+Action halted: cannot refactor non-e"
+shell-hard-07,shell,B,raw_rsi,2,False,False,,3,402866,204513,3467,0.0,6.62,File /tmp/rsibench_hard/race.sh not found. Provide correct path.
+shell-hard-04,shell,B,raw_rsi,2,False,False,,3,424770,215211,3545,0.0,10.25,"Failed to locate `/tmp/rsibench_hard/crontab.txt`. Search confirmed absence in file system. Identified project-local cron tooling (`tools/cronjob_tools.py`, `hermes_cli/cron.py`) but unable to process"
+shell-hard-07,shell,C,validated_rsi,2,False,False,,3,23649,12190,238,0.0,7.42,Path `/tmp/rsibench_hard/race.sh` not found. Provide correct location or script name.
+debug-hard-04,debugging,C,validated_rsi,2,False,False,,3,46039,23244,428,0.0,10.36,"Code behaves correctly: `binary_search` handles `lo > hi` (line 3) and returns `-1`. Infinite recursion not triggered in provided snippet.
+
+Skipped: Further investigation into environment-specific con"
+debug-hard-10,debugging,C,validated_rsi,2,False,False,,3,68080,34092,509,0.0,9.38,File `/tmp/rsibench_hard/struct_pack.py` not found in workspace. Search failed to locate file. Cannot fix or verify.
+debug-hard-01,debugging,C,validated_rsi,2,False,False,,3,90284,45066,597,0.0,8.7,"Found code already uses `threading.Lock` on lines 8-9. Dict size 500 confirms race prevented for identical keys (overwrite) but 1000 requested.
+
+To hit 1000, script requires unique keys per thread (e."
+debug-hard-09,debugging,C,validated_rsi,2,False,False,,3,112457,55981,748,0.0,9.15,"File `/tmp/rsibench_hard/arg_collision.py` missing. `find` failed permissions, `search_files` yielded only documentation reference. Unable to access target file for verification or patching. Task bloc"
+shell-hard-03,shell,C,validated_rsi,2,True,False,,2,127024,63008,860,0.0,4.2,"Grepping `/tmp/rsibench_hard/` for `TODO` returned nothing. Path may be wrong or files contain no `TODO`s.
+
+Search directory content to confirm:
+`ls -R /tmp/rsibench_hard/`"
+shell-hard-05,shell,C,validated_rsi,2,True,False,,2,141747,70119,1038,0.0,5.62,"`name,age,role`
+`alice,30,admin`
+
+Skipped: error handling (missing file/key), robust schema validation. 
+Add when: data structure varies or source grows."
+shell-hard-08,shell,C,validated_rsi,2,False,False,,3,163824,80907,1198,0.0,10.03,`/tmp/rsibench_hard/` files missing. Local `known_uuids_sorted.txt` exists. Binary `data.bin` not found in `/tmp`. Stop.
+shell-hard-06,shell,C,validated_rsi,2,False,False,,3,186103,91831,1410,0.0,10.64,"CSV import failed; `/tmp/rsibench_hard/users.csv` empty or missing. Database schema unknown. 
+
+Verification needed: 
+1. `ls -l /tmp/rsibench_hard/users.csv`
+2. `head -n 5 /tmp/rsibench_hard/users.csv`"
+debug-hard-08,debugging,C,validated_rsi,2,False,False,,3,208809,101159,1801,0.0,10.36,"File `/tmp/rsibench_hard/timezone.py` already had both variables set with `pytz.UTC`. The `TypeError` happens when comparing naive with aware. 
+
+To fix, force `naive` to aware: 
+`naive = datetime(2026"
+debug-hard-02,debugging,C,validated_rsi,2,False,False,,3,231022,112122,1950,0.0,9.56,File `/tmp/rsibench_hard/recursion.py` does not exist in filesystem. Searched path and `/tmp/rsibench_hard/` directory contents; file is absent despite task reference. Unable to apply fix. Suggest ver
+debug-hard-03,debugging,C,validated_rsi,2,False,False,,3,253051,122906,2070,0.0,9.02,"File `/tmp/rsibench_hard/encoding.py` currently uses `.decode('latin-1')` on a UTF-8 encoded string. This causes the corruption requested.
+
+To fix: Change `decode('latin-1')` to `decode('utf-8')` in l"
+debug-hard-06,debugging,C,validated_rsi,2,False,False,,3,275123,133775,2167,0.0,9.26,File `/tmp/rsibench_hard/sql_inject.py` missing. `ls -R /tmp/rsibench_hard/` confirmed file absence in directory. Task cannot proceed.
+shell-hard-09,shell,C,validated_rsi,2,False,False,,3,297200,144657,2248,0.0,8.81,File `/tmp/rsibench_hard/struct_pack.py` does not exist. Searched `/tmp` and local repo; found no matching files. Unable to verify or fix missing code.
+shell-hard-01,shell,C,validated_rsi,2,True,False,,2,311941,151788,2422,0.0,3.94,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+debug-hard-05,debugging,C,validated_rsi,2,False,False,,3,334046,166349,2574,0.0,9.89,"File `/tmp/rsibench_hard/gil_cpu.py` missing. `ls` confirms file absence. Task halted.
+
+Summary:
+1. Checked `/tmp/rsibench_hard/` directory.
+2. Verified `gil_cpu.py` does not exist in target path.
+3. "
+shell-hard-10,shell,C,validated_rsi,2,False,False,,3,356285,177207,2822,0.0,9.58,"Analyzed files in `/tmp/rsibench_hard/`. Calculated lines, words, and ratios. CSV generated at `/tmp/ratio_results.csv`.
+
+**Results (Sorted by Ratio Descending):**
+
+| Filename | Lines | Words | Ratio "
+debug-hard-07,debugging,C,validated_rsi,2,False,False,,3,379001,188563,3036,0.0,9.23,"Deadlock fixed. `coro1` now sets `ev2` immediately after `ev1`, allowing `coro2` to proceed past its `wait()` calls. Code verified via successful execution.
+
+→ skipped: complex synchronization primiti"
+shell-hard-04,shell,C,validated_rsi,2,False,False,,3,401056,199346,3186,0.0,9.48,"Target `/tmp/rsibench_hard/crontab.txt` missing. `search_files` shows `find_conflicts.py` expects that specific path, but `ls /tmp/rsibench_hard/` confirms file absence. Task blocked by missing data. "
+shell-hard-02,shell,C,validated_rsi,2,False,False,,3,424392,210797,3894,0.0,10.46,"Script ran, produced header but no data. Likely empty log file or pattern mismatch.
+
+Skipped: file existence verification, regex strictness check.
+Add when: data source confirmed and populated."
+debug-hard-02,debugging,A,control,3,False,False,,3,22133,10963,69,0.0,9.61,"File `/tmp/rsibench_hard/recursion.py` does not exist on disk. Searches and directory listings confirm its absence despite it being referenced in `tasks_hard.py`. 
+
+Accomplished: 
+1. Verified file pat"
+shell-hard-06,shell,A,control,3,True,False,,2,36835,18068,232,0.0,4.35,"Results:
+```
+Engineering,1
+Sales,1
+```
+Code: One-liner SQL. Skipped: Explicit table schema definition (SQLite infers), external script file. Add when: Data volume requires indexing."
+shell-hard-05,shell,A,control,3,True,False,,2,51438,25138,334,0.0,4.8,"name,age,role
+alice,30,admin"
+shell-hard-09,shell,A,control,3,False,False,,3,73592,36020,492,0.0,11.75,"File `/tmp/rsibench_hard/struct_pack.py` does not exist in the specified directory. Directory listing confirmed contents are limited to `async_deadlock.py`, `binary_search.py`, `race_dict.py`, `encodi"
+shell-hard-04,shell,A,control,3,False,False,,3,95508,46725,574,0.0,8.98,"File `/tmp/rsibench_hard/crontab.txt` not found. Searched filesystem, no trace of file or directory. Task halted."
+debug-hard-06,debugging,A,control,3,False,False,,3,117677,57638,726,0.0,9.62,"File `/tmp/rsibench_hard/sql_inject.py` does not exist on disk, despite referenced in task documentation. Checked `/tmp/rsibench_hard/` contents; file missing. Cannot proceed with fix. Need user to pr"
+debug-hard-08,debugging,A,control,3,False,False,,3,140374,68861,1063,0.0,9.72,"Modified `/tmp/rsibench_hard/timezone.py` to localize naive `datetime` via `.replace(tzinfo=pytz.UTC)`. Execution verified successful, output `False`.
+
+Skipped: abstraction/wrapper function.
+Add when:"
+debug-hard-10,debugging,A,control,3,False,False,,3,162493,79801,1135,0.0,8.8,"Target file `/tmp/rsibench_hard/struct_pack.py` does not exist on disk, despite documentation references. Tool-based search in `/tmp` failed to locate it. I cannot fix, run, or verify code that is not"
+debug-hard-04,debugging,A,control,3,False,False,,3,184811,90809,1301,0.0,9.42,"Code in `/tmp/rsibench_hard/binary_search.py` is functionally correct: it returns -1 when the target is missing (`lo > hi` check exists at line 3). 
+
+Tests confirmed:
+1. `binary_search([1, 2, 3], 4)` "
+debug-hard-05,debugging,A,control,3,False,False,,3,206884,101608,1463,0.0,188.8,"Search failed. Path `/tmp/rsibench_hard/gil_cpu.py` nonexistent. System scan timed out. Unable to refactor missing code. 
+
+To proceed:
+1. Verify correct file path.
+2. Provide file content."
+debug-hard-09,debugging,A,control,3,False,False,,3,228978,119941,1535,0.0,10.54,"File `/tmp/rsibench_hard/arg_collision.py` does not exist on disk, despite references in project docs. Checked `/tmp/rsibench_hard/` contents; confirmed absence. Task blocked by missing target."
+shell-hard-03,shell,A,control,3,False,False,,3,251120,134445,1758,0.0,10.71,Directory `/tmp/rsibench_hard/` checked. No `TODO` comments found in any files. Execution complete.
+debug-hard-01,debugging,A,control,3,False,False,,3,273800,153000,2164,0.0,10.27,"Python dict operations are atomic in CPython due to the GIL, explaining why the original script consistently returned 1000 items. Added `threading.Lock` as requested to enforce explicit synchronizatio"
+shell-hard-10,shell,A,control,3,True,False,,2,288749,160230,2441,0.0,5.32,"filename,lines,words,ratio
+/tmp/rsibench_hard/binary_search.py,9,57,6.33
+/tmp/rsibench_hard/test.py,3,15,5.00
+/tmp/rsibench_hard/timezone.py,6,29,4.83
+/tmp/rsibench_hard/async_deadlock.py,18,39,2.17
+/"
+debug-hard-03,debugging,A,control,3,False,False,,3,310998,174871,2639,0.0,10.39,Fixed file `/tmp/rsibench_hard/encoding.py`. Changed `.decode('latin-1')` to `.decode('utf-8')`. Output verified as `café`. Task complete.
+shell-hard-08,shell,A,control,3,True,False,,2,325603,181968,2714,0.0,6.65,Files missing. Need path check. Use `find / -name known_uuids.txt 2>/dev/null`.
+shell-hard-01,shell,A,control,3,True,False,,2,340367,189100,2910,0.0,5.61,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+debug-hard-07,debugging,A,control,3,False,False,,3,362941,200370,3073,0.0,11.74,"Fixed deadlock. `coro2` now sets `ev2` instead of waiting on it. Verification passed (script exited 0).
+
+Skipped: extra error logging, complex signal handling. Add when: production scale."
+shell-hard-07,shell,A,control,3,False,False,,3,386606,212781,3223,0.0,188.45,File `/tmp/rsibench_hard/race.sh` missing. System scan timed out. Unable to execute benchmark requested. Verified absence via search_files and file system traversal.
+shell-hard-02,shell,A,control,3,False,False,,3,409026,231225,3485,0.0,10.35,"Log format identified: `YYYY-MM-DD HH:MM:SS LEVEL [...] message`. 
+Awk syntax issue stems from multi-dimensional array support variation in standard `awk` vs `gawk`.
+
+Final CSV result structure:
+`hour"
+debug-hard-08,debugging,B,raw_rsi,3,False,False,,3,22516,14863,238,0.0,10.19,File `/tmp/rsibench_hard/timezone.py` fixed by initializing `naive` with `tzinfo=pytz.UTC`. Redundant `.replace()` call on line 5 is technically harmless but unnecessary; left for minimal diff. Verifi
+shell-hard-06,shell,B,raw_rsi,3,True,False,,2,37200,25685,385,0.0,4.68,"Executed. Query output:
+
+```
+Engineering,1
+Sales,1
+```
+
+→ skipped: persistent file, error handling. Add when schema evolves."
+shell-hard-09,shell,B,raw_rsi,3,False,False,,3,59351,40284,542,0.0,10.41,"File `/tmp/rsibench_hard/struct_pack.py` does not exist in the specified directory. Directory listing confirms presence of `async_deadlock.py`, `binary_search.py`, `race_dict.py`, `encoding.py`, `test"
+shell-hard-01,shell,B,raw_rsi,3,True,False,,2,74094,47416,717,0.0,4.58,"filename,import_count
+/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibe"
+shell-hard-02,shell,B,raw_rsi,3,True,False,,2,89151,54695,1049,0.0,6.54,Log file empty or non-existent at `/tmp/rsibench_hard/server.log`. Output header only. Check file path.
+shell-hard-10,shell,B,raw_rsi,3,True,False,,2,103917,61826,1248,0.0,5.37,"Output:
+
+```csv
+filename,lines,words,ratio
+352,9,57,6.33333
+102,3,15,5
+216,6,30,5
+342,18,38,2.11111
+95,4,10,2.5
+```
+
+Skipped: `wc` filename output parsing nuance. Add if path handling needs robustness"
+debug-hard-03,debugging,B,raw_rsi,3,False,False,,3,125969,72610,1391,0.0,7.12,"The provided code `/tmp/rsibench_hard/encoding.py` is already using `utf-8` correctly and prints `café` as expected. No changes needed.
+
+```python
+text = 'café'
+encoded = text.encode('utf-8')
+decoded "
+shell-hard-08,shell,B,raw_rsi,3,False,False,,3,148323,83602,1611,0.0,10.04,"Found directory `/tmp/rsibench_hard/` via `ls /tmp`. Attempted to access files therein but commands failed due to incorrect path assumptions (expected file names not present or missing permissions). 
+"
+shell-hard-03,shell,B,raw_rsi,3,True,False,,2,162864,90628,1698,0.0,5.26,`grep` returned nothing. Path `/tmp/rsibench_hard/` empty or contains no `TODO` strings. Verify path existence.
+debug-hard-06,debugging,B,raw_rsi,3,False,False,,3,185040,101541,1857,0.0,10.02,File `/tmp/rsibench_hard/sql_inject.py` missing. `find` and `search_files` confirm absence. Nothing to fix.
+debug-hard-04,debugging,B,raw_rsi,3,False,False,,3,207425,112595,2042,0.0,9.65,"Binary search code provided in `/tmp/rsibench_hard/binary_search.py` is correct. It handles base case `lo > hi` on line 3, returning `-1` as expected. Recursion does not loop infinitely.
+
+Tested logic"
+debug-hard-09,debugging,B,raw_rsi,3,False,False,,3,229589,123492,2198,0.0,10.47,Searched filesystem for `arg_collision.py` in `/tmp/rsibench_hard/` and entire project. File missing. Could not verify or fix nonexistent code.
+debug-hard-05,debugging,B,raw_rsi,3,False,False,,3,251693,134335,2349,0.0,11.27,Target file `/tmp/rsibench_hard/gil_cpu.py` missing. `ls` confirms file absence in directory. Search shows file mentioned in task documentation only. Task cannot proceed without source code.
+shell-hard-05,shell,B,raw_rsi,3,False,False,,3,273694,145116,2448,0.0,6.57,Created `/tmp/rsibench_hard/output.csv`. Skipped generic parser: JSON schema fixed. Add when schema varies.
+debug-hard-10,debugging,B,raw_rsi,3,False,False,,3,295813,156056,2520,0.0,9.71,"File `/tmp/rsibench_hard/struct_pack.py` does not exist on disk, confirmed by failed `read_file` and `find` commands. Docs reference the file but system lacks the directory. Task impossible to complet"
+debug-hard-01,debugging,B,raw_rsi,3,False,False,,3,318510,167269,2856,0.0,9.43,"Dict size is 500 because keys 0-499 are overwritten by both threads, not missing. Dictionary `__setitem__` is atomic in CPython; data race occurs only on size consistency or non-atomic read-modify-wri"
+shell-hard-07,shell,B,raw_rsi,3,False,False,,3,341005,178425,3037,0.0,9.58,Target `/tmp/rsibench_hard/race.sh` missing. System search for `race.sh` returned zero results. Execution blocked by missing file.
+shell-hard-04,shell,B,raw_rsi,3,False,False,,3,362980,189208,3107,0.0,8.72,"Crontab file missing at `/tmp/rsibench_hard/crontab.txt`. `find_conflicts.py` exists but fails to run due to missing input.
+
+Accomplished:
+1. Located existing logic in `find_conflicts.py`.
+2. Verified"
+debug-hard-02,debugging,B,raw_rsi,3,False,False,,3,385114,200171,3177,0.0,9.19,"Path `/tmp/rsibench_hard/recursion.py` does not exist on disk, though referenced in `docs/abelion/research/scripts/tasks_hard.py`. Directory `/tmp/rsibench_hard/` contains other files but no `recursio"
+debug-hard-07,debugging,B,raw_rsi,3,False,False,,3,407804,211412,3481,0.0,10.36,"Deadlock fixed. `coro1` now sets `ev1` then waits on `ev2`. `coro2` waits on `ev1` then sets `ev2`. Execution confirmed: output ""Success"". 
+
+Skipped: adding complex timeout logic, logging, or extra ev"
+shell-hard-08,shell,C,validated_rsi,3,False,False,,3,22071,10791,146,0.0,9.31,"/tmp/rsibench_hard/known_uuids.txt not found. Listing `/tmp/rsibench_hard` reveals directory `data/` instead of expected `data.bin`. Files in root `/tmp` (e.g., `binary_uuids.txt`) exist but path requ"
+shell-hard-01,shell,C,validated_rsi,3,True,False,,2,36827,17923,334,0.0,4.15,"/tmp/rsibench_hard/timezone.py,2
+/tmp/rsibench_hard/test.py,1
+/tmp/rsibench_hard/race_dict.py,1
+/tmp/rsibench_hard/async_deadlock.py,1
+/tmp/rsibench_hard/encoding.py,0
+/tmp/rsibench_hard/binary_search"
+debug-hard-07,debugging,C,validated_rsi,3,False,False,,3,59604,29315,570,0.0,10.32,"Deadlock fixed. `coro1` no longer waits for `ev2`; it sets `ev1` twice (redundant but harmless) to trigger `coro2`. Execution confirms success. 
+
+Skipped: Refactoring `asyncio.Event` usage (e.g., remo"
+debug-hard-01,debugging,C,validated_rsi,3,False,False,,3,82496,40512,1105,0.0,10.64,"Python `dict` operations are atomic in CPython due to the Global Interpreter Lock (GIL), masking race conditions in simple assignments.
+
+I modified `race_dict.py` by introducing an explicit `threading"
+debug-hard-02,debugging,C,validated_rsi,3,False,False,,3,106371,53348,1169,0.0,8.86,"Target file `/tmp/rsibench_hard/recursion.py` not found on system. Search indicates the file is likely part of an external benchmark suite not present in the current workspace. Without the file, I can"
+debug-hard-03,debugging,C,validated_rsi,3,False,False,,3,128452,64196,1288,0.0,9.22,File `/tmp/rsibench_hard/encoding.py` updated to decode using `'utf-8'` instead of `'latin-1'`. Verified by executing script; output is `café`. Task complete.
+shell-hard-04,shell,C,validated_rsi,3,False,False,,3,150391,74897,1397,0.0,7.23,"Find file. None exists. 
+
+Current directory: `/media/abelion/Isaf/ican/project/references/hermes-agent`. 
+
+Path `/tmp/rsibench_hard/crontab.txt` invalid. Where is it?"
+debug-hard-04,debugging,C,validated_rsi,3,False,False,,3,173568,86440,1850,0.0,11.33,"Bug confirmed: `low > high` condition triggered infinite recursion due to self-call instead of base case return.
+
+Fixed: Patched `binary_search` to return `-1` when search range exhausted.
+
+Verificati"
+shell-hard-05,shell,C,validated_rsi,3,True,False,,2,188211,93515,1986,0.0,4.09,"name,age,role
+alice,30,admin
+
+Skipped: file write (output to stdout only), extra error handling.
+Add when: data structure varies or file output requested."
+debug-hard-06,debugging,C,validated_rsi,3,False,False,,3,210301,104428,2059,0.0,9.74,File `/tmp/rsibench_hard/sql_inject.py` missing. Search failed to locate path in filesystem. Task blocked by missing file.
+shell-hard-03,shell,C,validated_rsi,3,False,False,,3,233668,116470,2180,0.0,9.23,"Found no `TODO` comments in `/tmp/rsibench_hard/`. Directory contains mostly scripts (`process.py`, `convert.py`), output logs, and Git objects. Task complete: searched codebase, confirmed absence of "
+shell-hard-07,shell,C,validated_rsi,3,False,False,,3,255825,127332,2337,0.0,10.01,Target `/tmp/rsibench_hard/race.sh` missing. File search confirm: zero hits in project. Task blocked.
+shell-hard-10,shell,C,validated_rsi,3,True,False,,2,270746,134510,2641,0.0,4.64,"The result below follows your request. The `wc` tool output for `lines` and `words` was processed, ratio `words/lines` computed, and entries sorted descending.
+
+```csv
+filename,lines,words,ratio
+race_"
+shell-hard-06,shell,C,validated_rsi,3,True,False,,2,285459,141629,2800,0.0,5.41,"Result:
+Engineering,1
+Sales,1
+
+Skipped: file/table cleanup (ephemeral). Add if persistence required."
+debug-hard-08,debugging,C,validated_rsi,3,False,False,,3,307666,152525,2979,0.0,10.27,"Fixed `/tmp/rsibench_hard/timezone.py` by removing `tzinfo=pytz.UTC` from `naive` constructor, forcing mismatch to trigger, then applying `.replace(tzinfo=pytz.UTC)` to synchronize both objects. Verif"
+debug-hard-09,debugging,C,validated_rsi,3,False,False,,3,329804,163396,3136,0.0,9.39,"File `/tmp/rsibench_hard/arg_collision.py` nonexistent in provided path. Searched `/tmp` via `find`, yielded no results. Cannot verify or patch missing file."
+shell-hard-02,shell,C,validated_rsi,3,False,False,,3,353063,174818,3798,0.0,12.04,"Script `/media/abelion/Isaf/ican/project/references/hermes-agent/parse.py` created. Parses `/tmp/rsibench_hard/server.log` by regex matching `YYYY-MM-DD HH:MM:SS LEVEL`, aggregates counts by `HH` into"
+debug-hard-05,debugging,C,validated_rsi,3,False,False,,3,375132,185617,3956,0.0,9.12,Target file `/tmp/rsibench_hard/gil_cpu.py` missing. `ls` confirms file absence in directory. Refactoring impossible without source. Task abandoned.
+shell-hard-09,shell,C,validated_rsi,3,False,False,,3,397289,196591,4030,0.0,8.97,"File `/tmp/rsibench_hard/struct_pack.py` does not exist on disk, despite references in project docs. Checked `/tmp/rsibench_hard/` contents; file missing. Cannot proceed with fix or verification. Plea"
+debug-hard-10,debugging,C,validated_rsi,3,False,False,,3,419424,207461,4182,0.0,8.95,Target file `/tmp/rsibench_hard/struct_pack.py` missing. Search failed to locate file matching pattern in directory. Task stalled due to missing artifact.

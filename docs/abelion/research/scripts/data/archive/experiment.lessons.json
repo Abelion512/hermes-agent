@@ -2,531 +2,864 @@
   "A_run1": [],
   "B_run1": [
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": false, \"error\": \"Found 2 matches for old_string. Provide more context to make it unique,",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"0 1 4 /tmp/rsibench_data/sample.txt\", \"exit_code\": 0, \"error\": null}",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"hour,error_count,warn_count,info_count\", \"exit_code\": 0, \"error\": nu",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"hour,error_count,warn_count,info_count\", \"exit_code\": 0, \"error\": nu",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"\", \"total_lines\": 0, \"file_size\": 0, \"truncated\": false, \"is_binary\": false, \"is_image\"",
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|import threading\\n2|lock_a = threading.Lock()\\n3|lock_b = threading.Lock()\\n4|\\n5|def",
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "source_tool": "terminal",
+      "confidence": 0.75,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "search_files failure: When using search_files, verify preconditions and handle errors properly",
+      "trigger": "search_files failure",
+      "action": "When using search_files, verify preconditions and handle errors properly",
+      "source_tool": "search_files",
+      "confidence": 0.4,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "source_tool": "terminal",
+      "confidence": 0.75,
+      "error_type": "pattern"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Hello World\", \"exit_code\": 0, \"error\": null}",
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.8,
+      "error_type": "pattern"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|def lookup(key):\\n2|    raise KeyError(f\\\"not found: {key}\\\")\\n3|\\n4|try:\\n5|    look",
+      "content": "search_files failure: When using search_files, verify preconditions and handle errors properly",
+      "trigger": "search_files failure",
+      "action": "When using search_files, verify preconditions and handle errors properly",
+      "source_tool": "search_files",
+      "confidence": 0.4,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"[Command timed out after 180s]\", \"exit_code\": 124, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"[Command timed out after 180s]\", \"exit_code\": 124, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Dict size: 500\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Dict size: 500\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"-1\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"-1\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"caf\u00e9\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"caf\u00e9\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Engineering,1\\nSales,1\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Engineering,1\\nSales,1\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"diff\": \"--- a//tmp/rsibench_wrong_exception.py\\n+++ b//tmp/rsibench_wrong_excepti",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.7
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"/tmp/rsibench_data/todo_work.py\", \"exit_code\": 123, \"error\": null}",
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"5b15452c268a7d3adf9d03387d69b4fb  /tmp/rsibench_data/duplicates/a.txt\\n5b15452c268a7d3ad",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"2 bin\\n      1 csv\\n      1 gz\\n      1 log\\n      3 py\\n     12 txt\", \"exit_code\": 0, \"",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"15360 bin\\n381 log\\n288 txt\\n180 tar.gz\\n150 py\\n110 csv\", \"exit_code\": 0, \"error\": null",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"grace,31,96\\nalice,30,95\\ncharlie,35,92\\nevan,32,91\\nhenry,27,90\", \"exit_code\": 0, \"erro",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"[2026-06-25 14:30:00] ERROR: connection failed\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using write_file without proper validation causes errors: {\"bytes_written\": 54, \"dirs_created\": true, \"lint\": {\"status\": \"ok\", \"output\": \"\"}, \"resolved_path\":",
-      "source_tool": "write_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Traceback (most recent call last):\\n  File \\\"/tmp/rsibench_regex_error.py\\\", line 3, in ",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"diff\": \"--- a//tmp/rsibench_regex_error.py\\n+++ b//tmp/rsibench_regex_error.py\\n@",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"/tmp/rsibench_data/clean.py\\n/tmp/rsibench_data/data.bin\\n/tmp/rsibench_data/sample.txt\\",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.7
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"3 192.168.1.1\\n      2 192.168.1.2\\n      2 10.0.0.1\", \"exit_code\": 0, \"error\": null}",
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
+      "source_tool": "read_file",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "source_tool": "terminal",
+      "confidence": 0.75,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"name,age,role\\r\\nalice,30,admin\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"name,age,role\\r\\nalice,30,admin\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
     }
   ],
   "C_run1": [
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"0 1 4 /tmp/rsibench_data/sample.txt\", \"exit_code\": 0, \"error\": null}",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"{\\\"users\\\":[{\\\"name\\\":\\\"alice\\\",\\\"metadata\\\":{\\\"age\\\":30,\\\"role\\\":\\\"",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"{\\\"users\\\":[{\\\"name\\\":\\\"alice\\\",\\\"metadata\\\":{\\\"age\\\":30,\\\"role\\\":\\\"",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"\", \"total_lines\": 0, \"file_size\": 0, \"truncated\": false, \"is_binary\": false, \"is_image\"",
-      "source_tool": "read_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": false, \"error\": \"Found 2 matches for old_string. Provide more context to make it unique,",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
-      "source_tool": "read_file",
-      "confidence": 0.7
-    },
-    {
-      "content": "Using write_file without proper validation causes errors: {\"bytes_written\": 53, \"dirs_created\": true, \"lint\": {\"status\": \"ok\", \"output\": \"\"}, \"resolved_path\":",
-      "source_tool": "write_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Traceback (most recent call last):\\n  File \\\"/tmp/rsibench_regex_error.py\\\", line 3, in ",
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.8,
+      "error_type": "pattern"
     },
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"diff\": \"--- a//tmp/rsibench_regex_error.py\\n+++ b//tmp/rsibench_regex_error.py\\n@",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|import threading\\n2|lock_a = threading.Lock()\\n3|lock_b = threading.Lock()\\n4|\\n5|def",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|def lookup(key):\\n2|    raise ValueError(f\\\"not found: {key}\\\")\\n3|\\n4|try:\\n5|    lo",
-      "source_tool": "read_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"15360 bin\\n381 log\\n288 txt\\n180 tar.gz\\n150 py\\n110 csv\", \"exit_code\": 0, \"error\": null",
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"['Cache', 'CallInfo', 'CaptureFixture', 'Class', 'CollectReport', 'Collector', 'Config',",
+      "content": "File permission issues: When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
+      "trigger": "File permission issues",
+      "action": "When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.6,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Recursion depth errors: If function can receive arbitrarily large input, provide iterative fallback. Add explicit 'if n > 1000: use loop instead of recursion' guard before recursive call.",
+      "trigger": "Recursion depth errors",
+      "action": "If function can receive arbitrarily large input, provide iterative fallback. Add explicit 'if n > 1000: use loop instead of recursion' guard before recursive call.",
+      "source_tool": "search_files",
+      "confidence": 0.75,
+      "error_type": "pattern"
+    },
+    {
+      "content": "search_files failure: When using search_files, verify preconditions and handle errors properly",
+      "trigger": "search_files failure",
+      "action": "When using search_files, verify preconditions and handle errors properly",
+      "source_tool": "search_files",
+      "confidence": 0.4,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"[Command timed out after 180s]\", \"exit_code\": 124, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"[Command timed out after 180s]\", \"exit_code\": 124, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
     }
   ],
   "A_run2": [],
   "B_run2": [
     {
-      "content": "Using search_files without proper validation causes errors: {\"total_count\": 6, \"matches\": [{\"path\": \"./docs/abelion/research/IMPLEMENTATION-PLAN-experiment-tool",
-      "source_tool": "search_files",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using search_files without proper validation causes errors: {\"total_count\": 50, \"matches\": [{\"path\": \"./agent/conversation_compression.py\", \"line\": 286, \"conten",
-      "source_tool": "search_files",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"/tmp/rsibench_data/todo_work.py\", \"exit_code\": 123, \"error\": null}",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using write_file without proper validation causes errors: {\"bytes_written\": 232, \"dirs_created\": true, \"lint\": {\"status\": \"ok\", \"output\": \"\"}, \"resolved_path\"",
-      "source_tool": "write_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using write_file without proper validation causes errors: {\"bytes_written\": 113, \"dirs_created\": true, \"lint\": {\"status\": \"ok\", \"output\": \"\"}, \"resolved_path\"",
-      "source_tool": "write_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Traceback (most recent call last):\\n  File \\\"/tmp/rsibench_regex_error.py\\\", line 4, in ",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"diff\": \"--- a//tmp/rsibench_regex_error.py\\n+++ b//tmp/rsibench_regex_error.py\\n@",
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
       "source_tool": "patch",
-      "confidence": 0.6
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"0 1 4 /tmp/rsibench_data/sample.txt\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"\", \"total_lines\": 0, \"file_size\": 0, \"truncated\": false, \"is_binary\": false, \"is_image\"",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|def lookup(key):\\n2|    raise KeyError(f\\\"not found: {key}\\\")\\n3|\\n4|try:\\n5|    look",
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Dict size: 500\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Dict size: 500\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"files_modified\": [\"/tmp/rsibench_wrong_exception.py\"], \"lint\": {\"status\": \"ok\", \"",
-      "source_tool": "patch",
-      "confidence": 0.6
+      "content": "search_files failure: When using search_files, verify preconditions and handle errors properly",
+      "trigger": "search_files failure",
+      "action": "When using search_files, verify preconditions and handle errors properly",
+      "source_tool": "search_files",
+      "confidence": 0.4,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Hello World\", \"exit_code\": 0, \"error\": null}",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"awk: line 7: syntax error at or near ,\\nawk: line 11: syntax error a",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"awk: line 7: syntax error at or near ,\\nawk: line 11: syntax error a",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"[2026-06-25 14:30:00] ERROR: connection failed\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.7
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"/tmp/rsibench_data/clean.py\\n/tmp/rsibench_data/data.bin\\n/tmp/rsibench_data/sample.txt\\",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"3 192.168.1.1\\n      2 192.168.1.2\\n      2 10.0.0.1\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.7
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"bin 2\\ncsv 1\\ngz 1\\nlog 1\\npy 3\\ntxt 12\\n15360 bin\\n381 log\\n288 txt\\n180 gz\\n150 py\\n11",
-      "source_tool": "terminal",
-      "confidence": 0.6
+      "content": "Recursion depth errors: If function can receive arbitrarily large input, provide iterative fallback. Add explicit 'if n > 1000: use loop instead of recursion' guard before recursive call.",
+      "trigger": "Recursion depth errors",
+      "action": "If function can receive arbitrarily large input, provide iterative fallback. Add explicit 'if n > 1000: use loop instead of recursion' guard before recursive call.",
+      "source_tool": "search_files",
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"grace,31,96\\nalice,30,95\\ncharlie,35,92\\nevan,32,91\\nhenry,27,90\", \"exit_code\": 0, \"erro",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|import threading\\n2|lock_a = threading.Lock()\\n3|lock_b = threading.Lock()\\n4|\\n5|def",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"5b15452c268a7d3adf9d03387d69b4fb  /tmp/rsibench_data/duplicates/a.txt\\n5b15452c268a7d3ad",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"name,age,role\\nalice,30,admin\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"name,age,role\\nalice,30,admin\", \"exit_code\": 0, \"error\": null}",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
+      "source_tool": "read_file",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Engineering,1\\nSales,1\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Engineering,1\\nSales,1\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
+      "source_tool": "read_file",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "search_files failure: When using search_files, verify preconditions and handle errors properly",
+      "trigger": "search_files failure",
+      "action": "When using search_files, verify preconditions and handle errors properly",
+      "source_tool": "search_files",
+      "confidence": 0.4,
+      "error_type": "synthesized"
     }
   ],
   "C_run2": [
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"archive/\\narchive/file1.txt\\narchive/file2.txt\", \"exit_code\": 0, \"error\": null}",
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.8,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"grep: /tmp/rsibench_data/**/*.py: No such file or directory\\n(standard input)\", \"exit_co",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"-1\\n-1\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"-1\\n-1\", \"exit_code\": 0, \"error\": null}",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|def lookup(key):\\n2|    raise KeyError(f\\\"not found: {key}\\\")\\n3|\\n4|try:\\n5|    look",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"files_modified\": [\"/tmp/rsibench_wrong_exception.py\"], \"lint\": {\"status\": \"ok\", \"",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"txt: 40K\\ttotal\\nbin: 20K\\ttotal\\npy: 12K\\ttotal\\nlog: 4,0K\\ttotal\\ngz: 4,0K\\ttotal\\ncsv",
+      "content": "File permission issues: When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
+      "trigger": "File permission issues",
+      "action": "When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.6,
+      "error_type": "pattern"
     },
     {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
-      "source_tool": "read_file",
-      "confidence": 0.7
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"\", \"total_lines\": 0, \"file_size\": 0, \"truncated\": false, \"is_binary\": false, \"is_image\"",
-      "source_tool": "read_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 1, in <module>\\nModuleNotF",
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.7,
+      "error_type": "pattern"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|import threading\\n2|lock_a = threading.Lock()\\n3|lock_b = threading.Lock()\\n4|\\n5|def",
-      "source_tool": "read_file",
-      "confidence": 0.6
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Parse error near line 5: no such column: u.department_id\", \"exit_cod",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Parse error near line 5: no such column: u.department_id\", \"exit_cod",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": false, \"error\": \"Found 2 matches for old_string. Provide more context to make it unique,",
-      "source_tool": "patch",
-      "confidence": 0.6
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
     },
     {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"diff\": \"--- a//tmp/rsibench_deadlock.py\\n+++ b//tmp/rsibench_deadlock.py\\n@@ -7,1",
-      "source_tool": "patch",
-      "confidence": 0.6
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "source_tool": "terminal",
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using write_file without proper validation causes errors: {\"bytes_written\": 123, \"dirs_created\": true, \"lint\": {\"status\": \"ok\", \"output\": \"\"}, \"resolved_path\"",
-      "source_tool": "write_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using search_files without proper validation causes errors: {\"total_count\": 50, \"matches\": [{\"path\": \"./trajectory_compressor.py\", \"line\": 44, \"content\": \"from ",
-      "source_tool": "search_files",
-      "confidence": 0.6
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"awk: line 3: syntax error at or near ,\\nawk: line 6: syntax error at",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"awk: line 3: syntax error at or near ,\\nawk: line 6: syntax error at",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
     }
   ],
   "A_run3": [],
   "B_run3": [
     {
-      "content": "Using search_files without proper validation causes errors: {\"total_count\": 6, \"matches\": [{\"path\": \"./docs/abelion/research/IMPLEMENTATION-PLAN-experiment-tool",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"False\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"False\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Engineering,1\\nSales,1\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Engineering,1\\nSales,1\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
+      "source_tool": "read_file",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"hour,error_count,warn_count,info_count\", \"exit_code\": 0, \"error\": nu",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"hour,error_count,warn_count,info_count\", \"exit_code\": 0, \"error\": nu",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"filename,lines,words,ratio\\n352,9,57,6,33333\\n102,3,15,5\\n216,6,30,5",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"filename,lines,words,ratio\\n352,9,57,6,33333\\n102,3,15,5\\n216,6,30,5",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"caf\u00e9\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"caf\u00e9\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
+      "source_tool": "read_file",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"-1\\nResult for missing element: -1\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"-1\\nResult for missing element: -1\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
+      "source_tool": "read_file",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Function argument collision: When using *args and **kwargs, named parameters after *args may conflict. Rename the positional to *rest, *items to avoid collision, or move the keyword before *args.",
+      "trigger": "Function argument collision",
+      "action": "When using *args and **kwargs, named parameters after *args may conflict. Rename the positional to *rest, *items to avoid collision, or move the keyword before *args.",
       "source_tool": "search_files",
-      "confidence": 0.6
+      "confidence": 0.65,
+      "error_type": "pattern"
     },
     {
-      "content": "Using write_file without proper validation causes errors: {\"bytes_written\": 90, \"dirs_created\": true, \"lint\": {\"status\": \"ok\", \"output\": \"\"}, \"resolved_path\":",
-      "source_tool": "write_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Regex ran successfully\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"/tmp/rsibench_data/clean.py\\n/tmp/rsibench_data/data.bin\\n/tmp/rsibench_data/sample.txt\\",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"find: missing argument to `-exec'\\nfind: missing argument to `-exec'\\nfind: missing argu",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"15360 bin\\n381 log\\n288 txt\\n180 gz\\n150 py\\n110 csv\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"0 1 4 /tmp/rsibench_data/sample.txt\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"5b15452c268a7d3adf9d03387d69b4fb  /tmp/rsibench_data/duplicates/a.txt\\n5b15452c268a7d3ad",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"archive/\\narchive/file1.txt\\narchive/file2.txt\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|def lookup(key):\\n2|    raise KeyError(f\\\"not found: {key}\\\")\\n3|\\n4|try:\\n5|    look",
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"-rw-rw-r-- 1 abelion abelion 118 Jun 26 19:10 /tmp/rsibench_wrong_exception.py\", \"exit_c",
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier rea",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"{\\\"users\\\":[{\\\"name\\\":\\\"alice\\\",\\\"metadata\\\":{\\\"age\\\":30,\\\"role\\\":\\\"",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"{\\\"users\\\":[{\\\"name\\\":\\\"alice\\\",\\\"metadata\\\":{\\\"age\\\":30,\\\"role\\\":\\\"",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
+      "content": "File permission issues: When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
+      "trigger": "File permission issues",
+      "action": "When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
+      "source_tool": "terminal",
+      "confidence": 0.6,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Dict size: 500\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Dict size: 500\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 127, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"\", \"exit_code\": 127, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "source_tool": "terminal",
+      "confidence": 0.7,
+      "error_type": "pattern"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.7
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"3 192.168.1.1\\n      2 192.168.1.2\\n      2 10.0.0.1\", \"exit_code\": 0, \"error\": null}",
+      "content": "Encoding/decoding mismatches: Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
+      "trigger": "Encoding/decoding mismatches",
+      "action": "Always use UTF-8 for encoding/decoding text. If data was encoded with encode('utf-8'), decode with decode('utf-8'), not latin-1. When reading files, specify encoding='utf-8' explicitly.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.75,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"grace,31,96\\nalice,30,95\\ncharlie,35,92\\nevan,32,91\\nhenry,27,90\", \"exit_code\": 0, \"erro",
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"Success\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"Success\", \"exit_code\": 0, \"error\": null}",
       "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": false, \"error\": \"old_string and new_string are identical\"}",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
-      "source_tool": "read_file",
-      "confidence": 0.7
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"\", \"total_lines\": 0, \"file_size\": 0, \"truncated\": false, \"is_binary\": false, \"is_image\"",
-      "source_tool": "read_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"Hello World\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"[2026-06-25 14:30:00] ERROR: connection failed\", \"exit_code\": 0, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"/tmp/rsibench_data/todo_work.py\", \"exit_code\": 123, \"error\": null}",
-      "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     }
   ],
   "C_run3": [
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"3 192.168.1.1\\n      2 192.168.1.2\\n      2 10.0.0.1\", \"exit_code\": 0, \"error\": null}",
+      "content": "Missing file/directory: Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
+      "trigger": "Missing file/directory",
+      "action": "Before reading/operating on a file, verify it exists: 'test -f path' or 'os.path.exists()'. Use ls or find to discover correct path if the expected path doesn't exist.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.7,
+      "error_type": "pattern"
     },
     {
-      "content": "Using terminal without proper validation causes errors: {\"output\": \"bin 2\\ncsv 1\\ngz 1\\nlog 1\\npy 3\\ntxt 12\\n15360 bin\\n381 log\\n288 txt\\n180 gz\\n150 py\\n11",
+      "content": "search_files failure: When using search_files, verify preconditions and handle errors properly",
+      "trigger": "search_files failure",
+      "action": "When using search_files, verify preconditions and handle errors properly",
+      "source_tool": "search_files",
+      "confidence": 0.4,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "Algorithm termination: When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
+      "trigger": "Algorithm termination",
+      "action": "When implementing binary search: return -1 when lo > hi (target not in array). Do NOT recurse in the not-found branch \u2014 that causes infinite recursion.",
       "source_tool": "terminal",
-      "confidence": 0.6
+      "confidence": 0.7,
+      "error_type": "pattern"
     },
     {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"\", \"total_lines\": 0, \"file_size\": 0, \"truncated\": false, \"is_binary\": false, \"is_image\"",
+      "content": "Thread safety / race condition: When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "trigger": "Thread safety / race condition",
+      "action": "When multiple threads access shared data, always use threading.Lock. Acquire lock before all reads AND writes. Release in finally block or use 'with lock:'.",
+      "source_tool": "terminal",
+      "confidence": 0.8,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Terminal command failure: When running terminal commands, always check exit codes and handle errors: {\"output\": \"coro1 done\\ncoro2 done\\nSuccess\", \"exit_code\": 0, \"error\": null}",
+      "trigger": "Terminal command failure",
+      "action": "When running terminal commands, always check exit codes and handle errors: {\"output\": \"coro1 done\\ncoro2 done\\nSuccess\", \"exit_code\": 0, \"error\": null}",
+      "source_tool": "terminal",
+      "confidence": 0.5,
+      "error_type": "synthesized"
+    },
+    {
+      "content": "File read failure: When reading files, verify existence first and handle missing files gracefully",
+      "trigger": "File read failure",
+      "action": "When reading files, verify existence first and handle missing files gracefully",
       "source_tool": "read_file",
-      "confidence": 0.6
+      "confidence": 0.5,
+      "error_type": "synthesized"
     },
     {
-      "content": "Using search_files without proper validation causes errors: {\"total_count\": 50, \"matches\": [{\"path\": \"./hermes_try/sessions/request_dump_20260626_121957_5730c0_",
+      "content": "File permission issues: When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
+      "trigger": "File permission issues",
+      "action": "When getting 'Permission denied': check file ownership with ls -la, use chmod +x for scripts, or prefix with sudo. If reading config files, check if they exist first.",
+      "source_tool": "terminal",
+      "confidence": 0.6,
+      "error_type": "pattern"
+    },
+    {
+      "content": "Binary serialization format: struct.pack and struct.unpack must use the same format string. 'I' = unsigned int (4 bytes), 'Q' = unsigned long long (8 bytes). Check both sides when serializing across platforms.",
+      "trigger": "Binary serialization format",
+      "action": "struct.pack and struct.unpack must use the same format string. 'I' = unsigned int (4 bytes), 'Q' = unsigned long long (8 bytes). Check both sides when serializing across platforms.",
       "source_tool": "search_files",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": false, \"error\": \"Could not find a match for old_string in the file\\n\\nDid you mean one o",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using read_file without proper validation causes errors: {\"content\": \"1|def lookup(key):\\n2|    raise KeyError(f\\\"not found: {key}\\\")\\n3|\\n4|try:\\n5|    look",
-      "source_tool": "read_file",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": true, \"files_modified\": [\"/tmp/rsibench_wrong_exception.py\"], \"lint\": {\"status\": \"ok\", \"",
-      "source_tool": "patch",
-      "confidence": 0.6
-    },
-    {
-      "content": "Using search_files without proper validation causes errors: {\"total_count\": 0, \"error\": \"Search failed: regex parse error:\\n    items=[]\\n          ^^\\nerror: u",
-      "source_tool": "search_files",
-      "confidence": 0.6
-    },
-    {
-      "content": "Tool correction pattern: {\"status\": \"unchanged\", \"message\": \"File unchanged since last read. The content from the earlier read_file result in this conversation is still current \u2014 refer to that instead of re-reading.\", \"path\":",
-      "source_tool": "read_file",
-      "confidence": 0.7
-    },
-    {
-      "content": "Using patch without proper validation causes errors: {\"success\": false, \"error\": \"Found 2 matches for old_string. Provide more context to make it unique,",
-      "source_tool": "patch",
-      "confidence": 0.6
+      "confidence": 0.7,
+      "error_type": "pattern"
     }
   ]
 }

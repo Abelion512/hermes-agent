@@ -7,6 +7,7 @@ Usage:
 
 import argparse
 import csv
+import json
 import os
 import random
 import sys
@@ -107,6 +108,7 @@ def run_condition(
     base_url: str = None,
     provider: str = None,
     max_iterations: int = 10,
+    global_task_count: int = 0,
 ) -> tuple[list[dict], list[dict]]:
     """Run all tasks under one condition for one run.
 
@@ -130,6 +132,17 @@ def run_condition(
         result["run"] = run_number
         results.append(result)
 
+        # Live status update per-task
+        _update_status(
+            f"running ({len(results)}/{global_task_count})",
+            condition=condition_id,
+            run=run_number,
+            task_id=task.id,
+            ok=result["completed"] and not result["failed"],
+            tokens=int(result["total_tokens"]),
+            iterations=int(result["iterations"]),
+        )
+
         if config["rsi"] and not result["failed"]:
             # Extract lesson candidates from the same conversation
             candidates = extract_lesson_candidates(execution["messages"])
@@ -149,6 +162,46 @@ def run_condition(
         print(f" {status} ({result['iterations']} calls, {result['total_tokens']} tokens)")
 
     return results, injected_lessons
+
+
+# ── Live status (realtime transparency) ───────────────────────────────
+
+_status_cache = {"status": "", "progress": 0, "total": 0, "conditions": {}, "latest": ""}
+_status_path: Path | None = None
+
+
+def _write_status(status_path: Path, data: dict) -> None:
+    """Write live status JSON — user can `cat` this anytime."""
+    try:
+        with open(status_path, "w") as f:
+            json.dump(data, f, indent=2)
+    except OSError:
+        pass
+
+
+def _update_status(
+    status: str,
+    condition: str = "",
+    run: int = 0,
+    task_id: str = "",
+    ok: bool = False,
+    tokens: int = 0,
+    iterations: int = 0,
+) -> None:
+    global _status_cache, _status_path
+    sc = _status_cache
+    sc["status"] = status
+    if condition:
+        key = f"{condition}_run{run}"
+        if key not in sc["conditions"]:
+            sc["conditions"][key] = {"total": 0, "ok": 0}
+        sc["conditions"][key]["total"] += 1
+        if ok:
+            sc["conditions"][key]["ok"] += 1
+    if task_id:
+        sc["latest"] = f"{task_id}: {'OK' if ok else 'FAIL'} ({iterations} calls, {tokens} tokens)"
+    if _status_path:
+        _write_status(_status_path, sc)
 
 
 def main():
@@ -172,6 +225,11 @@ def main():
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Live status file — updated every task, readable anytime
+    status_path = output_path.with_suffix(".status.json")
+    _write_status(status_path, {"status": "starting", "progress": 0, "total": 0, "conditions": {}, "latest": ""})
+    _status_path = status_path
+
     fieldnames = [
         "task_id", "category", "condition", "condition_name", "run",
         "completed", "failed", "error",
@@ -181,6 +239,7 @@ def main():
 
     tasks = get_task_batch()
     condition_ids = args.conditions.split(",")
+    total_tasks = len(tasks) * len(condition_ids) * args.runs
 
     # Switch task sets
     if args.tasks == "hard":
@@ -202,6 +261,7 @@ def main():
 
     total_start = time.time()
     all_lessons: dict[str, list[dict]] = {}
+    task_number = 0
 
     with open(output_path, "w", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -211,14 +271,17 @@ def main():
             print(f"\n=== Run {run}/{args.runs} ===")
             for cid in condition_ids:
                 config = CONDITIONS[cid]
+                _update_status(f"running ({task_number}/{total_tasks})", condition=cid, run=run)
                 results, lessons = run_condition(
                     cid, config, tasks, args.api_key, args.model, run,
                     base_url=args.base_url, provider=args.provider,
                     max_iterations=args.max_iterations,
+                    global_task_count=total_tasks,
                 )
                 all_lessons[f"{cid}_run{run}"] = lessons
                 for row in results:
                     writer.writerow(row)
+                    task_number += 1
                 csv_file.flush()
 
     total_elapsed = time.time() - total_start
